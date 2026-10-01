@@ -91,6 +91,26 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .level-bar strong{font-size:18px}
 .level button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#2b1d05;font-weight:500}
 
+/* ---------- 花鄉的故事 ---------- */
+.story{display:grid;grid-template-columns:.8fr 1.2fr;gap:40px;align-items:start}
+.story-pic{position:sticky;top:90px;margin:0}
+.story-pic img{border-radius:var(--radius);box-shadow:var(--shadow);width:100%;aspect-ratio:3/4;object-fit:cover}
+.story-pic figcaption{color:var(--muted);font-size:18px;margin-top:10px}
+.timeline{list-style:none;margin:0;padding:0;border-left:3px solid var(--gold);margin-left:10px}
+.timeline li{position:relative;padding:0 0 28px 28px}
+.timeline li::before{content:"";position:absolute;left:-11px;top:6px;width:16px;height:16px;border-radius:50%;
+  background:var(--card);border:3px solid var(--green)}
+.timeline .when{display:inline-block;background:var(--green);color:#fff;border-radius:999px;padding:0 14px;font-size:18px;font-weight:500}
+.timeline h3{margin:8px 0 4px;font-size:22px;color:var(--green-dark);line-height:1.4}
+.timeline p{margin:0 0 6px}
+.fun{background:#fff4dc;border-radius:14px;padding:14px 18px;margin-top:6px;color:#4a3410}
+:root[data-theme="dark"] .fun{background:#3a2f17;color:#f4e2bd}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fun{background:#3a2f17;color:#f4e2bd}}
+.story-en{margin-top:8px}
+.story-en .sentence{font-size:20px;line-height:1.8}
+.src{font-size:18px;color:var(--muted);margin-top:18px}
+@media (max-width:860px){.story{grid-template-columns:1fr}.story-pic{position:static}.story-pic img{aspect-ratio:4/3}}
+
 /* ---------- 卡片 ---------- */
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
 .spots{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
@@ -175,6 +195,7 @@ footer ul{margin:0;padding-left:18px}
     <a class="logo" href="#top">🌼 花鄉田尾 <span>Tianwei</span></a>
     <nav class="nav-links">
       <a href="#about" data-i="nav_about">認識田尾</a>
+      <a href="#story" data-i="nav_story">故事</a>
       <a href="#spots" data-i="nav_spots">景點</a>
       <a href="#gallery" data-i="nav_gallery">相片</a>
       <a href="#learn" data-i="nav_learn">學英文</a>
@@ -222,8 +243,35 @@ footer ul{margin:0;padding-left:18px}
   </div>
 </section>
 
+<!-- ========== 花鄉的故事 ========== -->
+<section id="story" style="background:var(--soft)">
+  <div class="wrap">
+    <h2>花鄉的故事 <span class="l2" data-l2="story_t"></span></h2>
+    <p class="sub">田尾怎麼變成「花的故鄉」？從一包種子說起 · <span data-l2="story_sub"></span></p>
+    <div class="story">
+      <figure class="story-pic">
+        <img src="images/story.jpg" alt="田尾公路花園苗圃裡一排排的仙人掌盆栽" loading="lazy">
+        <figcaption>一百多年後，田尾的苗圃裡一排排都是植物 · Rows of plants in a Tianwei nursery today</figcaption>
+      </figure>
+      <div>
+        <ol class="timeline" id="timeline"></ol>
+        <div class="level-bar">
+          <strong>英文難度 English level：</strong>
+          <div class="level" role="group" aria-label="English level">
+            <button data-lv="1" aria-pressed="true">🌱 Level 1 國小</button>
+            <button data-lv="2" aria-pressed="false">🌿 Level 2 國中</button>
+            <button data-lv="3" aria-pressed="false">🌳 Level 3 高中</button>
+          </div>
+        </div>
+        <div class="learn story-en" id="storyEn"></div>
+        <p class="src">故事來源：<a href="https://www.chcg.gov.tw/TSO/tianwei/07other/main.aspx?main_id=2868" target="_blank" rel="noopener">田尾鄉公所〈田尾花卉事業的起源〉</a>，本站改寫為適合學生閱讀的版本。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ========== 特色景點 4 張 ========== -->
-<section id="spots" style="background:var(--soft)">
+<section id="spots">
   <div class="wrap">
     <h2>四個必看的公共景點 <span class="l2" data-l2="spots_t"></span></h2>
     <p class="sub">每張卡片都有英文小教室，可依年級切換難度 · Pick your English level below</p>
@@ -248,7 +296,7 @@ footer ul{margin:0;padding-left:18px}
 </section>
 
 <!-- ========== 相片牆 ========== -->
-<section id="gallery">
+<section id="gallery" style="background:var(--soft)">
   <div class="wrap">
     <h2>花鄉相片牆 <span class="l2" data-l2="gal_t"></span></h2>
     <p class="sub">在田尾，一年四季都有花開 · Something is blooming in every season</p>
@@ -266,7 +314,7 @@ footer ul{margin:0;padding-left:18px}
 </section>
 
 <!-- ========== 單字 + 小測驗 ========== -->
-<section id="learn" style="background:var(--soft)">
+<section id="learn">
   <div class="wrap">
     <h2>花鄉英文單字 <span class="l2" data-l2="learn_t"></span></h2>
     <p class="sub">點一下單字就能聽發音 · Tap a word to hear it</p>
@@ -315,6 +363,7 @@ footer ul{margin:0;padding-left:18px}
           <li><a href="https://www.taiwan.net.tw/m1.aspx?sNo=0042291&uid=48" target="_blank" rel="noopener">交通部觀光署・小鎮漫遊</a></li>
           <li><a href="https://tourism.chcg.gov.tw/AttractionsContent.aspx?id=7&chk=02d9d045-486c-4325-9d3c-a22b2aea5983" target="_blank" rel="noopener">彰化旅遊資訊網・田尾公路花園</a></li>
           <li><a href="https://tcmb.culture.tw/zh-tw/detail?indexCode=Culture_Place&id=563574" target="_blank" rel="noopener">國家文化記憶庫・海豐崙彩繪村</a></li>
+          <li><a href="https://www.chcg.gov.tw/TSO/tianwei/07other/main.aspx?main_id=2868" target="_blank" rel="noopener">田尾鄉公所・田尾花卉事業的起源</a></li>
           <li><a href="https://zh.wikipedia.org/zh-tw/%E7%94%B0%E5%B0%BE%E9%84%89" target="_blank" rel="noopener">維基百科・田尾鄉</a></li>
         </ul>
       </div>
@@ -322,7 +371,7 @@ footer ul{margin:0;padding-left:18px}
         <h4>照片授權 Photo credits</h4>
         全部照片皆為可商用的創用 CC 授權（BY-SA／CC0），使用時請保留作者標示。<br>
         Hero、單車、花朵造景、藍眼菊、小花特寫：JerryLai0208（CC BY-SA 2.0）·
-        公路花園、仙人掌、仙人掌娃娃、蝴蝶蘭、勳章菊、觀葉植物：Fat Joe's Photos（CC BY-SA 2.0）·
+        公路花園、故事苗圃、仙人掌、仙人掌娃娃、蝴蝶蘭、勳章菊、觀葉植物：Fat Joe's Photos（CC BY-SA 2.0）·
         電照菊示意照：At by At（CC BY-SA 3.0）·
         海豐崙教會：Shouji Hasegawa（CC0）·
         台1線：Chi-Hung Lin（CC BY-SA 3.0）·
@@ -386,9 +435,65 @@ const SPOTS = [
         {s:"Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.", zh:"園丁把灌木修剪成鳥和動物的形狀，這種藝術叫做「造型修剪」，展現田尾的園藝技術。", w:[["shrub","灌木"],["topiary","造型修剪"],["horticulture","園藝"],["route","路線"]]} ]}
 ];
 
+/* ================= 花鄉的故事（改寫自田尾鄉公所〈田尾花卉事業的起源〉） ================= */
+const STORY = [
+ { when:"一百多年前", whenL:{en:"Over 100 years ago", ja:"100年以上前", th:"กว่า 100 ปีก่อน", id:"Lebih dari 100 tahun lalu"},
+   t:"🌱 一包種子的旅行",
+   zh:"根據鄉公所的記載，田尾舊稱「打簾」。打簾村有一位叫<b>巫修齊</b>的年輕人，喜歡到處旅行，十幾歲就到了唐山（中國大陸）。他在漳州看到當地人種花，就沿路帶回許多種子和枝條。回家後，他和哥哥<b>巫規矩</b>一起播種、接枝，田尾種花的故事就這樣開始了。",
+   l2:{en:"A young man from Dalian Village, Wu Xiu-qi, travelled to Zhangzhou in China as a teenager. He saw people growing flowers there and brought seeds and cuttings home. With his brother Wu Gui-ju, he planted and grafted them — and Tianwei's flower story began.",
+       ja:"打簾村の青年・巫修齊は十代で中国の漳州へ旅をし、人々が花を育てる様子を見て、種や枝を持ち帰りました。兄の巫規矩と一緒に種をまき、接ぎ木をしたことが、田尾の花の物語の始まりです。",
+       th:"อู๋ซิวฉี ชายหนุ่มจากหมู่บ้านต่าเหลียน เดินทางไปจางโจวในจีนตั้งแต่อายุสิบกว่าปี เขาเห็นผู้คนปลูกดอกไม้ จึงนำเมล็ดและกิ่งพันธุ์กลับบ้าน แล้วปลูกและต่อกิ่งร่วมกับพี่ชาย เรื่องราวดอกไม้ของเทียนเหว่ยจึงเริ่มต้นขึ้น",
+       id:"Wu Xiu-qi, pemuda dari Desa Dalian, pergi ke Zhangzhou di Tiongkok saat remaja. Ia melihat orang menanam bunga dan membawa pulang biji serta stek. Bersama kakaknya, Wu Gui-ju, ia menanam dan menyambungnya — dan kisah bunga Tianwei pun dimulai."} },
+ { when:"幾年之後", whenL:{en:"A few years later", ja:"数年後", th:"ไม่กี่ปีต่อมา", id:"Beberapa tahun kemudian"},
+   t:"🔄 用花換花",
+   zh:"打簾村崙仔部落的<b>李朝慶</b>家裡也種了不少花木。他把別人家比較漂亮、特別的花木「交換」回來繁殖，大家開始互相交換、買賣花木，田尾的花木生意慢慢熱鬧起來。",
+   l2:{en:"Li Chao-qing, who also grew many plants, began trading his plants for special ones from other gardens. Soon people were swapping and selling plants, and the flower business started to grow.",
+       ja:"同じく多くの花木を育てていた李朝慶は、珍しい花木を交換して持ち帰り、増やしました。やがて人々が花木を交換・売買するようになり、花の商売がにぎわい始めました。",
+       th:"หลี่เฉาชิ่งซึ่งปลูกต้นไม้ไว้มากมาย เริ่มนำต้นไม้ของตนไปแลกกับพันธุ์แปลก ๆ จากบ้านอื่น ไม่นานผู้คนก็แลกเปลี่ยนและซื้อขายต้นไม้กัน ธุรกิจดอกไม้จึงเริ่มคึกคัก",
+       id:"Li Chao-qing, yang juga menanam banyak tanaman, mulai menukar tanamannya dengan jenis yang istimewa dari kebun lain. Tak lama, orang-orang saling bertukar dan berjualan tanaman, dan bisnis bunga pun mulai berkembang."} },
+ { when:"日治時期", whenL:{en:"Japanese era", ja:"日本統治時代", th:"ยุคญี่ปุ่นปกครอง", id:"Masa pendudukan Jepang"},
+   t:"👨‍🌾 種花變成一門職業",
+   zh:"到了日本時代，巫家的兄弟和叔姪已經把種花當成正式的工作。後來，光復後曾擔任議員的<b>羅老庚</b>建議由農會培育種苗，讓農民可以用便宜的價錢申請回家種。從此田尾種花的人越來越多，也培養出許多育種高手。",
+   l2:{en:"During the Japanese era, the Wu family turned flower growing into a real job. Later, Luo Lao-geng suggested that the farmers' association raise seedlings and sell them cheaply to farmers. More and more people grew flowers, and many skilled plant breeders appeared.",
+       ja:"日本統治時代、巫家の人々は花づくりを本業にしました。のちに羅老庚が農会で苗を育てて農家に安く分けることを提案し、花を育てる人が増え、多くの育種の名人が生まれました。",
+       th:"ในยุคญี่ปุ่นปกครอง ครอบครัวอู๋ทำให้การปลูกดอกไม้กลายเป็นอาชีพ ต่อมาหลัวเหล่าเกิงเสนอให้สมาคมเกษตรกรเพาะกล้าไม้แล้วขายให้เกษตรกรในราคาถูก คนปลูกดอกไม้จึงมากขึ้น และเกิดผู้เชี่ยวชาญการเพาะพันธุ์มากมาย",
+       id:"Pada masa Jepang, keluarga Wu menjadikan menanam bunga sebagai pekerjaan sungguhan. Kemudian Luo Lao-geng mengusulkan agar asosiasi petani membibitkan tanaman dan menjualnya murah kepada petani. Makin banyak orang menanam bunga, dan lahirlah banyak ahli pembibitan."} },
+ { when:"1972–1973", whenL:{en:"1972–1973", ja:"1972〜1973年", th:"ปี 1972–1973", id:"1972–1973"},
+   t:"🛣️ 公路花園誕生",
+   zh:"民國 61 年（1972），總統府資政<b>謝東閔</b>到好友<b>胡改量</b>家賞花。在胡老先生和地方人士的建議下，省政府在民國 62 年（1973）把這裡規劃為「公路花園園藝特定區」。縣長<b>吳榮興</b>支持、鄉長<b>陳玉清</b>籌劃，花了兩年完成：利用路邊住家原本種的花木來美化公路，讓大家都能欣賞。",
+   l2:{en:"In 1972, senior advisor Hsieh Tung-min visited his friend Hu Gai-liang to see his flowers. With local leaders' support, the provincial government named the area a special horticulture zone in 1973. It took two years to build: the roadside homes' own plants turned the highway into a garden for everyone.",
+       ja:"1972年、謝東閔が友人の胡改量の家を訪れ花を鑑賞しました。地元の人々の提案を受け、1973年に省政府がこの地域を園芸特定区に指定。2年かけて、道沿いの家々の花木で道路を美しく彩りました。",
+       th:"ปี 1972 เซี่ยตงหมิ่นไปชมดอกไม้ที่บ้านหูไก่เหลียงเพื่อนของเขา ด้วยข้อเสนอของคนในท้องถิ่น รัฐบาลมณฑลจึงกำหนดพื้นที่นี้เป็นเขตพืชสวนพิเศษในปี 1973 ใช้เวลาสองปี โดยใช้ต้นไม้ของบ้านริมทางตกแต่งถนนให้ทุกคนได้ชม",
+       id:"Tahun 1972, penasihat senior Hsieh Tung-min mengunjungi temannya, Hu Gai-liang, untuk melihat bunga. Atas usulan tokoh setempat, pemerintah provinsi menetapkan kawasan ini sebagai zona hortikultura khusus pada 1973. Butuh dua tahun: tanaman milik rumah-rumah di tepi jalan mengubah jalan raya menjadi taman untuk semua."},
+   fun:{zh:"💡 冷知識：這裡一開始叫做「公路<b>公園</b>」，可是遊客來了一直找不到「公園」在哪裡，所以後來改名叫「公路<b>花園</b>」！",
+        l2:{en:"Fun fact: It was first called the \"Highway Park\" — but visitors kept looking for a park that wasn't there, so it was renamed the \"Highway Garden\"!",
+            ja:"豆知識：最初は「公路公園」という名前でしたが、観光客が「公園」を探しても見つからないため、「公路花園」に改名されました！",
+            th:"เกร็ดน่ารู้: เดิมชื่อ \"สวนสาธารณะริมทาง\" แต่นักท่องเที่ยวหาสวนสาธารณะไม่เจอ จึงเปลี่ยนชื่อเป็น \"สวนดอกไม้ริมทาง\"!",
+            id:"Fakta unik: Awalnya bernama \"Taman Umum Jalan Raya\", tetapi pengunjung terus mencari taman umum yang tidak ada, jadi namanya diganti menjadi \"Taman Bunga Jalan Raya\"!"}} },
+ { when:"1998–2002", whenL:{en:"1998–2002", ja:"1998〜2002年", th:"ปี 1998–2002", id:"1998–2002"},
+   t:"🌼 走向觀光休閒",
+   zh:"民國 87 年（1998），鄉長<b>劉淑芳</b>爭取經濟部的計畫，花了三年半提升花卉產業、讓產業更多元。民國 91 年（2002），農委會輔導成立「田尾鄉休閒園區」，田尾從「種花的地方」變成大家都想來走走的「花之鄉」。",
+   l2:{en:"In 1998, Township Mayor Liu Shu-fang won a national program that spent three and a half years upgrading the flower industry. In 2002, the Tianwei Leisure Park was set up, and Tianwei grew from a place that grows flowers into a flower town everyone wants to visit.",
+       ja:"1998年、劉淑芳郷長が国の計画を獲得し、3年半かけて花卉産業を発展させました。2002年には「田尾郷レジャー園区」が設立され、田尾は誰もが訪れたい「花の町」になりました。",
+       th:"ปี 1998 นายกตำบลหลิวซูฟางได้รับโครงการระดับประเทศ ใช้เวลาสามปีครึ่งพัฒนาอุตสาหกรรมดอกไม้ ปี 2002 มีการจัดตั้งสวนพักผ่อนเทียนเหว่ย เทียนเหว่ยจึงกลายเป็นเมืองดอกไม้ที่ใคร ๆ ก็อยากมาเยือน",
+       id:"Tahun 1998, Kepala Kecamatan Liu Shu-fang memperoleh program nasional yang selama tiga setengah tahun meningkatkan industri bunga. Tahun 2002, Taman Rekreasi Tianwei didirikan, dan Tianwei berkembang menjadi kota bunga yang ingin dikunjungi semua orang."} }
+];
+const STORY_EN = [
+ {s:"Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!",
+  zh:"很久以前，一位年輕人到了中國。他看到很多花，把種子帶回家。現在田尾是一個花的小鎮！",
+  w:[["long ago","很久以前"],["seed","種子"],["bring","帶來"],["town","小鎮"]]},
+ {s:"More than one hundred years ago, Wu Xiu-qi traveled to Zhangzhou and saw people growing flowers. He brought seeds and cuttings back to Tianwei and started a flower farm with his brother. In 1973, the area became the Highway Garden.",
+  zh:"一百多年前，巫修齊到漳州旅行，看到人們種花。他把種子和枝條帶回田尾，和哥哥一起開始種花。1973 年，這裡變成了公路花園。",
+  w:[["travel","旅行"],["cutting","插枝；枝條"],["century","世紀；一百年"],["rename","重新命名"]]},
+ {s:"Tianwei's flower industry began over a century ago, when Wu Xiu-qi brought seeds and cuttings home from Zhangzhou. Plant trading and low-cost seedlings helped it spread, and in 1973 the government designated the area a horticultural zone. It was first called the Highway Park, but visitors kept looking for a park, so it was renamed the Highway Garden.",
+  zh:"田尾的花卉產業始於一百多年前，巫修齊從漳州帶回種子和枝條。花木交易和平價種苗讓它擴展開來，1973 年政府把這裡劃為園藝特定區。它原本叫「公路公園」，但遊客一直在找公園，所以改名為「公路花園」。",
+  w:[["industry","產業"],["graft","嫁接"],["designate","指定；劃定"],["pioneer","先驅"]]}
+];
+
 /* ================= 介面翻譯（第二語言） ================= */
 const T = {
- en:{hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
+ en:{story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
+     hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
      f1:"hectares of garden", f2:"garden opened", f3:"chrysanthemums a year", f4:"villages",
      about_t:"About Tianwei",
      about_1:"Tianwei is in southern Changhua, between Yongjing and Beidou. Early settlers lived at the lower end of the irrigation canals — the \"tail\" (wěi) of the rice fields (tián). That is how Tianwei got its name.",
@@ -399,7 +504,8 @@ const T = {
      m3t:"Provincial Highway 1", m3:"Taiwan's main north–south road runs right through Tianwei.",
      c1:"Find Tianwei on Google Maps", c2:"Listen and learn the words", c3:"Take the quick quiz",
      nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
- ja:{hero:"彰化県南部にある、台湾最大の花と植木の町。",
+ ja:{story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
+     hero:"彰化県南部にある、台湾最大の花と植木の町。",
      f1:"ヘクタールの花園", f2:"花園の開設", f3:"本の菊／年", f4:"の村",
      about_t:"田尾について",
      about_1:"田尾は彰化県の南部、永靖と北斗の間にあります。清の時代、移民は灌漑用水路の下流、つまり「田の尾（はし）」に住んだため、「田尾」と呼ばれるようになりました。",
@@ -410,7 +516,8 @@ const T = {
      m3t:"台1線", m3:"台湾を南北に貫く幹線道路が田尾の真ん中を通っています。",
      c1:"Googleマップで田尾を探す", c2:"単語を聞いて覚えよう", c3:"クイズに挑戦",
      nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
- th:{hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
+ th:{story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
+     hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
      f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f3:"ดอกเบญจมาศต่อปี", f4:"หมู่บ้าน",
      about_t:"รู้จักเทียนเหว่ย",
      about_1:"เทียนเหว่ยอยู่ทางใต้ของจางฮว่า ระหว่างหย่งจิ้งและเป่ยโต่ว ในอดีตผู้บุกเบิกอาศัยอยู่ปลายคลองชลประทาน คือ \"ปลายนา\" จึงได้ชื่อว่า \"เทียนเหว่ย\" (เทียน = นา, เหว่ย = ปลาย)",
@@ -421,7 +528,8 @@ const T = {
      m3t:"ทางหลวงหมายเลข 1", m3:"ถนนสายหลักเหนือ–ใต้ของไต้หวันผ่านกลางเทียนเหว่ย",
      c1:"ดูเทียนเหว่ยบน Google Maps", c2:"ฟังและเรียนคำศัพท์", c3:"ทำแบบทดสอบ",
      nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
- id:{hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
+ id:{story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
+     hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
      f1:"hektar taman", f2:"taman dibuka", f3:"tangkai krisan per tahun", f4:"desa",
      about_t:"Tentang Tianwei",
      about_1:"Tianwei terletak di selatan Changhua, di antara Yongjing dan Beidou. Para pendatang dulu tinggal di ujung bawah saluran irigasi — \"ujung sawah\" (tián = sawah, wěi = ujung). Dari situlah nama Tianwei berasal.",
@@ -433,13 +541,13 @@ const T = {
      c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
      nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"}
 };
-const NAV_ZH = {nav_about:"認識田尾",nav_spots:"景點",nav_gallery:"相片",nav_learn:"學英文"};
+const NAV_ZH = {nav_about:"認識田尾",nav_story:"故事",nav_spots:"景點",nav_gallery:"相片",nav_learn:"學英文"};
 
 let lang = "en", level = 1;
 try{ lang = localStorage.getItem("tw-lang") || "en"; level = +localStorage.getItem("tw-level") || 1; }catch(e){}
 
 /* ================= 發音（微軟 Edge 神經語音 en-US-AvaNeural，預先產生的 MP3） ================= */
-const AUDIO = {"At night, the lights are on. The fields are bright.": "80b9b48052", "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.": "33e034b86c", "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.": "cb252708a7", "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.": "b234aa836a", "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.": "aa6432938a", "I ride my bike. I see a bird tree!": "e92c0f4be3", "Look at the wall! It has a big painting.": "60274aefc1", "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.": "ddd7ec47c9", "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.": "7bf5617aca", "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.": "86ffd79105", "Tianwei has many flowers. They are beautiful!": "1747676726", "Young people came back to their hometown and painted the old walls with bright colors.": "eb85882c37", "agriculture": "f8ea9e07f5", "ancestral": "8f2ea402d3", "artist": "0441f9e2d9", "beautiful": "e8008e0690", "bike": "dde2c7ad63", "bloom": "414d49e28e", "bonsai": "90155b2515", "bright": "173309254d", "chrysanthemum": "26da5ba70e", "color": "70dda5dfb8", "colorful": "e280d65e42", "community": "82df41632d", "delay": "7243f8be75", "enjoy": "76e3692572", "extend": "e0a91e6db6", "famous": "8d0b660470", "farmer": "97f974881b", "flat": "37fc7edee2", "flower": "608f0b988d", "garden": "e2704f30f5", "harvest": "430e39cf0e", "hectare": "d0b24510aa", "helmet": "17b9183a08", "hometown": "262c999888", "horticulture": "e9c8af81d3", "light": "2ac43aa43b", "mural": "739d14e0d9", "night": "93a04b066f", "nursery": "a718a874dc", "painting": "6a7c1b1d58", "plant": "9ea0a36b3a", "quiet": "556966c783", "ride": "059763450f", "route": "9c46408a3b", "seed": "fe4c0f30aa", "seedling": "282e177897", "settler": "e11c2c8017", "shrub": "2f5bae73b1", "stem": "e730db5c29", "topiary": "22c2ebe8d1", "tree": "c0af77cf82", "village": "813f8ce580", "visitor": "127870930d", "wall": "2d86bdac01"};
+const AUDIO = {"At night, the lights are on. The fields are bright.": "80b9b48052", "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.": "33e034b86c", "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.": "cb252708a7", "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.": "b234aa836a", "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.": "aa6432938a", "I ride my bike. I see a bird tree!": "e92c0f4be3", "Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!": "3da290e20e", "Look at the wall! It has a big painting.": "60274aefc1", "More than one hundred years ago, Wu Xiu-qi traveled to Zhangzhou and saw people growing flowers. He brought seeds and cuttings back to Tianwei and started a flower farm with his brother. In 1973, the area became the Highway Garden.": "005911acf3", "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.": "ddd7ec47c9", "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.": "7bf5617aca", "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.": "86ffd79105", "Tianwei has many flowers. They are beautiful!": "1747676726", "Tianwei's flower industry began over a century ago, when Wu Xiu-qi brought seeds and cuttings home from Zhangzhou. Plant trading and low-cost seedlings helped it spread, and in 1973 the government designated the area a horticultural zone. It was first called the Highway Park, but visitors kept looking for a park, so it was renamed the Highway Garden.": "377ac548b0", "Young people came back to their hometown and painted the old walls with bright colors.": "eb85882c37", "agriculture": "f8ea9e07f5", "ancestral": "8f2ea402d3", "artist": "0441f9e2d9", "beautiful": "e8008e0690", "bike": "dde2c7ad63", "bloom": "414d49e28e", "bonsai": "90155b2515", "bright": "173309254d", "bring": "3413e60c4b", "century": "151aa0094f", "chrysanthemum": "26da5ba70e", "color": "70dda5dfb8", "colorful": "e280d65e42", "community": "82df41632d", "cutting": "566f517d91", "delay": "7243f8be75", "designate": "18142f8592", "enjoy": "76e3692572", "extend": "e0a91e6db6", "famous": "8d0b660470", "farmer": "97f974881b", "flat": "37fc7edee2", "flower": "608f0b988d", "garden": "e2704f30f5", "graft": "679c24daf0", "harvest": "430e39cf0e", "hectare": "d0b24510aa", "helmet": "17b9183a08", "hometown": "262c999888", "horticulture": "e9c8af81d3", "industry": "94074ce331", "light": "2ac43aa43b", "long ago": "6946c65d48", "mural": "739d14e0d9", "night": "93a04b066f", "nursery": "a718a874dc", "painting": "6a7c1b1d58", "pioneer": "b39ecd658b", "plant": "9ea0a36b3a", "quiet": "556966c783", "rename": "d7fba04fc8", "ride": "059763450f", "route": "9c46408a3b", "seed": "fe4c0f30aa", "seedling": "282e177897", "settler": "e11c2c8017", "shrub": "2f5bae73b1", "stem": "e730db5c29", "topiary": "22c2ebe8d1", "town": "7198cda575", "travel": "69266c67e7", "tree": "c0af77cf82", "village": "813f8ce580", "visitor": "127870930d", "wall": "2d86bdac01"};
 const player = new Audio();
 function speak(text){
   const id = AUDIO[text];
@@ -475,6 +583,22 @@ function renderSpots(){
   }).join("");
 }
 
+function renderStory(){
+  document.getElementById("timeline").innerHTML = STORY.map(x=>`<li>
+      <span class="when">${x.when}${x.whenL[lang]!==x.when ? " · "+esc(x.whenL[lang]) : ""}</span>
+      <h3>${x.t}</h3>
+      <p>${x.zh}</p>
+      <p class="l2">${esc(x.l2[lang])}</p>
+      ${x.fun?`<div class="fun"><p>${x.fun.zh}</p><p class="l2" style="color:inherit;opacity:.85">${esc(x.fun.l2[lang])}</p></div>`:""}
+    </li>`).join("");
+  const L = STORY_EN[level-1];
+  document.getElementById("storyEn").innerHTML = `
+    <div class="lv">${["🌱 Level 1","🌿 Level 2","🌳 Level 3"][level-1]} · Tell the story in English</div>
+    <p class="sentence">${esc(L.s)} <button class="say" data-say="${esc(L.s)}">🔊 聽</button></p>
+    <p class="zh">${L.zh}</p>
+    <div class="words">${L.w.map(([en,zh])=>`<button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button>`).join("")}</div>`;
+}
+
 function renderL2(){
   const t = T[lang];
   document.querySelectorAll("[data-l2]").forEach(el=>{ el.textContent = t[el.dataset.l2] || ""; });
@@ -486,6 +610,7 @@ function renderL2(){
 function renderVocab(){
   const all = [];
   SPOTS.forEach(p=>p.lv.slice(0,level).forEach(L=>L.w.forEach(w=>{ if(!all.some(a=>a[0]===w[0])) all.push(w); })));
+  STORY_EN.slice(0,level).forEach(L=>L.w.forEach(w=>{ if(!all.some(a=>a[0]===w[0])) all.push(w); }));
   document.getElementById("vocab").innerHTML = all.map(([en,zh])=>
     `<div class="vcard"><div><b>${en}</b><small>${zh}</small></div><button class="say" data-say="${en}">🔊</button></div>`).join("");
 }
@@ -496,7 +621,9 @@ const QUIZ = [
  {q:"\"Nursery\" 在這裡的意思是？", o:["托兒所","苗圃","醫院"], a:1},
  {q:"海豐崙的祖先是從哪裡來的？ Where did the settlers of Haifenglun come from?", o:["日本 Japan","廣東 Guangdong","泰國 Thailand"], a:1},
  {q:"The Highway Garden opened in ___.", o:["1973","1999","2014"], a:0},
- {q:"把樹修剪成動物形狀，英文叫做？", o:["topiary","bonsai","mural"], a:0}
+ {q:"把樹修剪成動物形狀，英文叫做？", o:["topiary","bonsai","mural"], a:0},
+ {q:"公路花園一開始叫什麼名字？ What was the Highway Garden first called?", o:["公路公園 Highway Park","田尾花市 Flower Market","花卉森林 Flower Forest"], a:0},
+ {q:"Who brought flower seeds home from Zhangzhou more than 100 years ago?", o:["Hsieh Tung-min","Wu Xiu-qi","Liu Shu-fang"], a:1}
 ];
 let answered = 0, correct = 0;
 function renderQuiz(){
@@ -508,12 +635,12 @@ function setLevel(n){
   level = n;
   try{ localStorage.setItem("tw-level", n); }catch(e){}
   document.querySelectorAll(".level button").forEach(b=>b.setAttribute("aria-pressed", +b.dataset.lv===n));
-  renderSpots(); renderVocab();
+  renderSpots(); renderStory(); renderVocab();
 }
 function setLang(l){
   lang = l;
   try{ localStorage.setItem("tw-lang", l); }catch(e){}
-  renderL2(); renderSpots();
+  renderL2(); renderSpots(); renderStory();
 }
 
 document.addEventListener("click", e=>{
