@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>花鄉田尾 Tianwei</title>
+<meta name="description" content="彰化縣田尾鄉多語介紹：中文＋英文（三級難度），並提供日文、泰文、印尼文。非官方、教學用途。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+Thai:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#2f6b4f;        /* 主色：苗圃綠 */
+  --green-dark:#1f4a36;
+  --gold:#e3a33a;         /* 輔色：菊花金 */
+  --pink:#d9668a;         /* 點綴：花朵粉 */
+  --bg:#fbfaf6;
+  --card:#ffffff;
+  --soft:#f1f5ef;
+  --text:#24302a;
+  --muted:#5f6d65;
+  --line:#e3e8e2;
+  --shadow:0 6px 20px rgba(31,74,54,.08);
+  --radius:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --green:#7cc3a0; --green-dark:#a8dcc1; --gold:#f0bd5e; --pink:#ee8fae;
+    --bg:#141a17; --card:#1d2621; --soft:#1a231e; --text:#e8eee9; --muted:#a8b5ad; --line:#2c3831;
+    --shadow:0 6px 20px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --green:#7cc3a0; --green-dark:#a8dcc1; --gold:#f0bd5e; --pink:#ee8fae;
+  --bg:#141a17; --card:#1d2621; --soft:#1a231e; --text:#e8eee9; --muted:#a8b5ad; --line:#2c3831;
+  --shadow:0 6px 20px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Sans TC","Noto Sans JP","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:18px;line-height:1.7}
+img{max-width:100%;display:block}
+a{color:var(--green)}
+.wrap{max-width:1160px;margin:0 auto;padding:0 16px}
+section{padding:72px 0;scroll-margin-top:64px}
+#quiz{scroll-margin-top:80px}
+h2{font-size:clamp(26px,4vw,34px);margin:0 0 6px;color:var(--green-dark);line-height:1.3}
+.sub{color:var(--muted);margin:0 0 36px}
+.l2{color:var(--muted);font-size:.92em}
+.l2:empty{display:none}
+
+/* ---------- 導覽列 ---------- */
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font-weight:700;font-size:20px;color:var(--green-dark);text-decoration:none;white-space:nowrap}
+.logo span{color:var(--gold)}
+.nav-links{display:flex;gap:20px;margin-left:auto}
+.nav-links a{text-decoration:none;color:var(--text);font-size:16px}
+.nav-links a:hover{color:var(--green)}
+.lang{display:flex;gap:4px;flex-wrap:wrap}
+.lang button,.level button{border:1px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:999px;padding:4px 12px;font:inherit;font-size:14px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+@media (max-width:860px){.nav-links{display:none}.nav{height:auto;padding:10px 16px;flex-wrap:wrap}.lang{margin-left:auto}.lang button{padding:3px 10px;font-size:13px}section{scroll-margin-top:110px}}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;color:#fff;padding:0}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(10,30,20,.72))}
+.hero .wrap{position:relative;z-index:1;padding-bottom:64px;width:100%}
+.hero .tag{display:inline-block;background:var(--gold);color:#2b1d05;border-radius:999px;padding:2px 14px;font-size:14px;font-weight:500}
+.hero h1{font-size:clamp(36px,7vw,64px);margin:12px 0 4px;line-height:1.15}
+.hero .en{font-size:clamp(20px,3vw,28px);margin:0 0 6px;opacity:.95}
+.hero .hero-l2{font-size:18px;opacity:.9;margin:0}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-48px;position:relative;z-index:2}
+.fact{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;text-align:center}
+.fact b{display:block;font-size:28px;color:var(--green)}
+.fact small{color:var(--muted);font-size:14px;line-height:1.4;display:block}
+@media (max-width:700px){.facts{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- 認識田尾 ---------- */
+.about{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.about .card{padding:28px}
+.about img{border-radius:var(--radius);box-shadow:var(--shadow);aspect-ratio:4/3;object-fit:cover;width:100%}
+@media (max-width:860px){.about{grid-template-columns:1fr}}
+
+/* ---------- 難度切換 ---------- */
+.level-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--soft);border-radius:var(--radius);
+  padding:14px 18px;margin-bottom:32px}
+.level-bar strong{font-size:16px}
+.level button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#2b1d05;font-weight:500}
+
+/* ---------- 卡片 ---------- */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.spots{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+@media (max-width:860px){.spots{grid-template-columns:1fr}}
+.spot img{aspect-ratio:16/9;object-fit:cover;width:100%}
+.pic{margin:0;position:relative}
+.pic figcaption{position:absolute;left:0;right:0;bottom:0;padding:18px 14px 8px;color:#fff;font-size:13px;line-height:1.4;background:linear-gradient(transparent,rgba(0,0,0,.6))}
+.spot .body{padding:22px 24px 26px}
+.spot h3{margin:0;font-size:24px;color:var(--green-dark);line-height:1.35}
+.spot .h3-l2{margin:0 0 12px;color:var(--pink);font-weight:500}
+.spot p{margin:0 0 10px}
+.learn{margin-top:16px;background:var(--soft);border-radius:14px;padding:16px 18px}
+.learn .lv{font-size:13px;color:var(--muted);margin-bottom:4px}
+.learn .sentence{font-size:19px;margin:0 0 10px}
+.learn .zh{font-size:15px;color:var(--muted);margin:-6px 0 10px}
+.words{display:flex;flex-wrap:wrap;gap:8px}
+.word{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  border-radius:999px;padding:4px 12px;font-size:15px;cursor:pointer;color:var(--text);font-family:inherit}
+.word:hover{border-color:var(--green)}
+.word i{font-style:normal;color:var(--muted)}
+.say{border:none;background:var(--green);color:#fff;border-radius:999px;padding:4px 12px;font:inherit;font-size:14px;cursor:pointer}
+.meta{font-size:14px;color:var(--muted);margin-top:12px}
+
+/* ---------- 相片牆 ---------- */
+.gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gallery figure{margin:0;border-radius:14px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
+.gallery img{aspect-ratio:1/1;object-fit:cover;width:100%;transition:transform .4s}
+.gallery figure:hover img{transform:scale(1.04)}
+.gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;color:#fff;font-size:14px;line-height:1.35;
+  background:linear-gradient(transparent,rgba(0,0,0,.65))}
+.gallery .wide{grid-column:span 2}
+.gallery .wide img{aspect-ratio:2/1}
+@media (max-width:700px){.gallery{grid-template-columns:repeat(2,1fr)}}
+
+/* ---------- 更多景點 ---------- */
+.more{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.more .card{padding:20px 22px}
+.more h4{margin:0;font-size:19px;color:var(--green-dark)}
+.more p{margin:6px 0 0;font-size:16px}
+@media (max-width:860px){.more{grid-template-columns:1fr}}
+
+/* ---------- 單字 & 測驗 ---------- */
+.vocab{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.vcard{background:var(--card);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.vcard b{font-size:19px}
+.vcard div small{display:block;color:var(--muted);font-size:14px}
+.quiz .q{padding:22px 24px;margin-bottom:16px}
+.quiz .q p{margin:0 0 12px;font-weight:500}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opts button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:8px 16px;font:inherit;font-size:16px;cursor:pointer}
+.opts button.ok{background:#d8f0e2;border-color:#3a9a68;color:#174d31}
+.opts button.no{background:#fbe1e6;border-color:#d9668a;color:#7a1f38}
+.score{font-weight:700;color:var(--green)}
+
+/* ---------- 行動卡片 ---------- */
+.cta{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.cta a{text-decoration:none;color:inherit;display:block;transition:transform .2s}
+.cta a:hover{transform:translateY(-4px)}
+.cta img{aspect-ratio:16/10;object-fit:cover;width:100%}
+.cta .body{padding:18px 22px 22px}
+.cta h3{margin:0;font-size:21px;color:var(--green-dark)}
+.cta p{margin:6px 0 0;font-size:16px;color:var(--muted)}
+@media (max-width:860px){.cta{grid-template-columns:1fr}}
+
+/* ---------- Footer ---------- */
+footer{background:var(--green-dark);color:#e9f3ed;padding:56px 0 32px;font-size:15px}
+:root[data-theme="dark"] footer{background:#0e1411}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) footer{background:#0e1411}}
+footer a{color:#ffd88a}
+.foot{display:grid;grid-template-columns:1.2fr 1fr 1.4fr;gap:32px}
+footer h4{margin:0 0 10px;font-size:17px;color:#fff}
+footer ul{margin:0;padding-left:18px}
+.credits{font-size:13px;opacity:.85;line-height:1.6}
+.note{border-top:1px solid rgba(255,255,255,.15);margin-top:32px;padding-top:18px;font-size:13px;opacity:.8}
+@media (max-width:860px){.foot{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">🌼 花鄉田尾 <span>Tianwei</span></a>
+    <nav class="nav-links">
+      <a href="#about" data-i="nav_about">認識田尾</a>
+      <a href="#spots" data-i="nav_spots">景點</a>
+      <a href="#gallery" data-i="nav_gallery">相片</a>
+      <a href="#learn" data-i="nav_learn">學英文</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">English</button>
+      <button data-lang="ja" aria-pressed="false">日本語</button>
+      <button data-lang="th" aria-pressed="false">ไทย</button>
+      <button data-lang="id" aria-pressed="false">Indonesia</button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== Hero ========== -->
+<section class="hero" id="top">
+  <img src="images/hero.jpg" alt="田尾公路花園的花卉造景">
+  <div class="wrap">
+    <span class="tag">彰化縣 · Changhua County</span>
+    <h1>花鄉田尾</h1>
+    <p class="en">Tianwei — The Flower Town of Taiwan</p>
+    <p class="hero-l2" data-l2="hero"></p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="facts">
+    <div class="fact"><b>341</b><small>公頃 公路花園<br><span data-l2="f1"></span></small></div>
+    <div class="fact"><b>1973</b><small>開闢公路花園<br><span data-l2="f2"></span></small></div>
+    <div class="fact"><b>4,000萬</b><small>支菊花／年<br><span data-l2="f3"></span></small></div>
+    <div class="fact"><b>20</b><small>個村<br><span data-l2="f4"></span></small></div>
+  </div>
+</div>
+
+<!-- ========== 認識田尾 ========== -->
+<section id="about">
+  <div class="wrap about">
+    <div>
+      <h2>認識田尾 <span class="l2" data-l2="about_t"></span></h2>
+      <p>田尾鄉位在彰化縣南邊，北邊是永靖、南邊是北斗。清朝時，漢人移民來這裡開墾，因為這裡位在濁水溪灌溉水圳的下游，是「田的尾端」，所以叫做<b>「田尾」</b>。</p>
+      <p class="l2" data-l2="about_1"></p>
+      <p>這裡的土壤肥沃、水源充足，很適合種植物。1973 年開闢了「公路花園」，現在是全臺灣最大的花卉、苗木、盆栽集散地，大家都叫它<b>「花的故鄉」</b>。</p>
+      <p class="l2" data-l2="about_2"></p>
+    </div>
+    <img src="images/g-road.jpg" alt="穿過田尾鄉的台1線縱貫公路">
+  </div>
+</section>
+
+<!-- ========== 特色景點 4 張 ========== -->
+<section id="spots" style="background:var(--soft)">
+  <div class="wrap">
+    <h2>四個必看的公共景點 <span class="l2" data-l2="spots_t"></span></h2>
+    <p class="sub">每張卡片都有英文小教室，可依年級切換難度 · Pick your English level below</p>
+
+    <div class="level-bar">
+      <strong>英文難度 English level：</strong>
+      <div class="level" role="group" aria-label="English level">
+        <button data-lv="1" aria-pressed="true">🌱 Level 1 國小</button>
+        <button data-lv="2" aria-pressed="false">🌿 Level 2 國中</button>
+        <button data-lv="3" aria-pressed="false">🌳 Level 3 高中</button>
+      </div>
+    </div>
+
+    <div class="spots" id="spotList"></div>
+
+    <div class="more">
+      <div class="card"><h4>🛝 怡心園遊戲場</h4><p class="l2" style="margin:0" data-l2="m1t"></p><p>公路花園入口旁的共融公園，有磨石子溜滑梯、攀爬球架、沙坑和鞦韆，全天開放。</p><p class="l2" data-l2="m1"></p></div>
+      <div class="card"><h4>⛩️ 在地廟宇</h4><p class="l2" style="margin:0" data-l2="m2t"></p><p>國聖宮祭祀鄭成功，歷史可追溯到清朝道光年間；海豐崙的沛霖宮祭祀三山國王，是客家移民的信仰中心。</p><p class="l2" data-l2="m2"></p></div>
+      <div class="card"><h4>🛤️ 台1線與田尾路</h4><p class="l2" style="margin:0" data-l2="m3t"></p><p>縱貫全臺的台1線省道從田尾中間穿過，從公路花園出發，騎單車就能逛遍花鄉。</p><p class="l2" data-l2="m3"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 相片牆 ========== -->
+<section id="gallery">
+  <div class="wrap">
+    <h2>花鄉相片牆 <span class="l2" data-l2="gal_t"></span></h2>
+    <p class="sub">在田尾，一年四季都有花開 · Something is blooming in every season</p>
+    <div class="gallery">
+      <figure class="wide"><img src="images/g-flower-sculpture.jpg" alt="" loading="lazy"><figcaption>花朵造景 Flower sculpture</figcaption></figure>
+      <figure><img src="images/g-cactus.jpg" alt="" loading="lazy"><figcaption>仙人掌 Cactus</figcaption></figure>
+      <figure><img src="images/g-orchid.jpg" alt="" loading="lazy"><figcaption>蝴蝶蘭 Moth orchid</figcaption></figure>
+      <figure><img src="images/g-foliage.jpg" alt="" loading="lazy"><figcaption>觀葉植物 Foliage plant</figcaption></figure>
+      <figure><img src="images/g-daisy.jpg" alt="" loading="lazy"><figcaption>藍眼菊 African daisy</figcaption></figure>
+      <figure class="wide"><img src="images/g-gazania.jpg" alt="" loading="lazy"><figcaption>勳章菊 Gazania</figcaption></figure>
+      <figure><img src="images/g-gerbera.jpg" alt="" loading="lazy"><figcaption>小花特寫 Flower close-up</figcaption></figure>
+      <figure><img src="images/g-cactus-face.jpg" alt="" loading="lazy"><figcaption>仙人掌娃娃 Cactus with a face</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 單字 + 小測驗 ========== -->
+<section id="learn" style="background:var(--soft)">
+  <div class="wrap">
+    <h2>花鄉英文單字 <span class="l2" data-l2="learn_t"></span></h2>
+    <p class="sub">點一下單字就能聽發音 · Tap a word to hear it</p>
+    <div class="vocab" id="vocab"></div>
+
+    <h2 style="margin-top:64px" id="quiz">小測驗 Quick Quiz</h2>
+    <p class="sub">答對了嗎？ · <span class="score" id="score">0 / 0</span></p>
+    <div class="quiz" id="quizList"></div>
+  </div>
+</section>
+
+<!-- ========== 行動引導 3 張 ========== -->
+<section>
+  <div class="wrap">
+    <h2>下一步 <span class="l2" data-l2="next_t"></span></h2>
+    <p class="sub">走出教室，親自去看看</p>
+    <div class="cta">
+      <a class="card" href="https://www.google.com/maps/search/?api=1&query=%E7%94%B0%E5%B0%BE%E5%85%AC%E8%B7%AF%E8%8A%B1%E5%9C%92" target="_blank" rel="noopener">
+        <img src="images/cycling.jpg" alt="" loading="lazy">
+        <div class="body"><h3>🗺️ 在地圖上找田尾</h3><p data-l2="c1">Find Tianwei on Google Maps</p></div>
+      </a>
+      <a class="card" href="#learn">
+        <img src="images/g-gerbera.jpg" alt="" loading="lazy">
+        <div class="body"><h3>🎧 聽單字、學發音</h3><p data-l2="c2">Listen and learn the words</p></div>
+      </a>
+      <a class="card" href="#quiz">
+        <img src="images/g-cactus.jpg" alt="" loading="lazy">
+        <div class="body"><h3>📝 挑戰小測驗</h3><p data-l2="c3">Take the quick quiz</p></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <h4>🌼 花鄉田尾 Tianwei</h4>
+        <p style="margin:0">彰化縣田尾鄉<br>Tianwei Township, Changhua County, Taiwan</p>
+        <p>田尾鄉公所 Township Office：<br><a href="https://town.chcg.gov.tw/tianwei/" target="_blank" rel="noopener">town.chcg.gov.tw/tianwei</a></p>
+        <p>彰化旅遊資訊網 Changhua Tourism：<br><a href="https://tourism.chcg.gov.tw/" target="_blank" rel="noopener">tourism.chcg.gov.tw</a></p>
+      </div>
+      <div>
+        <h4>資料來源 Sources</h4>
+        <ul>
+          <li><a href="https://www.taiwan.net.tw/m1.aspx?sNo=0042291&uid=48" target="_blank" rel="noopener">交通部觀光署・小鎮漫遊</a></li>
+          <li><a href="https://tourism.chcg.gov.tw/AttractionsContent.aspx?id=7&chk=02d9d045-486c-4325-9d3c-a22b2aea5983" target="_blank" rel="noopener">彰化旅遊資訊網・田尾公路花園</a></li>
+          <li><a href="https://tcmb.culture.tw/zh-tw/detail?indexCode=Culture_Place&id=563574" target="_blank" rel="noopener">國家文化記憶庫・海豐崙彩繪村</a></li>
+          <li><a href="https://zh.wikipedia.org/zh-tw/%E7%94%B0%E5%B0%BE%E9%84%89" target="_blank" rel="noopener">維基百科・田尾鄉</a></li>
+        </ul>
+      </div>
+      <div class="credits">
+        <h4>照片授權 Photo credits</h4>
+        全部照片皆為可商用的創用 CC 授權（BY-SA／CC0），使用時請保留作者標示。<br>
+        Hero、單車、花朵造景、藍眼菊、小花特寫：JerryLai0208（CC BY-SA 2.0）·
+        公路花園、仙人掌、仙人掌娃娃、蝴蝶蘭、勳章菊、觀葉植物：Fat Joe's Photos（CC BY-SA 2.0）·
+        電照菊示意照：At by At（CC BY-SA 3.0）·
+        海豐崙教會：Shouji Hasegawa（CC0）·
+        台1線：Chi-Hung Lin（CC BY-SA 3.0）·
+        來源 Flickr／Wikimedia Commons。
+      </div>
+    </div>
+    <p class="note">本網站為個人製作的非官方家鄉介紹，用於學校教學。日文、泰文、印尼文為 AI 初譯，歡迎母語人士協助校對。資料整理於 2026 年 10 月。<br>
+    This is an unofficial, non-commercial site made for teaching. Japanese, Thai and Indonesian texts are machine-assisted drafts — corrections welcome.</p>
+  </div>
+</footer>
+
+<script>
+/* ================= 景點資料 ================= */
+const SPOTS = [
+ { img:"highway-garden.jpg", zh:"田尾公路花園", icon:"🌷",
+   name:{en:"Tianwei Highway Garden", ja:"田尾公路花園（ハイウェイ・ガーデン）", th:"สวนดอกไม้ริมทางเทียนเหว่ย", id:"Taman Bunga Jalan Raya Tianwei"},
+   zhText:"341 公頃的花卉專業區，沿著公園路、民生路、民族路，有上百家園藝店和苗圃。草花、多肉、仙人掌、盆景、樹苗都有，是全臺灣最大的花卉集散地。",
+   l2:{en:"A 341-hectare flower zone with hundreds of nurseries along Gongyuan, Minsheng and Minzu Roads — Taiwan's biggest plant and flower market.",
+       ja:"341ヘクタールの花の専門区域。公園路・民生路・民族路沿いに数百の園芸店や苗圃が並ぶ、台湾最大の花卉の集散地です。",
+       th:"พื้นที่ปลูกดอกไม้ 341 เฮกตาร์ มีร้านต้นไม้และเรือนเพาะชำนับร้อยแห่งเรียงรายตามถนน เป็นตลาดต้นไม้และดอกไม้ที่ใหญ่ที่สุดในไต้หวัน",
+       id:"Kawasan bunga seluas 341 hektar dengan ratusan toko tanaman dan pembibitan di sepanjang jalan — pasar tanaman dan bunga terbesar di Taiwan."},
+   meta:"📍 彰化縣田尾鄉民生路一段一帶 · 全年開放",
+   lv:[ {s:"Tianwei has many flowers. They are beautiful!", zh:"田尾有很多花，它們很漂亮！", w:[["flower","花"],["garden","花園"],["beautiful","漂亮的"]]},
+        {s:"Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.", zh:"田尾公路花園以花田聞名，遊客可以在那裡買植物和種子。", w:[["famous","有名的"],["visitor","遊客"],["plant","植物"],["seed","種子"]]},
+        {s:"Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.", zh:"占地 341 公頃，這座花園是臺灣最大的花卉、苗木和盆景生產與銷售中心。", w:[["hectare","公頃"],["seedling","幼苗"],["bonsai","盆景"],["nursery","苗圃"]]} ]},
+
+ { img:"chrysanthemum-lights.jpg", cap:"示意照：夜間開燈的電照菊溫室（攝於日本）Illustration: a lit chrysanthemum greenhouse in Japan", zh:"菊花不夜城", icon:"💡",
+   name:{en:"Chrysanthemum Fields at Night", ja:"菊畑の不夜城", th:"ทุ่งเบญจมาศยามค่ำคืน", id:"Ladang Krisan di Malam Hari"},
+   zhText:"田尾有 120 公頃的菊花田。秋冬夜晚，花農會打開一排排電燈，讓菊花晚一點開花、花莖長得更高。整片田亮晶晶的，像一座不睡覺的城市。",
+   l2:{en:"Tianwei has 120 hectares of chrysanthemum fields. On autumn and winter nights, farmers switch on rows of lights so the flowers grow taller stems — the fields glow like a city that never sleeps.",
+       ja:"田尾には120ヘクタールの菊畑があります。秋から冬の夜、農家は電灯をともして開花を調整し、茎を長く育てます。畑全体が光り輝き、まるで眠らない街のようです。",
+       th:"เทียนเหว่ยมีทุ่งเบญจมาศ 120 เฮกตาร์ ในคืนฤดูใบไม้ร่วงและฤดูหนาว เกษตรกรจะเปิดไฟเป็นแถว ๆ เพื่อให้ก้านดอกยาวขึ้น ทุ่งทั้งทุ่งจึงสว่างไสวเหมือนเมืองที่ไม่เคยหลับใหล",
+       id:"Tianwei memiliki 120 hektar ladang krisan. Pada malam musim gugur dan dingin, petani menyalakan deretan lampu agar batang bunga tumbuh lebih tinggi — ladang bersinar seperti kota yang tak pernah tidur."},
+   meta:"🕖 最佳時間：約 10 月至隔年 2 月的晚上 · 請在路邊欣賞，不要進入田裡",
+   lv:[ {s:"At night, the lights are on. The fields are bright.", zh:"晚上燈亮了，田裡很明亮。", w:[["night","晚上"],["light","燈"],["bright","明亮的"]]},
+        {s:"Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.", zh:"農夫在晚上開燈，讓菊花在開花前長出更長的莖。", w:[["farmer","農夫"],["chrysanthemum","菊花"],["stem","莖"],["bloom","開花"]]},
+        {s:"By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.", zh:"農夫用電燈延長白天的時間，延後開花，控制菊花上市的時間。", w:[["extend","延長"],["delay","延後"],["harvest","收成"],["agriculture","農業"]]} ]},
+
+ { img:"haifenglun-church.jpg", cap:"海豐崙的街景：海豐崙教會 A street in Haifenglun", zh:"海豐崙彩繪村", icon:"🎨",
+   name:{en:"Haifenglun Painted Village", ja:"海豊崙ペイント村", th:"หมู่บ้านภาพวาดไห่เฟิงหลุน", id:"Desa Lukisan Haifenglun"},
+   zhText:"海豐崙是海豐村和陸豐村的舊名，祖先從廣東海豐、陸豐搬來，用老家的名字紀念家鄉。2014 年起，返鄉青年和居民一起在牆上畫畫，讓老巷弄變得繽紛有趣。",
+   l2:{en:"Haifenglun is the old name of two villages founded by settlers from Guangdong. Since 2014, young locals and residents have painted the walls, turning quiet old lanes into colorful street art.",
+       ja:"海豊崙は、広東から移り住んだ人々が故郷の名をつけた二つの村の旧名です。2014年から若者と住民が壁に絵を描き、古い路地がカラフルなアートの街になりました。",
+       th:"ไห่เฟิงหลุนเป็นชื่อเก่าของสองหมู่บ้านที่ผู้อพยพจากกวางตุ้งตั้งขึ้น ตั้งแต่ปี 2014 คนหนุ่มสาวและชาวบ้านร่วมกันวาดภาพบนกำแพง ทำให้ตรอกเก่ากลายเป็นงานศิลปะหลากสี",
+       id:"Haifenglun adalah nama lama dua desa yang didirikan pendatang dari Guangdong. Sejak 2014, pemuda dan warga melukis dinding-dinding sehingga gang tua berubah menjadi seni jalanan yang penuh warna."},
+   meta:"📍 田尾鄉海豐村、陸豐村 · 這裡是住家，請小聲參觀",
+   lv:[ {s:"Look at the wall! It has a big painting.", zh:"看那面牆！上面有一幅大畫。", w:[["wall","牆"],["painting","畫"],["color","顏色"]]},
+        {s:"Young people came back to their hometown and painted the old walls with bright colors.", zh:"年輕人回到家鄉，用鮮豔的顏色畫老牆。", w:[["hometown","家鄉"],["village","村莊"],["colorful","繽紛的"],["artist","藝術家"]]},
+        {s:"The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.", zh:"村名來自移民在廣東的祖籍地，而社區藝術讓它有了新的面貌。", w:[["settler","移民；拓墾者"],["ancestral","祖先的"],["community","社區"],["mural","壁畫"]]} ]},
+
+ { img:"cycling.jpg", zh:"騎單車遊花鄉", icon:"🚲",
+   name:{en:"Cycling the Flower Town", ja:"自転車で花の町めぐり", th:"ปั่นจักรยานชมเมืองดอกไม้", id:"Bersepeda Keliling Kota Bunga"},
+   zhText:"公路花園有約 4.7 公里的觀光環園道路，地勢平坦，很適合騎單車。路邊常常可以看到被修剪成動物形狀的樹，像一群鳥站在路旁！",
+   l2:{en:"A flat 4.7 km loop road runs through the garden area — perfect for cycling. Watch for trees trimmed into animal shapes, like a flock of birds by the road!",
+       ja:"花園エリアには約4.7kmの平坦な周遊道路があり、サイクリングにぴったり。道ばたには鳥の形に刈り込まれた木もあります！",
+       th:"มีถนนวงรอบระยะทางประมาณ 4.7 กม. ผ่านพื้นที่สวน ทางราบเรียบเหมาะกับการปั่นจักรยาน ระหว่างทางจะเห็นต้นไม้ที่ตัดแต่งเป็นรูปสัตว์ เหมือนฝูงนกยืนอยู่ริมถนน!",
+       id:"Jalan melingkar sepanjang sekitar 4,7 km yang datar melintasi kawasan taman — cocok untuk bersepeda. Lihat pohon-pohon yang dipangkas berbentuk hewan, seperti sekawanan burung di tepi jalan!"},
+   meta:"🚲 環園道路約 4.7 公里 · 記得戴安全帽、注意來車",
+   lv:[ {s:"I ride my bike. I see a bird tree!", zh:"我騎腳踏車，我看到一棵小鳥樹！", w:[["bike","腳踏車"],["ride","騎"],["tree","樹"]]},
+        {s:"The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.", zh:"這條路平坦又安靜，所以很容易騎腳踏車欣賞花。", w:[["flat","平坦的"],["quiet","安靜的"],["enjoy","享受"],["helmet","安全帽"]]},
+        {s:"Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.", zh:"園丁把灌木修剪成鳥和動物的形狀，這種藝術叫做「造型修剪」，展現田尾的園藝技術。", w:[["shrub","灌木"],["topiary","造型修剪"],["horticulture","園藝"],["route","路線"]]} ]}
+];
+
+/* ================= 介面翻譯（第二語言） ================= */
+const T = {
+ en:{hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
+     f1:"hectares of garden", f2:"garden opened", f3:"chrysanthemums a year", f4:"villages",
+     about_t:"About Tianwei",
+     about_1:"Tianwei is in southern Changhua, between Yongjing and Beidou. Early settlers lived at the lower end of the irrigation canals — the \"tail\" (wěi) of the rice fields (tián). That is how Tianwei got its name.",
+     about_2:"With rich soil and plenty of water, Tianwei is great for growing plants. The Highway Garden opened in 1973, and today Tianwei is known as \"the hometown of flowers.\"",
+     spots_t:"Four Public Places to See", gal_t:"Photo Wall", learn_t:"Flower Town Words", next_t:"Next Steps",
+     m1t:"Yixin Park Playground", m1:"An inclusive playground at the garden entrance, open all day.",
+     m2t:"Local Temples", m2:"Guosheng Temple honors Koxinga; Peilin Temple is the center of Hakka faith in Haifenglun.",
+     m3t:"Provincial Highway 1", m3:"Taiwan's main north–south road runs right through Tianwei.",
+     c1:"Find Tianwei on Google Maps", c2:"Listen and learn the words", c3:"Take the quick quiz",
+     nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
+ ja:{hero:"彰化県南部にある、台湾最大の花と植木の町。",
+     f1:"ヘクタールの花園", f2:"花園の開設", f3:"本の菊／年", f4:"の村",
+     about_t:"田尾について",
+     about_1:"田尾は彰化県の南部、永靖と北斗の間にあります。清の時代、移民は灌漑用水路の下流、つまり「田の尾（はし）」に住んだため、「田尾」と呼ばれるようになりました。",
+     about_2:"肥えた土と豊かな水に恵まれ、植物を育てるのに最適です。1973年に公路花園が開かれ、今では「花のふるさと」と呼ばれています。",
+     spots_t:"必見の公共スポット4選", gal_t:"フォトギャラリー", learn_t:"花の町の英単語", next_t:"次のステップ",
+     m1t:"怡心園の遊び場", m1:"花園入口にあるインクルーシブ公園。終日開放。",
+     m2t:"地元の廟", m2:"国聖宮は鄭成功を祀り、沛霖宮は海豊崙の客家の信仰の中心です。",
+     m3t:"台1線", m3:"台湾を南北に貫く幹線道路が田尾の真ん中を通っています。",
+     c1:"Googleマップで田尾を探す", c2:"単語を聞いて覚えよう", c3:"クイズに挑戦",
+     nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
+ th:{hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
+     f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f3:"ดอกเบญจมาศต่อปี", f4:"หมู่บ้าน",
+     about_t:"รู้จักเทียนเหว่ย",
+     about_1:"เทียนเหว่ยอยู่ทางใต้ของจางฮว่า ระหว่างหย่งจิ้งและเป่ยโต่ว ในอดีตผู้บุกเบิกอาศัยอยู่ปลายคลองชลประทาน คือ \"ปลายนา\" จึงได้ชื่อว่า \"เทียนเหว่ย\" (เทียน = นา, เหว่ย = ปลาย)",
+     about_2:"ดินอุดมสมบูรณ์และน้ำบริบูรณ์ เหมาะกับการปลูกต้นไม้ สวนดอกไม้ริมทางเปิดในปี 1973 ปัจจุบันได้ชื่อว่า \"บ้านเกิดของดอกไม้\"",
+     spots_t:"4 สถานที่สาธารณะที่ต้องไป", gal_t:"แกลเลอรีภาพ", learn_t:"คำศัพท์เมืองดอกไม้", next_t:"ขั้นต่อไป",
+     m1t:"สนามเด็กเล่นอี๋ซินหยวน", m1:"สวนสาธารณะสำหรับทุกคนที่ทางเข้าสวน เปิดตลอดวัน",
+     m2t:"ศาลเจ้าท้องถิ่น", m2:"ศาลเจ้ากั๋วเซิ่งบูชาเจิ้งเฉิงกง ศาลเจ้าเพ่ยหลินเป็นศูนย์รวมศรัทธาของชาวฮากกา",
+     m3t:"ทางหลวงหมายเลข 1", m3:"ถนนสายหลักเหนือ–ใต้ของไต้หวันผ่านกลางเทียนเหว่ย",
+     c1:"ดูเทียนเหว่ยบน Google Maps", c2:"ฟังและเรียนคำศัพท์", c3:"ทำแบบทดสอบ",
+     nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
+ id:{hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
+     f1:"hektar taman", f2:"taman dibuka", f3:"tangkai krisan per tahun", f4:"desa",
+     about_t:"Tentang Tianwei",
+     about_1:"Tianwei terletak di selatan Changhua, di antara Yongjing dan Beidou. Para pendatang dulu tinggal di ujung bawah saluran irigasi — \"ujung sawah\" (tián = sawah, wěi = ujung). Dari situlah nama Tianwei berasal.",
+     about_2:"Tanahnya subur dan airnya melimpah, sangat cocok untuk menanam. Taman Bunga Jalan Raya dibuka tahun 1973, dan kini Tianwei dikenal sebagai \"kampung halaman bunga\".",
+     spots_t:"4 Tempat Umum yang Wajib Dikunjungi", gal_t:"Galeri Foto", learn_t:"Kosakata Kota Bunga", next_t:"Langkah Berikutnya",
+     m1t:"Taman Bermain Yixin", m1:"Taman bermain inklusif di pintu masuk taman, buka sepanjang hari.",
+     m2t:"Kuil Setempat", m2:"Kuil Guosheng memuliakan Koxinga; Kuil Peilin adalah pusat kepercayaan warga Hakka di Haifenglun.",
+     m3t:"Jalan Provinsi 1", m3:"Jalan utama utara–selatan Taiwan melintas tepat di tengah Tianwei.",
+     c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
+     nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"}
+};
+const NAV_ZH = {nav_about:"認識田尾",nav_spots:"景點",nav_gallery:"相片",nav_learn:"學英文"};
+
+let lang = "en", level = 1;
+try{ lang = localStorage.getItem("tw-lang") || "en"; level = +localStorage.getItem("tw-level") || 1; }catch(e){}
+
+/* ================= 發音（微軟 Edge 神經語音 en-US-AvaNeural，預先產生的 MP3） ================= */
+const AUDIO = {"At night, the lights are on. The fields are bright.": "80b9b48052", "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.": "33e034b86c", "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.": "cb252708a7", "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.": "b234aa836a", "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.": "aa6432938a", "I ride my bike. I see a bird tree!": "e92c0f4be3", "Look at the wall! It has a big painting.": "60274aefc1", "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.": "ddd7ec47c9", "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.": "7bf5617aca", "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.": "86ffd79105", "Tianwei has many flowers. They are beautiful!": "1747676726", "Young people came back to their hometown and painted the old walls with bright colors.": "eb85882c37", "agriculture": "f8ea9e07f5", "ancestral": "8f2ea402d3", "artist": "0441f9e2d9", "beautiful": "e8008e0690", "bike": "dde2c7ad63", "bloom": "414d49e28e", "bonsai": "90155b2515", "bright": "173309254d", "chrysanthemum": "26da5ba70e", "color": "70dda5dfb8", "colorful": "e280d65e42", "community": "82df41632d", "delay": "7243f8be75", "enjoy": "76e3692572", "extend": "e0a91e6db6", "famous": "8d0b660470", "farmer": "97f974881b", "flat": "37fc7edee2", "flower": "608f0b988d", "garden": "e2704f30f5", "harvest": "430e39cf0e", "hectare": "d0b24510aa", "helmet": "17b9183a08", "hometown": "262c999888", "horticulture": "e9c8af81d3", "light": "2ac43aa43b", "mural": "739d14e0d9", "night": "93a04b066f", "nursery": "a718a874dc", "painting": "6a7c1b1d58", "plant": "9ea0a36b3a", "quiet": "556966c783", "ride": "059763450f", "route": "9c46408a3b", "seed": "fe4c0f30aa", "seedling": "282e177897", "settler": "e11c2c8017", "shrub": "2f5bae73b1", "stem": "e730db5c29", "topiary": "22c2ebe8d1", "tree": "c0af77cf82", "village": "813f8ce580", "visitor": "127870930d", "wall": "2d86bdac01"};
+const player = new Audio();
+function speak(text){
+  const id = AUDIO[text];
+  if(id){ player.pause(); player.src = `audio/${id}.mp3`; player.currentTime = 0; player.play().catch(()=>{}); return; }
+  if("speechSynthesis" in window){            // 備援：找不到音檔時改用瀏覽器內建語音
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = .85;
+    speechSynthesis.speak(u);
+  }
+}
+
+/* ================= 渲染 ================= */
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function renderSpots(){
+  document.getElementById("spotList").innerHTML = SPOTS.map((p,i)=>{
+    const L = p.lv[level-1];
+    return `<article class="card spot">
+      <figure class="pic"><img src="images/${p.img}" alt="${p.zh}" loading="lazy">${p.cap?`<figcaption>${esc(p.cap)}</figcaption>`:""}</figure>
+      <div class="body">
+        <h3>${p.icon} ${p.zh}</h3>
+        <p class="h3-l2">${esc(p.name[lang])}${lang!=="en" ? " · "+esc(p.name.en) : ""}</p>
+        <p>${p.zhText}</p>
+        <p class="l2">${esc(p.l2[lang])}</p>
+        <div class="learn">
+          <div class="lv">${["🌱 Level 1","🌿 Level 2","🌳 Level 3"][level-1]} · English Corner</div>
+          <p class="sentence">${esc(L.s)} <button class="say" data-say="${esc(L.s)}">🔊 聽</button></p>
+          <p class="zh">${L.zh}</p>
+          <div class="words">${L.w.map(([en,zh])=>`<button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button>`).join("")}</div>
+        </div>
+        <div class="meta">${p.meta}</div>
+      </div></article>`;
+  }).join("");
+}
+
+function renderL2(){
+  const t = T[lang];
+  document.querySelectorAll("[data-l2]").forEach(el=>{ el.textContent = t[el.dataset.l2] || ""; });
+  document.querySelectorAll("[data-i]").forEach(el=>{ el.textContent = NAV_ZH[el.dataset.i] + " " + t[el.dataset.i]; });
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.lang===lang));
+  document.documentElement.lang = "zh-Hant";
+}
+
+function renderVocab(){
+  const all = [];
+  SPOTS.forEach(p=>p.lv.slice(0,level).forEach(L=>L.w.forEach(w=>{ if(!all.some(a=>a[0]===w[0])) all.push(w); })));
+  document.getElementById("vocab").innerHTML = all.map(([en,zh])=>
+    `<div class="vcard"><div><b>${en}</b><small>${zh}</small></div><button class="say" data-say="${en}">🔊</button></div>`).join("");
+}
+
+const QUIZ = [
+ {q:"「田尾」的名字是怎麼來的？ Where does the name \"Tianwei\" come from?", o:["田的尾端 The end of the fields","一種花的名字 A flower's name","一條河 A river"], a:0},
+ {q:"Farmers turn on lights at night to help the ___ grow.", o:["cactus","chrysanthemums","rice"], a:1},
+ {q:"\"Nursery\" 在這裡的意思是？", o:["托兒所","苗圃","醫院"], a:1},
+ {q:"海豐崙的祖先是從哪裡來的？ Where did the settlers of Haifenglun come from?", o:["日本 Japan","廣東 Guangdong","泰國 Thailand"], a:1},
+ {q:"The Highway Garden opened in ___.", o:["1973","1999","2014"], a:0},
+ {q:"把樹修剪成動物形狀，英文叫做？", o:["topiary","bonsai","mural"], a:0}
+];
+let answered = 0, correct = 0;
+function renderQuiz(){
+  document.getElementById("quizList").innerHTML = QUIZ.map((x,i)=>
+    `<div class="card q"><p>${i+1}. ${esc(x.q)}</p><div class="opts">${x.o.map((o,j)=>`<button data-q="${i}" data-j="${j}">${esc(o)}</button>`).join("")}</div></div>`).join("");
+}
+
+function setLevel(n){
+  level = n;
+  try{ localStorage.setItem("tw-level", n); }catch(e){}
+  document.querySelectorAll(".level button").forEach(b=>b.setAttribute("aria-pressed", +b.dataset.lv===n));
+  renderSpots(); renderVocab();
+}
+function setLang(l){
+  lang = l;
+  try{ localStorage.setItem("tw-lang", l); }catch(e){}
+  renderL2(); renderSpots();
+}
+
+document.addEventListener("click", e=>{
+  const s = e.target.closest("[data-say]"); if(s){ speak(s.dataset.say); return; }
+  const lb = e.target.closest("[data-lang]"); if(lb){ setLang(lb.dataset.lang); return; }
+  const vb = e.target.closest("[data-lv]"); if(vb){ setLevel(+vb.dataset.lv); return; }
+  const qb = e.target.closest("[data-q]");
+  if(qb){
+    const box = qb.parentElement; if(box.dataset.done) return;
+    box.dataset.done = 1; answered++;
+    const x = QUIZ[+qb.dataset.q], j = +qb.dataset.j;
+    if(j === x.a) correct++; else qb.classList.add("no");
+    box.children[x.a].classList.add("ok");
+    document.getElementById("score").textContent = `${correct} / ${answered}`;
+  }
+});
+
+renderQuiz(); setLang(lang); setLevel(level);
+</script>
+</body>
+</html>
