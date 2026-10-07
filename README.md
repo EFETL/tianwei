@@ -37,7 +37,7 @@ CNAME           自訂網域 tianwei.efetl.com
 
 ## 照片授權
 
-全部照片皆為可商用的創用 CC 授權（CC BY-SA／CC0），來源 Flickr、Wikimedia Commons：
+全部照片皆為可商用的創用 CC 授權（CC BY-SA／CC0），來源 Flickr、Wikimedia Commons。為保護隱私，照片中的車牌與門牌已做馬賽克處理。
 
 - JerryLai0208（CC BY-SA 2.0）：首頁大圖、單車、花朵造景、藍眼菊、小花特寫
 - Fat Joe's Photos（CC BY-SA 2.0）：公路花園、故事苗圃、仙人掌、仙人掌娃娃、蝴蝶蘭、勳章菊、觀葉植物
