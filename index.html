@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>花鄉田尾 Tianwei</title>
-<meta name="description" content="彰化縣田尾鄉多語介紹：中文＋英文（三級難度），並提供日文、泰文、印尼文。非官方、教學用途。">
+<meta name="description" content="彰化縣田尾鄉多語介紹：中文＋英文（三級難度），並提供日文、泰文、印尼文、越南文。非官方、教學用途。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+Thai:wght@400;600&family=Noto+Sans+JP:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -62,7 +62,7 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .lang button,.level button{border:1px solid var(--line);background:var(--card);color:var(--text);
   border-radius:999px;padding:4px 12px;font:inherit;font-size:18px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
-@media (max-width:860px){.nav-links{display:none}.nav{height:auto;padding:10px 16px;flex-wrap:wrap}.lang{margin-left:auto}.lang button{padding:3px 10px;font-size:18px}section{scroll-margin-top:110px}}
+@media (max-width:860px){.nav-links{display:none}.nav{height:auto;padding:10px 16px;flex-wrap:wrap}.lang{margin-left:auto}.lang button{padding:3px 10px;font-size:18px}section{scroll-margin-top:160px}}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;color:#fff;padding:0}
@@ -205,6 +205,7 @@ footer ul{margin:0;padding-left:18px}
       <button data-lang="ja" aria-pressed="false">日本語</button>
       <button data-lang="th" aria-pressed="false">ไทย</button>
       <button data-lang="id" aria-pressed="false">Indonesia</button>
+      <button data-lang="vi" aria-pressed="false">Tiếng Việt</button>
     </div>
   </div>
 </header>
@@ -378,8 +379,8 @@ footer ul{margin:0;padding-left:18px}
         來源 Flickr／Wikimedia Commons。
       </div>
     </div>
-    <p class="note">本網站為個人製作的非官方家鄉介紹，用於學校教學。日文、泰文、印尼文為 AI 初譯，歡迎母語人士協助校對。資料整理於 2026 年 10 月。<br>
-    This is an unofficial, non-commercial site made for teaching. Japanese, Thai and Indonesian texts are machine-assisted drafts — corrections welcome.</p>
+    <p class="note">本網站為個人製作的非官方家鄉介紹，用於學校教學。日文、泰文、印尼文、越南文為 AI 初譯，歡迎母語人士協助校對。資料整理於 2026 年 10 月。<br>
+    This is an unofficial, non-commercial site made for teaching. Japanese, Thai, Indonesian and Vietnamese texts are machine-assisted drafts — corrections welcome.</p>
   </div>
 </footer>
 
@@ -387,48 +388,48 @@ footer ul{margin:0;padding-left:18px}
 /* ================= 景點資料 ================= */
 const SPOTS = [
  { img:"highway-garden.jpg", zh:"田尾公路花園", icon:"🌷",
-   name:{en:"Tianwei Highway Garden", ja:"田尾公路花園（ハイウェイ・ガーデン）", th:"สวนดอกไม้ริมทางเทียนเหว่ย", id:"Taman Bunga Jalan Raya Tianwei"},
+   name:{en:"Tianwei Highway Garden", ja:"田尾公路花園（ハイウェイ・ガーデン）", th:"สวนดอกไม้ริมทางเทียนเหว่ย", id:"Taman Bunga Jalan Raya Tianwei", vi:"Vườn hoa Quốc lộ Tianwei"},
    zhText:"341 公頃的花卉專業區，沿著公園路、民生路、民族路，有上百家園藝店和苗圃。草花、多肉、仙人掌、盆景、樹苗都有，是全臺灣最大的花卉集散地。",
    l2:{en:"A 341-hectare flower zone with hundreds of nurseries along Gongyuan, Minsheng and Minzu Roads — Taiwan's biggest plant and flower market.",
        ja:"341ヘクタールの花の専門区域。公園路・民生路・民族路沿いに数百の園芸店や苗圃が並ぶ、台湾最大の花卉の集散地です。",
        th:"พื้นที่ปลูกดอกไม้ 341 เฮกตาร์ มีร้านต้นไม้และเรือนเพาะชำนับร้อยแห่งเรียงรายตามถนน เป็นตลาดต้นไม้และดอกไม้ที่ใหญ่ที่สุดในไต้หวัน",
-       id:"Kawasan bunga seluas 341 hektar dengan ratusan toko tanaman dan pembibitan di sepanjang jalan — pasar tanaman dan bunga terbesar di Taiwan."},
+       id:"Kawasan bunga seluas 341 hektar dengan ratusan toko tanaman dan pembibitan di sepanjang jalan — pasar tanaman dan bunga terbesar di Taiwan.", vi:"Khu trồng hoa rộng 341 hecta với hàng trăm vườn ươm và cửa hàng cây cảnh dọc các con đường — chợ hoa và cây cảnh lớn nhất Đài Loan."},
    meta:"📍 彰化縣田尾鄉民生路一段一帶 · 全年開放",
    lv:[ {s:"Tianwei has many flowers. They are beautiful!", zh:"田尾有很多花，它們很漂亮！", w:[["flower","花"],["garden","花園"],["beautiful","漂亮的"]]},
         {s:"Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.", zh:"田尾公路花園以花田聞名，遊客可以在那裡買植物和種子。", w:[["famous","有名的"],["visitor","遊客"],["plant","植物"],["seed","種子"]]},
         {s:"Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.", zh:"占地 341 公頃，這座花園是臺灣最大的花卉、苗木和盆景生產與銷售中心。", w:[["hectare","公頃"],["seedling","幼苗"],["bonsai","盆景"],["nursery","苗圃"]]} ]},
 
  { img:"chrysanthemum-lights.jpg", cap:"示意照：夜間開燈的電照菊溫室（攝於日本）Illustration: a lit chrysanthemum greenhouse in Japan", zh:"菊花不夜城", icon:"💡",
-   name:{en:"Chrysanthemum Fields at Night", ja:"菊畑の不夜城", th:"ทุ่งเบญจมาศยามค่ำคืน", id:"Ladang Krisan di Malam Hari"},
+   name:{en:"Chrysanthemum Fields at Night", ja:"菊畑の不夜城", th:"ทุ่งเบญจมาศยามค่ำคืน", id:"Ladang Krisan di Malam Hari", vi:"Cánh đồng hoa cúc về đêm"},
    zhText:"田尾有 120 公頃的菊花田。秋冬夜晚，花農會打開一排排電燈，讓菊花晚一點開花、花莖長得更高。整片田亮晶晶的，像一座不睡覺的城市。",
    l2:{en:"Tianwei has 120 hectares of chrysanthemum fields. On autumn and winter nights, farmers switch on rows of lights so the flowers grow taller stems — the fields glow like a city that never sleeps.",
        ja:"田尾には120ヘクタールの菊畑があります。秋から冬の夜、農家は電灯をともして開花を調整し、茎を長く育てます。畑全体が光り輝き、まるで眠らない街のようです。",
        th:"เทียนเหว่ยมีทุ่งเบญจมาศ 120 เฮกตาร์ ในคืนฤดูใบไม้ร่วงและฤดูหนาว เกษตรกรจะเปิดไฟเป็นแถว ๆ เพื่อให้ก้านดอกยาวขึ้น ทุ่งทั้งทุ่งจึงสว่างไสวเหมือนเมืองที่ไม่เคยหลับใหล",
-       id:"Tianwei memiliki 120 hektar ladang krisan. Pada malam musim gugur dan dingin, petani menyalakan deretan lampu agar batang bunga tumbuh lebih tinggi — ladang bersinar seperti kota yang tak pernah tidur."},
+       id:"Tianwei memiliki 120 hektar ladang krisan. Pada malam musim gugur dan dingin, petani menyalakan deretan lampu agar batang bunga tumbuh lebih tinggi — ladang bersinar seperti kota yang tak pernah tidur.", vi:"Tianwei có 120 hecta ruộng hoa cúc. Vào những đêm thu đông, nông dân bật từng hàng đèn để thân hoa mọc cao hơn — cả cánh đồng sáng rực như một thành phố không ngủ."},
    meta:"🕖 最佳時間：約 10 月至隔年 2 月的晚上 · 請在路邊欣賞，不要進入田裡",
    lv:[ {s:"At night, the lights are on. The fields are bright.", zh:"晚上燈亮了，田裡很明亮。", w:[["night","晚上"],["light","燈"],["bright","明亮的"]]},
         {s:"Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.", zh:"農夫在晚上開燈，讓菊花在開花前長出更長的莖。", w:[["farmer","農夫"],["chrysanthemum","菊花"],["stem","莖"],["bloom","開花"]]},
         {s:"By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.", zh:"農夫用電燈延長白天的時間，延後開花，控制菊花上市的時間。", w:[["extend","延長"],["delay","延後"],["harvest","收成"],["agriculture","農業"]]} ]},
 
  { img:"haifenglun-church.jpg", cap:"海豐崙的街景：海豐崙教會 A street in Haifenglun", zh:"海豐崙彩繪村", icon:"🎨",
-   name:{en:"Haifenglun Painted Village", ja:"海豊崙ペイント村", th:"หมู่บ้านภาพวาดไห่เฟิงหลุน", id:"Desa Lukisan Haifenglun"},
+   name:{en:"Haifenglun Painted Village", ja:"海豊崙ペイント村", th:"หมู่บ้านภาพวาดไห่เฟิงหลุน", id:"Desa Lukisan Haifenglun", vi:"Làng bích họa Haifenglun"},
    zhText:"海豐崙是海豐村和陸豐村的舊名，祖先從廣東海豐、陸豐搬來，用老家的名字紀念家鄉。2014 年起，返鄉青年和居民一起在牆上畫畫，讓老巷弄變得繽紛有趣。",
    l2:{en:"Haifenglun is the old name of two villages founded by settlers from Guangdong. Since 2014, young locals and residents have painted the walls, turning quiet old lanes into colorful street art.",
        ja:"海豊崙は、広東から移り住んだ人々が故郷の名をつけた二つの村の旧名です。2014年から若者と住民が壁に絵を描き、古い路地がカラフルなアートの街になりました。",
        th:"ไห่เฟิงหลุนเป็นชื่อเก่าของสองหมู่บ้านที่ผู้อพยพจากกวางตุ้งตั้งขึ้น ตั้งแต่ปี 2014 คนหนุ่มสาวและชาวบ้านร่วมกันวาดภาพบนกำแพง ทำให้ตรอกเก่ากลายเป็นงานศิลปะหลากสี",
-       id:"Haifenglun adalah nama lama dua desa yang didirikan pendatang dari Guangdong. Sejak 2014, pemuda dan warga melukis dinding-dinding sehingga gang tua berubah menjadi seni jalanan yang penuh warna."},
+       id:"Haifenglun adalah nama lama dua desa yang didirikan pendatang dari Guangdong. Sejak 2014, pemuda dan warga melukis dinding-dinding sehingga gang tua berubah menjadi seni jalanan yang penuh warna.", vi:"Haifenglun là tên cũ của hai ngôi làng do những người di cư từ Quảng Đông lập nên. Từ năm 2014, thanh niên và cư dân địa phương đã vẽ tranh lên tường, biến những con hẻm cũ yên tĩnh thành nghệ thuật đường phố đầy màu sắc."},
    meta:"📍 田尾鄉海豐村、陸豐村 · 這裡是住家，請小聲參觀",
    lv:[ {s:"Look at the wall! It has a big painting.", zh:"看那面牆！上面有一幅大畫。", w:[["wall","牆"],["painting","畫"],["color","顏色"]]},
         {s:"Young people came back to their hometown and painted the old walls with bright colors.", zh:"年輕人回到家鄉，用鮮豔的顏色畫老牆。", w:[["hometown","家鄉"],["village","村莊"],["colorful","繽紛的"],["artist","藝術家"]]},
         {s:"The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.", zh:"村名來自移民在廣東的祖籍地，而社區藝術讓它有了新的面貌。", w:[["settler","移民；拓墾者"],["ancestral","祖先的"],["community","社區"],["mural","壁畫"]]} ]},
 
  { img:"cycling.jpg", zh:"騎單車遊花鄉", icon:"🚲",
-   name:{en:"Cycling the Flower Town", ja:"自転車で花の町めぐり", th:"ปั่นจักรยานชมเมืองดอกไม้", id:"Bersepeda Keliling Kota Bunga"},
+   name:{en:"Cycling the Flower Town", ja:"自転車で花の町めぐり", th:"ปั่นจักรยานชมเมืองดอกไม้", id:"Bersepeda Keliling Kota Bunga", vi:"Đạp xe quanh thị trấn hoa"},
    zhText:"公路花園有約 4.7 公里的觀光環園道路，地勢平坦，很適合騎單車。路邊常常可以看到被修剪成動物形狀的樹，像一群鳥站在路旁！",
    l2:{en:"A flat 4.7 km loop road runs through the garden area — perfect for cycling. Watch for trees trimmed into animal shapes, like a flock of birds by the road!",
        ja:"花園エリアには約4.7kmの平坦な周遊道路があり、サイクリングにぴったり。道ばたには鳥の形に刈り込まれた木もあります！",
        th:"มีถนนวงรอบระยะทางประมาณ 4.7 กม. ผ่านพื้นที่สวน ทางราบเรียบเหมาะกับการปั่นจักรยาน ระหว่างทางจะเห็นต้นไม้ที่ตัดแต่งเป็นรูปสัตว์ เหมือนฝูงนกยืนอยู่ริมถนน!",
-       id:"Jalan melingkar sepanjang sekitar 4,7 km yang datar melintasi kawasan taman — cocok untuk bersepeda. Lihat pohon-pohon yang dipangkas berbentuk hewan, seperti sekawanan burung di tepi jalan!"},
+       id:"Jalan melingkar sepanjang sekitar 4,7 km yang datar melintasi kawasan taman — cocok untuk bersepeda. Lihat pohon-pohon yang dipangkas berbentuk hewan, seperti sekawanan burung di tepi jalan!", vi:"Một con đường vòng bằng phẳng dài khoảng 4,7 km chạy qua khu vườn — rất thích hợp để đạp xe. Hãy để ý những cây được cắt tỉa thành hình con vật, trông như một đàn chim đứng bên đường!"},
    meta:"🚲 環園道路約 4.7 公里 · 記得戴安全帽、注意來車",
    lv:[ {s:"I ride my bike. I see a bird tree!", zh:"我騎腳踏車，我看到一棵小鳥樹！", w:[["bike","腳踏車"],["ride","騎"],["tree","樹"]]},
         {s:"The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.", zh:"這條路平坦又安靜，所以很容易騎腳踏車欣賞花。", w:[["flat","平坦的"],["quiet","安靜的"],["enjoy","享受"],["helmet","安全帽"]]},
@@ -437,46 +438,46 @@ const SPOTS = [
 
 /* ================= 花鄉的故事（改寫自田尾鄉公所〈田尾花卉事業的起源〉） ================= */
 const STORY = [
- { when:"一百多年前", whenL:{en:"Over 100 years ago", ja:"100年以上前", th:"กว่า 100 ปีก่อน", id:"Lebih dari 100 tahun lalu"},
+ { when:"一百多年前", whenL:{en:"Over 100 years ago", ja:"100年以上前", th:"กว่า 100 ปีก่อน", id:"Lebih dari 100 tahun lalu", vi:"Hơn 100 năm trước"},
    t:"🌱 一包種子的旅行",
    zh:"根據鄉公所的記載，田尾舊稱「打簾」。打簾村有一位叫<b>巫修齊</b>的年輕人，喜歡到處旅行，十幾歲就到了唐山（中國大陸）。他在漳州看到當地人種花，就沿路帶回許多種子和枝條。回家後，他和哥哥<b>巫規矩</b>一起播種、接枝，田尾種花的故事就這樣開始了。",
    l2:{en:"A young man from Dalian Village, Wu Xiu-qi, travelled to Zhangzhou in China as a teenager. He saw people growing flowers there and brought seeds and cuttings home. With his brother Wu Gui-ju, he planted and grafted them — and Tianwei's flower story began.",
        ja:"打簾村の青年・巫修齊は十代で中国の漳州へ旅をし、人々が花を育てる様子を見て、種や枝を持ち帰りました。兄の巫規矩と一緒に種をまき、接ぎ木をしたことが、田尾の花の物語の始まりです。",
        th:"อู๋ซิวฉี ชายหนุ่มจากหมู่บ้านต่าเหลียน เดินทางไปจางโจวในจีนตั้งแต่อายุสิบกว่าปี เขาเห็นผู้คนปลูกดอกไม้ จึงนำเมล็ดและกิ่งพันธุ์กลับบ้าน แล้วปลูกและต่อกิ่งร่วมกับพี่ชาย เรื่องราวดอกไม้ของเทียนเหว่ยจึงเริ่มต้นขึ้น",
-       id:"Wu Xiu-qi, pemuda dari Desa Dalian, pergi ke Zhangzhou di Tiongkok saat remaja. Ia melihat orang menanam bunga dan membawa pulang biji serta stek. Bersama kakaknya, Wu Gui-ju, ia menanam dan menyambungnya — dan kisah bunga Tianwei pun dimulai."} },
- { when:"幾年之後", whenL:{en:"A few years later", ja:"数年後", th:"ไม่กี่ปีต่อมา", id:"Beberapa tahun kemudian"},
+       id:"Wu Xiu-qi, pemuda dari Desa Dalian, pergi ke Zhangzhou di Tiongkok saat remaja. Ia melihat orang menanam bunga dan membawa pulang biji serta stek. Bersama kakaknya, Wu Gui-ju, ia menanam dan menyambungnya — dan kisah bunga Tianwei pun dimulai.", vi:"Wu Xiu-qi, một chàng trai ở làng Dalian, khi còn là thiếu niên đã đến Chương Châu (Trung Quốc). Thấy người dân ở đó trồng hoa, anh mang hạt giống và cành giâm về quê. Cùng anh trai Wu Gui-ju, anh gieo trồng và ghép cành — câu chuyện hoa của Tianwei bắt đầu từ đó."} },
+ { when:"幾年之後", whenL:{en:"A few years later", ja:"数年後", th:"ไม่กี่ปีต่อมา", id:"Beberapa tahun kemudian", vi:"Vài năm sau"},
    t:"🔄 用花換花",
    zh:"打簾村崙仔部落的<b>李朝慶</b>家裡也種了不少花木。他把別人家比較漂亮、特別的花木「交換」回來繁殖，大家開始互相交換、買賣花木，田尾的花木生意慢慢熱鬧起來。",
    l2:{en:"Li Chao-qing, who also grew many plants, began trading his plants for special ones from other gardens. Soon people were swapping and selling plants, and the flower business started to grow.",
        ja:"同じく多くの花木を育てていた李朝慶は、珍しい花木を交換して持ち帰り、増やしました。やがて人々が花木を交換・売買するようになり、花の商売がにぎわい始めました。",
        th:"หลี่เฉาชิ่งซึ่งปลูกต้นไม้ไว้มากมาย เริ่มนำต้นไม้ของตนไปแลกกับพันธุ์แปลก ๆ จากบ้านอื่น ไม่นานผู้คนก็แลกเปลี่ยนและซื้อขายต้นไม้กัน ธุรกิจดอกไม้จึงเริ่มคึกคัก",
-       id:"Li Chao-qing, yang juga menanam banyak tanaman, mulai menukar tanamannya dengan jenis yang istimewa dari kebun lain. Tak lama, orang-orang saling bertukar dan berjualan tanaman, dan bisnis bunga pun mulai berkembang."} },
- { when:"日治時期", whenL:{en:"Japanese era", ja:"日本統治時代", th:"ยุคญี่ปุ่นปกครอง", id:"Masa pendudukan Jepang"},
+       id:"Li Chao-qing, yang juga menanam banyak tanaman, mulai menukar tanamannya dengan jenis yang istimewa dari kebun lain. Tak lama, orang-orang saling bertukar dan berjualan tanaman, dan bisnis bunga pun mulai berkembang.", vi:"Li Chao-qing, người cũng trồng nhiều cây, bắt đầu đổi cây của mình lấy những loại đặc biệt từ vườn nhà khác. Chẳng bao lâu, mọi người trao đổi và mua bán cây, việc buôn bán hoa bắt đầu phát triển."} },
+ { when:"日治時期", whenL:{en:"Japanese era", ja:"日本統治時代", th:"ยุคญี่ปุ่นปกครอง", id:"Masa pendudukan Jepang", vi:"Thời Nhật thuộc"},
    t:"👨‍🌾 種花變成一門職業",
    zh:"到了日本時代，巫家的兄弟和叔姪已經把種花當成正式的工作。後來，光復後曾擔任議員的<b>羅老庚</b>建議由農會培育種苗，讓農民可以用便宜的價錢申請回家種。從此田尾種花的人越來越多，也培養出許多育種高手。",
    l2:{en:"During the Japanese era, the Wu family turned flower growing into a real job. Later, Luo Lao-geng suggested that the farmers' association raise seedlings and sell them cheaply to farmers. More and more people grew flowers, and many skilled plant breeders appeared.",
        ja:"日本統治時代、巫家の人々は花づくりを本業にしました。のちに羅老庚が農会で苗を育てて農家に安く分けることを提案し、花を育てる人が増え、多くの育種の名人が生まれました。",
        th:"ในยุคญี่ปุ่นปกครอง ครอบครัวอู๋ทำให้การปลูกดอกไม้กลายเป็นอาชีพ ต่อมาหลัวเหล่าเกิงเสนอให้สมาคมเกษตรกรเพาะกล้าไม้แล้วขายให้เกษตรกรในราคาถูก คนปลูกดอกไม้จึงมากขึ้น และเกิดผู้เชี่ยวชาญการเพาะพันธุ์มากมาย",
-       id:"Pada masa Jepang, keluarga Wu menjadikan menanam bunga sebagai pekerjaan sungguhan. Kemudian Luo Lao-geng mengusulkan agar asosiasi petani membibitkan tanaman dan menjualnya murah kepada petani. Makin banyak orang menanam bunga, dan lahirlah banyak ahli pembibitan."} },
- { when:"1972–1973", whenL:{en:"1972–1973", ja:"1972〜1973年", th:"ปี 1972–1973", id:"1972–1973"},
+       id:"Pada masa Jepang, keluarga Wu menjadikan menanam bunga sebagai pekerjaan sungguhan. Kemudian Luo Lao-geng mengusulkan agar asosiasi petani membibitkan tanaman dan menjualnya murah kepada petani. Makin banyak orang menanam bunga, dan lahirlah banyak ahli pembibitan.", vi:"Thời Nhật thuộc, gia đình họ Wu đã biến việc trồng hoa thành một nghề thật sự. Sau đó, ông Luo Lao-geng đề nghị hội nông dân ươm cây giống và bán rẻ cho nông dân. Ngày càng nhiều người trồng hoa, và nhiều chuyên gia nhân giống xuất hiện."} },
+ { when:"1972–1973", whenL:{en:"1972–1973", ja:"1972〜1973年", th:"ปี 1972–1973", id:"1972–1973", vi:"1972–1973"},
    t:"🛣️ 公路花園誕生",
    zh:"民國 61 年（1972），總統府資政<b>謝東閔</b>到好友<b>胡改量</b>家賞花。在胡老先生和地方人士的建議下，省政府在民國 62 年（1973）把這裡規劃為「公路花園園藝特定區」。縣長<b>吳榮興</b>支持、鄉長<b>陳玉清</b>籌劃，花了兩年完成：利用路邊住家原本種的花木來美化公路，讓大家都能欣賞。",
    l2:{en:"In 1972, senior advisor Hsieh Tung-min visited his friend Hu Gai-liang to see his flowers. With local leaders' support, the provincial government named the area a special horticulture zone in 1973. It took two years to build: the roadside homes' own plants turned the highway into a garden for everyone.",
        ja:"1972年、謝東閔が友人の胡改量の家を訪れ花を鑑賞しました。地元の人々の提案を受け、1973年に省政府がこの地域を園芸特定区に指定。2年かけて、道沿いの家々の花木で道路を美しく彩りました。",
        th:"ปี 1972 เซี่ยตงหมิ่นไปชมดอกไม้ที่บ้านหูไก่เหลียงเพื่อนของเขา ด้วยข้อเสนอของคนในท้องถิ่น รัฐบาลมณฑลจึงกำหนดพื้นที่นี้เป็นเขตพืชสวนพิเศษในปี 1973 ใช้เวลาสองปี โดยใช้ต้นไม้ของบ้านริมทางตกแต่งถนนให้ทุกคนได้ชม",
-       id:"Tahun 1972, penasihat senior Hsieh Tung-min mengunjungi temannya, Hu Gai-liang, untuk melihat bunga. Atas usulan tokoh setempat, pemerintah provinsi menetapkan kawasan ini sebagai zona hortikultura khusus pada 1973. Butuh dua tahun: tanaman milik rumah-rumah di tepi jalan mengubah jalan raya menjadi taman untuk semua."},
+       id:"Tahun 1972, penasihat senior Hsieh Tung-min mengunjungi temannya, Hu Gai-liang, untuk melihat bunga. Atas usulan tokoh setempat, pemerintah provinsi menetapkan kawasan ini sebagai zona hortikultura khusus pada 1973. Butuh dua tahun: tanaman milik rumah-rumah di tepi jalan mengubah jalan raya menjadi taman untuk semua.", vi:"Năm 1972, cố vấn cấp cao Hsieh Tung-min đến thăm vườn hoa của người bạn Hu Gai-liang. Theo đề nghị của người dân địa phương, năm 1973 chính quyền tỉnh chỉ định nơi đây là khu làm vườn đặc biệt. Mất hai năm xây dựng: cây hoa của các nhà ven đường đã biến quốc lộ thành khu vườn cho mọi người."},
    fun:{zh:"💡 冷知識：這裡一開始叫做「公路<b>公園</b>」，可是遊客來了一直找不到「公園」在哪裡，所以後來改名叫「公路<b>花園</b>」！",
         l2:{en:"Fun fact: It was first called the \"Highway Park\" — but visitors kept looking for a park that wasn't there, so it was renamed the \"Highway Garden\"!",
             ja:"豆知識：最初は「公路公園」という名前でしたが、観光客が「公園」を探しても見つからないため、「公路花園」に改名されました！",
             th:"เกร็ดน่ารู้: เดิมชื่อ \"สวนสาธารณะริมทาง\" แต่นักท่องเที่ยวหาสวนสาธารณะไม่เจอ จึงเปลี่ยนชื่อเป็น \"สวนดอกไม้ริมทาง\"!",
-            id:"Fakta unik: Awalnya bernama \"Taman Umum Jalan Raya\", tetapi pengunjung terus mencari taman umum yang tidak ada, jadi namanya diganti menjadi \"Taman Bunga Jalan Raya\"!"}} },
- { when:"1998–2002", whenL:{en:"1998–2002", ja:"1998〜2002年", th:"ปี 1998–2002", id:"1998–2002"},
+            id:"Fakta unik: Awalnya bernama \"Taman Umum Jalan Raya\", tetapi pengunjung terus mencari taman umum yang tidak ada, jadi namanya diganti menjadi \"Taman Bunga Jalan Raya\"!", vi:"Chuyện thú vị: Ban đầu nơi này tên là \"Công viên Quốc lộ\", nhưng du khách cứ đi tìm công viên mà không thấy, nên được đổi tên thành \"Vườn hoa Quốc lộ\"!"}} },
+ { when:"1998–2002", whenL:{en:"1998–2002", ja:"1998〜2002年", th:"ปี 1998–2002", id:"1998–2002", vi:"1998–2002"},
    t:"🌼 走向觀光休閒",
    zh:"民國 87 年（1998），鄉長<b>劉淑芳</b>爭取經濟部的計畫，花了三年半提升花卉產業、讓產業更多元。民國 91 年（2002），農委會輔導成立「田尾鄉休閒園區」，田尾從「種花的地方」變成大家都想來走走的「花之鄉」。",
    l2:{en:"In 1998, Township Mayor Liu Shu-fang won a national program that spent three and a half years upgrading the flower industry. In 2002, the Tianwei Leisure Park was set up, and Tianwei grew from a place that grows flowers into a flower town everyone wants to visit.",
        ja:"1998年、劉淑芳郷長が国の計画を獲得し、3年半かけて花卉産業を発展させました。2002年には「田尾郷レジャー園区」が設立され、田尾は誰もが訪れたい「花の町」になりました。",
        th:"ปี 1998 นายกตำบลหลิวซูฟางได้รับโครงการระดับประเทศ ใช้เวลาสามปีครึ่งพัฒนาอุตสาหกรรมดอกไม้ ปี 2002 มีการจัดตั้งสวนพักผ่อนเทียนเหว่ย เทียนเหว่ยจึงกลายเป็นเมืองดอกไม้ที่ใคร ๆ ก็อยากมาเยือน",
-       id:"Tahun 1998, Kepala Kecamatan Liu Shu-fang memperoleh program nasional yang selama tiga setengah tahun meningkatkan industri bunga. Tahun 2002, Taman Rekreasi Tianwei didirikan, dan Tianwei berkembang menjadi kota bunga yang ingin dikunjungi semua orang."} }
+       id:"Tahun 1998, Kepala Kecamatan Liu Shu-fang memperoleh program nasional yang selama tiga setengah tahun meningkatkan industri bunga. Tahun 2002, Taman Rekreasi Tianwei didirikan, dan Tianwei berkembang menjadi kota bunga yang ingin dikunjungi semua orang.", vi:"Năm 1998, Hương trưởng Liu Shu-fang giành được một chương trình quốc gia, dành ba năm rưỡi nâng cấp ngành hoa. Năm 2002, Khu giải trí Tianwei được thành lập, và Tianwei từ nơi trồng hoa trở thành thị trấn hoa mà ai cũng muốn ghé thăm."} }
 ];
 const STORY_EN = [
  {s:"Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!",
@@ -539,7 +540,19 @@ const T = {
      m2t:"Kuil Setempat", m2:"Kuil Guosheng memuliakan Koxinga; Kuil Peilin adalah pusat kepercayaan warga Hakka di Haifenglun.",
      m3t:"Jalan Provinsi 1", m3:"Jalan utama utara–selatan Taiwan melintas tepat di tengah Tianwei.",
      c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
-     nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"}
+     nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"},
+ vi:{story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
+     hero:"Thị trấn hoa và cây cảnh lớn nhất Đài Loan — ở phía nam huyện Chương Hóa.",
+     f1:"hecta vườn hoa", f2:"năm mở vườn", f3:"cành hoa cúc mỗi năm", f4:"làng",
+     about_t:"Giới thiệu Tianwei",
+     about_1:"Tianwei nằm ở phía nam Chương Hóa, giữa Yongjing và Beidou. Những người khai hoang đầu tiên sống ở cuối kênh tưới tiêu — \"phần đuôi\" (wěi) của ruộng lúa (tián). Đó là nguồn gốc của tên Tianwei.",
+     about_2:"Đất đai màu mỡ và nguồn nước dồi dào giúp Tianwei rất thích hợp để trồng cây. Vườn hoa Quốc lộ mở cửa năm 1973, và ngày nay Tianwei được gọi là \"quê hương của hoa\".",
+     spots_t:"4 địa điểm công cộng nên ghé thăm", gal_t:"Bộ sưu tập ảnh", learn_t:"Từ vựng thị trấn hoa", next_t:"Bước tiếp theo",
+     m1t:"Sân chơi Công viên Yixin", m1:"Sân chơi hòa nhập ở lối vào khu vườn, mở cửa cả ngày.",
+     m2t:"Đền miếu địa phương", m2:"Miếu Guosheng thờ Trịnh Thành Công; miếu Peilin là trung tâm tín ngưỡng của người Khách Gia ở Haifenglun.",
+     m3t:"Quốc lộ tỉnh số 1", m3:"Con đường chính bắc–nam của Đài Loan chạy ngay qua giữa Tianwei.",
+     c1:"Tìm Tianwei trên Google Maps", c2:"Nghe và học từ vựng", c3:"Làm bài kiểm tra nhanh",
+     nav_about:"Giới thiệu", nav_spots:"Địa điểm", nav_gallery:"Ảnh", nav_learn:"Tiếng Anh"}
 };
 const NAV_ZH = {nav_about:"認識田尾",nav_story:"故事",nav_spots:"景點",nav_gallery:"相片",nav_learn:"學英文"};
 
