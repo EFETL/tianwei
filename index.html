@@ -153,6 +153,8 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .gallery figure{margin:0;border-radius:14px;overflow:hidden;position:relative;box-shadow:var(--shadow)}
 .gallery img{aspect-ratio:1/1;object-fit:cover;width:100%;transition:transform .4s}
 .gallery figure:hover img{transform:scale(1.04)}
+.cap2{display:block;opacity:.9}
+.story-pic figcaption .cap2{opacity:1}
 .gallery figcaption{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 8px;color:#fff;font-size:18px;line-height:1.35;
   background:linear-gradient(transparent,rgba(0,0,0,.65))}
 .gallery .wide{grid-column:span 2}
@@ -270,7 +272,7 @@ footer ul{margin:0;padding-left:18px}
     <div class="story">
       <figure class="story-pic">
         <img src="images/story.jpg" alt="田尾公路花園苗圃裡一排排的仙人掌盆栽" loading="lazy">
-        <figcaption>一百多年後，田尾的苗圃裡一排排都是植物 · Rows of plants in a Tianwei nursery today</figcaption>
+        <figcaption>一百多年後，田尾的苗圃裡一排排都是植物<span class="cap2" data-l2="story_cap"></span></figcaption>
       </figure>
       <div>
         <ol class="timeline" id="timeline"></ol>
@@ -293,7 +295,7 @@ footer ul{margin:0;padding-left:18px}
 <section id="spots">
   <div class="wrap">
     <h2>四個必看的公共景點 <span class="l2" data-l2="spots_t"></span></h2>
-    <p class="sub">每張卡片都有英文小教室，可依年級切換難度 · Pick your English level below</p>
+    <p class="sub">每張卡片都有英文小教室，可依年級切換難度 · <span data-l2="spots_sub"></span></p>
 
     <div class="level-bar">
       <strong>英文難度 English level：</strong>
@@ -318,16 +320,16 @@ footer ul{margin:0;padding-left:18px}
 <section id="gallery" style="background:var(--soft)">
   <div class="wrap">
     <h2>花鄉相片牆 <span class="l2" data-l2="gal_t"></span></h2>
-    <p class="sub">在田尾，一年四季都有花開 · Something is blooming in every season</p>
+    <p class="sub">在田尾，一年四季都有花開 · <span data-l2="gal_sub"></span></p>
     <div class="gallery">
-      <figure class="wide"><img src="images/g-flower-sculpture.jpg" alt="" loading="lazy"><figcaption>花朵造景 Flower sculpture</figcaption></figure>
-      <figure><img src="images/g-cactus.jpg" alt="" loading="lazy"><figcaption>仙人掌 Cactus</figcaption></figure>
-      <figure><img src="images/g-orchid.jpg" alt="" loading="lazy"><figcaption>蝴蝶蘭 Moth orchid</figcaption></figure>
-      <figure><img src="images/g-foliage.jpg" alt="" loading="lazy"><figcaption>觀葉植物 Foliage plant</figcaption></figure>
-      <figure><img src="images/g-daisy.jpg" alt="" loading="lazy"><figcaption>藍眼菊 African daisy</figcaption></figure>
-      <figure class="wide"><img src="images/g-gazania.jpg" alt="" loading="lazy"><figcaption>勳章菊 Gazania</figcaption></figure>
-      <figure><img src="images/g-gerbera.jpg" alt="" loading="lazy"><figcaption>小花特寫 Flower close-up</figcaption></figure>
-      <figure><img src="images/g-cactus-face.jpg" alt="" loading="lazy"><figcaption>仙人掌娃娃 Cactus with a face</figcaption></figure>
+      <figure class="wide"><img src="images/g-flower-sculpture.jpg" alt="" loading="lazy"><figcaption>花朵造景<span class="cap2" data-l2="g1"></span></figcaption></figure>
+      <figure><img src="images/g-cactus.jpg" alt="" loading="lazy"><figcaption>仙人掌<span class="cap2" data-l2="g2"></span></figcaption></figure>
+      <figure><img src="images/g-orchid.jpg" alt="" loading="lazy"><figcaption>蝴蝶蘭<span class="cap2" data-l2="g3"></span></figcaption></figure>
+      <figure><img src="images/g-foliage.jpg" alt="" loading="lazy"><figcaption>觀葉植物<span class="cap2" data-l2="g4"></span></figcaption></figure>
+      <figure><img src="images/g-daisy.jpg" alt="" loading="lazy"><figcaption>藍眼菊<span class="cap2" data-l2="g5"></span></figcaption></figure>
+      <figure class="wide"><img src="images/g-gazania.jpg" alt="" loading="lazy"><figcaption>勳章菊<span class="cap2" data-l2="g6"></span></figcaption></figure>
+      <figure><img src="images/g-gerbera.jpg" alt="" loading="lazy"><figcaption>小花特寫<span class="cap2" data-l2="g7"></span></figcaption></figure>
+      <figure><img src="images/g-cactus-face.jpg" alt="" loading="lazy"><figcaption>仙人掌娃娃<span class="cap2" data-l2="g8"></span></figcaption></figure>
     </div>
   </div>
 </section>
@@ -336,7 +338,7 @@ footer ul{margin:0;padding-left:18px}
 <section id="learn">
   <div class="wrap">
     <h2>花鄉英文單字 <span class="l2" data-l2="learn_t"></span></h2>
-    <p class="sub">點一下單字就能聽發音 · Tap a word to hear it</p>
+    <p class="sub">點一下單字就能聽發音 · <span data-l2="learn_sub"></span></p>
     <div class="vocab" id="vocab"></div>
 
     <h2 style="margin-top:64px" id="quiz">小測驗 <span class="l2" data-l2="quiz_t"></span></h2>
@@ -349,7 +351,7 @@ footer ul{margin:0;padding-left:18px}
 <section>
   <div class="wrap">
     <h2>下一步 <span class="l2" data-l2="next_t"></span></h2>
-    <p class="sub">走出教室，親自去看看</p>
+    <p class="sub">走出教室，親自去看看 · <span data-l2="next_sub"></span></p>
     <div class="cta">
       <a class="card" href="https://www.google.com/maps/search/?api=1&query=%E7%94%B0%E5%B0%BE%E5%85%AC%E8%B7%AF%E8%8A%B1%E5%9C%92" target="_blank" rel="noopener">
         <img src="images/cycling.jpg" alt="" loading="lazy">
@@ -411,7 +413,7 @@ const SPOTS = [
         {s:"Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.", zh:"田尾公路花園以花田聞名，遊客可以在那裡買植物和種子。", w:[["famous","有名的"],["visitor","遊客"],["plant","植物"],["seed","種子"]]},
         {s:"Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.", zh:"占地 341 公頃，這座花園是臺灣最大的花卉、苗木和盆景生產與銷售中心。", w:[["hectare","公頃"],["seedling","幼苗"],["bonsai","盆景"],["nursery","苗圃"]]} ]},
 
- { img:"chrysanthemum-lights.jpg", cap:"示意照：夜間開燈的電照菊溫室（攝於日本）Illustration: a lit chrysanthemum greenhouse in Japan", zh:"菊花不夜城", icon:"💡",
+ { img:"chrysanthemum-lights.jpg", cap:{"zh": "示意照：夜間開燈的電照菊溫室（攝於日本）", "L": {"en": "Illustration: a lit chrysanthemum greenhouse in Japan", "ja": "イメージ写真：夜に電照する菊の温室（日本で撮影）", "th": "ภาพประกอบ: โรงเรือนเบญจมาศที่เปิดไฟตอนกลางคืน (ถ่ายที่ญี่ปุ่น)", "id": "Ilustrasi: rumah kaca krisan yang diterangi lampu pada malam hari (difoto di Jepang)", "vi": "Ảnh minh họa: nhà kính hoa cúc thắp đèn ban đêm (chụp tại Nhật Bản)", "ko": "참고 사진: 밤에 불을 밝힌 국화 온실(일본에서 촬영)"}}, zh:"菊花不夜城", icon:"💡",
    name:{en:"Chrysanthemum Fields at Night", ja:"菊畑の不夜城", th:"ทุ่งเบญจมาศยามค่ำคืน", id:"Ladang Krisan di Malam Hari", vi:"Cánh đồng hoa cúc về đêm", ko:"국화밭의 불야성"},
    zhText:"田尾有 120 公頃的菊花田。秋冬夜晚，花農會打開一排排電燈，讓菊花晚一點開花、花莖長得更高。整片田亮晶晶的，像一座不睡覺的城市。",
    l2:{en:"Tianwei has 120 hectares of chrysanthemum fields. On autumn and winter nights, farmers switch on rows of lights so the flowers grow taller stems — the fields glow like a city that never sleeps.",
@@ -423,7 +425,7 @@ const SPOTS = [
         {s:"Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.", zh:"農夫在晚上開燈，讓菊花在開花前長出更長的莖。", w:[["farmer","農夫"],["chrysanthemum","菊花"],["stem","莖"],["bloom","開花"]]},
         {s:"By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.", zh:"農夫用電燈延長白天的時間，延後開花，控制菊花上市的時間。", w:[["extend","延長"],["delay","延後"],["harvest","收成"],["agriculture","農業"]]} ]},
 
- { img:"haifenglun-church.jpg", cap:"海豐崙的街景：海豐崙教會 A street in Haifenglun", zh:"海豐崙彩繪村", icon:"🎨",
+ { img:"haifenglun-church.jpg", cap:{"zh": "海豐崙的街景：海豐崙教會", "L": {"en": "A street in Haifenglun: Haifenglun Church", "ja": "海豊崙の街並み：海豊崙教会", "th": "บรรยากาศถนนในไห่เฟิงหลุน: โบสถ์ไห่เฟิงหลุน", "id": "Suasana jalan di Haifenglun: Gereja Haifenglun", "vi": "Đường phố Haifenglun: Nhà thờ Haifenglun", "ko": "하이펑룬 거리 풍경: 하이펑룬 교회"}}, zh:"海豐崙彩繪村", icon:"🎨",
    name:{en:"Haifenglun Painted Village", ja:"海豊崙ペイント村", th:"หมู่บ้านภาพวาดไห่เฟิงหลุน", id:"Desa Lukisan Haifenglun", vi:"Làng bích họa Haifenglun", ko:"하이펑룬 벽화마을"},
    zhText:"海豐崙是海豐村和陸豐村的舊名，祖先從廣東海豐、陸豐搬來，用老家的名字紀念家鄉。2014 年起，返鄉青年和居民一起在牆上畫畫，讓老巷弄變得繽紛有趣。",
    l2:{en:"Haifenglun is the old name of two villages founded by settlers from Guangdong. Since 2014, young locals and residents have painted the walls, turning quiet old lanes into colorful street art.",
@@ -569,7 +571,8 @@ const LEARN_L2 = {
 
 /* ================= 介面翻譯（第二語言） ================= */
 const T = {
- en:{quiz_t:"Quick Quiz", quiz_sub:"How many did you get right?", story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
+ en:{g1:"Flower sculpture", g2:"Cactus", g3:"Moth orchid", g4:"Foliage plant", g5:"African daisy", g6:"Gazania", g7:"Flower close-up", g8:"Cactus with a face", gal_sub:"Something is blooming in every season", spots_sub:"Each card has an English corner — pick your level below", learn_sub:"Tap a word to hear it", next_sub:"Step out of the classroom and see it for yourself", story_cap:"Rows of plants in a Tianwei nursery today",
+     quiz_t:"Quick Quiz", quiz_sub:"How many did you get right?", story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
      hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
      f1:"hectares of garden", f2:"garden opened", f3:"chrysanthemums a year", f4:"villages",
      about_t:"About Tianwei",
@@ -581,7 +584,8 @@ const T = {
      m3t:"Provincial Highway 1", m3:"Taiwan's main north–south road runs right through Tianwei.",
      c1:"Find Tianwei on Google Maps", c2:"Listen and learn the words", c3:"Take the quick quiz",
      nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
- ja:{quiz_t:"ミニクイズ", quiz_sub:"何問正解できたかな？", story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
+ ja:{g1:"花のオブジェ", g2:"サボテン", g3:"胡蝶蘭", g4:"観葉植物", g5:"アフリカンデージー", g6:"ガザニア", g7:"花のクローズアップ", g8:"顔のあるサボテン", gal_sub:"田尾では一年中、花が咲いています", spots_sub:"各カードに英語コーナーがあります。下でレベルを選んでね", learn_sub:"単語をタップすると発音が聞けます", next_sub:"教室を出て、自分の目で見てみよう", story_cap:"今の田尾の苗圃には植物がずらり",
+     quiz_t:"ミニクイズ", quiz_sub:"何問正解できたかな？", story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
      hero:"彰化県南部にある、台湾最大の花と植木の町。",
      f1:"ヘクタールの花園", f2:"花園の開設", f3:"本の菊／年", f4:"の村",
      about_t:"田尾について",
@@ -593,7 +597,8 @@ const T = {
      m3t:"台1線", m3:"台湾を南北に貫く幹線道路が田尾の真ん中を通っています。",
      c1:"Googleマップで田尾を探す", c2:"単語を聞いて覚えよう", c3:"クイズに挑戦",
      nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
- th:{quiz_t:"แบบทดสอบสั้น", quiz_sub:"ตอบถูกกี่ข้อ?", story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
+ th:{g1:"ประติมากรรมดอกไม้", g2:"กระบองเพชร", g3:"กล้วยไม้ฟาแลนนอปซิส", g4:"ไม้ประดับใบ", g5:"เดซี่แอฟริกา", g6:"ดอกกาซาเนีย", g7:"ดอกไม้ระยะใกล้", g8:"กระบองเพชรหน้ายิ้ม", gal_sub:"ที่เทียนเหว่ยมีดอกไม้บานตลอดทั้งปี", spots_sub:"ทุกการ์ดมีมุมภาษาอังกฤษ เลือกระดับได้ด้านล่าง", learn_sub:"แตะคำศัพท์เพื่อฟังเสียง", next_sub:"ออกจากห้องเรียนไปดูด้วยตัวเอง", story_cap:"แถวต้นไม้ในเรือนเพาะชำของเทียนเหว่ยในปัจจุบัน",
+     quiz_t:"แบบทดสอบสั้น", quiz_sub:"ตอบถูกกี่ข้อ?", story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
      hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
      f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f3:"ดอกเบญจมาศต่อปี", f4:"หมู่บ้าน",
      about_t:"รู้จักเทียนเหว่ย",
@@ -605,7 +610,8 @@ const T = {
      m3t:"ทางหลวงหมายเลข 1", m3:"ถนนสายหลักเหนือ–ใต้ของไต้หวันผ่านกลางเทียนเหว่ย",
      c1:"ดูเทียนเหว่ยบน Google Maps", c2:"ฟังและเรียนคำศัพท์", c3:"ทำแบบทดสอบ",
      nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
- id:{quiz_t:"Kuis Singkat", quiz_sub:"Berapa yang benar?", story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
+ id:{g1:"Patung bunga", g2:"Kaktus", g3:"Anggrek bulan", g4:"Tanaman hias daun", g5:"Daisy Afrika", g6:"Gazania", g7:"Bunga dari dekat", g8:"Kaktus berwajah", gal_sub:"Di Tianwei, selalu ada bunga yang mekar sepanjang tahun", spots_sub:"Setiap kartu punya pojok bahasa Inggris — pilih tingkatnya di bawah", learn_sub:"Ketuk kata untuk mendengar pengucapannya", next_sub:"Keluar dari kelas dan lihat sendiri", story_cap:"Deretan tanaman di pembibitan Tianwei saat ini",
+     quiz_t:"Kuis Singkat", quiz_sub:"Berapa yang benar?", story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
      hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
      f1:"hektar taman", f2:"taman dibuka", f3:"tangkai krisan per tahun", f4:"desa",
      about_t:"Tentang Tianwei",
@@ -617,7 +623,8 @@ const T = {
      m3t:"Jalan Provinsi 1", m3:"Jalan utama utara–selatan Taiwan melintas tepat di tengah Tianwei.",
      c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
      nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"},
- vi:{quiz_t:"Câu đố nhanh", quiz_sub:"Bạn trả lời đúng mấy câu?", story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
+ vi:{g1:"Tiểu cảnh hoa", g2:"Xương rồng", g3:"Lan hồ điệp", g4:"Cây cảnh lá", g5:"Cúc châu Phi", g6:"Cúc huân chương", g7:"Cận cảnh hoa", g8:"Xương rồng có mặt", gal_sub:"Ở Tianwei, hoa nở quanh năm", spots_sub:"Mỗi thẻ đều có góc tiếng Anh — chọn cấp độ bên dưới", learn_sub:"Chạm vào từ để nghe phát âm", next_sub:"Hãy bước ra khỏi lớp học và tự mình khám phá", story_cap:"Những hàng cây trong vườn ươm ở Tianwei ngày nay",
+     quiz_t:"Câu đố nhanh", quiz_sub:"Bạn trả lời đúng mấy câu?", story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
      hero:"Thị trấn hoa và cây cảnh lớn nhất Đài Loan — ở phía nam huyện Chương Hóa.",
      f1:"hecta vườn hoa", f2:"năm mở vườn", f3:"cành hoa cúc mỗi năm", f4:"làng",
      about_t:"Giới thiệu Tianwei",
@@ -629,7 +636,8 @@ const T = {
      m3t:"Quốc lộ tỉnh số 1", m3:"Con đường chính bắc–nam của Đài Loan chạy ngay qua giữa Tianwei.",
      c1:"Tìm Tianwei trên Google Maps", c2:"Nghe và học từ vựng", c3:"Làm bài kiểm tra nhanh",
      nav_about:"Giới thiệu", nav_spots:"Địa điểm", nav_gallery:"Ảnh", nav_learn:"Tiếng Anh"},
- ko:{quiz_t:"미니 퀴즈", quiz_sub:"몇 개 맞혔나요?", story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
+ ko:{g1:"꽃 조형물", g2:"선인장", g3:"호접란", g4:"관엽식물", g5:"아프리칸 데이지", g6:"가자니아", g7:"꽃 클로즈업", g8:"얼굴 있는 선인장", gal_sub:"톈웨이에서는 사계절 내내 꽃이 핍니다", spots_sub:"카드마다 영어 코너가 있어요. 아래에서 난이도를 고르세요", learn_sub:"단어를 누르면 발음을 들을 수 있어요", next_sub:"교실 밖으로 나가 직접 보러 가요", story_cap:"오늘날 톈웨이 묘포에 줄지어 선 식물들",
+     quiz_t:"미니 퀴즈", quiz_sub:"몇 개 맞혔나요?", story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
      hero:"장화현 남부에 있는 대만 최대의 꽃과 식물의 마을.",
      f1:"헥타르의 화원", f2:"화원 조성", f3:"송이의 국화 / 연간", f4:"개 마을",
      about_t:"톈웨이 소개",
@@ -683,7 +691,7 @@ function renderSpots(){
   document.getElementById("spotList").innerHTML = SPOTS.map((p,i)=>{
     const L = p.lv[level-1];
     return `<article class="card spot">
-      <figure class="pic"><img src="images/${p.img}" alt="${p.zh}" loading="lazy">${p.cap?`<figcaption>${esc(p.cap)}</figcaption>`:""}</figure>
+      <figure class="pic"><img src="images/${p.img}" alt="${p.zh}" loading="lazy">${p.cap?`<figcaption>${esc(p.cap.zh)}<span class="cap2">${esc(p.cap.L[lang])}</span></figcaption>`:""}</figure>
       <div class="body">
         <h3>${p.icon} ${p.zh}</h3>
         <p class="h3-l2">${esc(p.name[lang])}${lang!=="en" ? " · "+esc(p.name.en) : ""}</p>
