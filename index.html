@@ -129,6 +129,18 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .learn .sentence{font-size:20px;margin:0 0 10px}
 .learn .zh{font-size:18px;color:var(--muted);margin:-6px 0 10px}
 .words{display:flex;flex-wrap:wrap;gap:8px}
+.tag-lang{display:inline-block;white-space:nowrap;font-size:18px;line-height:1.3;padding:1px 10px;border-radius:999px;margin-right:6px;vertical-align:2px;
+  background:var(--card);border:1px solid var(--line);color:var(--muted);font-weight:500}
+.tag-lang.en{border-color:var(--green);color:var(--green)}
+.tag-lang.l2t{border-color:var(--pink);color:var(--pink)}
+.l2learn{margin:0 0 12px;padding:10px 12px;border-left:4px solid var(--pink);background:var(--card);border-radius:0 10px 10px 0;font-size:19px;line-height:1.7}
+.say.l2s{background:var(--pink)}
+.wordbox{display:inline-flex;align-items:center;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:0 6px 0 0}
+.wordbox .word{border:none;background:none}
+.word,.wordbox .w2{white-space:nowrap}
+.wordbox{max-width:100%;flex-wrap:wrap}
+.wordbox .w2{border:none;background:none;color:var(--pink);font:inherit;font-size:18px;cursor:pointer;padding:4px 8px;border-left:1px dashed var(--line)}
+.words-legend{font-size:18px;color:var(--muted);margin:0 0 6px}
 .word{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
   border-radius:999px;padding:4px 12px;font-size:18px;cursor:pointer;color:var(--text);font-family:inherit}
 .word:hover{border-color:var(--green)}
@@ -494,6 +506,39 @@ const STORY_EN = [
   w:[["industry","產業"],["graft","嫁接"],["designate","指定；劃定"],["pioneer","先驅"]]}
 ];
 
+/* ================= 英文小教室的母語對照（目前：印尼文） =================
+   有資料的語言，英文例句與單字旁會加上該語言的翻譯與發音；沒有資料的語言就只顯示英文＋中文。 */
+const LEARN_L2 = {
+ id:{ name:"印尼文", native:"Bahasa Indonesia",
+  s:{
+   "Tianwei has many flowers. They are beautiful!":"Tianwei punya banyak bunga. Bunga-bunganya indah!",
+   "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.":"Taman Bunga Jalan Raya Tianwei terkenal dengan kebun bunganya. Pengunjung bisa membeli tanaman dan biji di sana.",
+   "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.":"Dengan luas 341 hektar, taman ini adalah pusat penanaman dan penjualan bunga, bibit, dan bonsai terbesar di Taiwan.",
+   "At night, the lights are on. The fields are bright.":"Pada malam hari, lampu menyala. Ladangnya terang.",
+   "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.":"Petani menyalakan lampu pada malam hari, sehingga batang krisan tumbuh lebih panjang sebelum berbunga.",
+   "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.":"Dengan memperpanjang waktu siang memakai lampu listrik, petani menunda masa berbunga dan mengatur kapan krisan dijual ke pasar.",
+   "Look at the wall! It has a big painting.":"Lihat dinding itu! Ada lukisan besar di sana.",
+   "Young people came back to their hometown and painted the old walls with bright colors.":"Anak-anak muda pulang ke kampung halaman dan melukis dinding-dinding tua dengan warna-warna cerah.",
+   "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.":"Desa ini mengambil nama dari kampung leluhur para pendatang di Guangdong, dan seni komunitas kemudian memberinya identitas baru.",
+   "I ride my bike. I see a bird tree!":"Saya naik sepeda. Saya melihat pohon berbentuk burung!",
+   "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.":"Jalannya datar dan sepi, jadi mudah bersepeda sambil menikmati bunga.",
+   "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.":"Tukang kebun memangkas semak menjadi bentuk burung dan hewan. Seni ini disebut topiari dan menunjukkan keahlian hortikultura Tianwei.",
+   "Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!":"Dahulu kala, seorang pemuda pergi ke Tiongkok. Ia melihat banyak bunga. Ia membawa pulang biji. Sekarang Tianwei adalah kota bunga!",
+   "More than one hundred years ago, Wu Xiu-qi traveled to Zhangzhou and saw people growing flowers. He brought seeds and cuttings back to Tianwei and started a flower farm with his brother. In 1973, the area became the Highway Garden.":"Lebih dari seratus tahun lalu, Wu Xiu-qi pergi ke Zhangzhou dan melihat orang menanam bunga. Ia membawa biji dan stek pulang ke Tianwei, lalu membuka kebun bunga bersama kakaknya. Pada tahun 1973, kawasan ini menjadi Taman Bunga Jalan Raya.",
+   "Tianwei's flower industry began over a century ago, when Wu Xiu-qi brought seeds and cuttings home from Zhangzhou. Plant trading and low-cost seedlings helped it spread, and in 1973 the government designated the area a horticultural zone. It was first called the Highway Park, but visitors kept looking for a park, so it was renamed the Highway Garden.":"Industri bunga Tianwei dimulai lebih dari seabad lalu, ketika Wu Xiu-qi membawa pulang biji dan stek dari Zhangzhou. Perdagangan tanaman dan bibit murah membantunya menyebar, dan pada tahun 1973 pemerintah menetapkan kawasan ini sebagai zona hortikultura. Awalnya bernama Taman Umum Jalan Raya, tetapi pengunjung terus mencari tamannya, jadi namanya diganti menjadi Taman Bunga Jalan Raya."
+  },
+  w:{flower:"bunga", garden:"taman", beautiful:"indah", famous:"terkenal", visitor:"pengunjung", plant:"tanaman", seed:"biji",
+     hectare:"hektar", seedling:"bibit", bonsai:"bonsai", nursery:"pembibitan", night:"malam", light:"lampu", bright:"terang",
+     farmer:"petani", chrysanthemum:"krisan", stem:"batang", bloom:"berbunga", extend:"memperpanjang", delay:"menunda",
+     harvest:"panen", agriculture:"pertanian", wall:"dinding", painting:"lukisan", color:"warna", hometown:"kampung halaman",
+     village:"desa", colorful:"berwarna-warni", artist:"seniman", settler:"pendatang", ancestral:"leluhur", community:"komunitas",
+     mural:"mural", bike:"sepeda", ride:"naik (sepeda)", tree:"pohon", flat:"datar", quiet:"sepi", enjoy:"menikmati", helmet:"helm",
+     shrub:"semak", topiary:"topiari", horticulture:"hortikultura", route:"rute", "long ago":"dahulu kala", bring:"membawa",
+     town:"kota kecil", travel:"bepergian", cutting:"stek", century:"abad", rename:"mengganti nama", industry:"industri",
+     graft:"okulasi", designate:"menetapkan", pioneer:"pelopor"}
+ }
+};
+
 /* ================= 介面翻譯（第二語言） ================= */
 const T = {
  en:{story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
@@ -574,20 +619,37 @@ let lang = "en", level = 1;
 try{ lang = localStorage.getItem("tw-lang") || "en"; level = +localStorage.getItem("tw-level") || 1; }catch(e){}
 
 /* ================= 發音（微軟 Edge 神經語音 en-US-AvaNeural，預先產生的 MP3） ================= */
-const AUDIO = {"At night, the lights are on. The fields are bright.": "80b9b48052", "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.": "33e034b86c", "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.": "cb252708a7", "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.": "b234aa836a", "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.": "aa6432938a", "I ride my bike. I see a bird tree!": "e92c0f4be3", "Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!": "3da290e20e", "Look at the wall! It has a big painting.": "60274aefc1", "More than one hundred years ago, Wu Xiu-qi traveled to Zhangzhou and saw people growing flowers. He brought seeds and cuttings back to Tianwei and started a flower farm with his brother. In 1973, the area became the Highway Garden.": "005911acf3", "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.": "ddd7ec47c9", "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.": "7bf5617aca", "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.": "86ffd79105", "Tianwei has many flowers. They are beautiful!": "1747676726", "Tianwei's flower industry began over a century ago, when Wu Xiu-qi brought seeds and cuttings home from Zhangzhou. Plant trading and low-cost seedlings helped it spread, and in 1973 the government designated the area a horticultural zone. It was first called the Highway Park, but visitors kept looking for a park, so it was renamed the Highway Garden.": "377ac548b0", "Young people came back to their hometown and painted the old walls with bright colors.": "eb85882c37", "agriculture": "f8ea9e07f5", "ancestral": "8f2ea402d3", "artist": "0441f9e2d9", "beautiful": "e8008e0690", "bike": "dde2c7ad63", "bloom": "414d49e28e", "bonsai": "90155b2515", "bright": "173309254d", "bring": "3413e60c4b", "century": "151aa0094f", "chrysanthemum": "26da5ba70e", "color": "70dda5dfb8", "colorful": "e280d65e42", "community": "82df41632d", "cutting": "566f517d91", "delay": "7243f8be75", "designate": "18142f8592", "enjoy": "76e3692572", "extend": "e0a91e6db6", "famous": "8d0b660470", "farmer": "97f974881b", "flat": "37fc7edee2", "flower": "608f0b988d", "garden": "e2704f30f5", "graft": "679c24daf0", "harvest": "430e39cf0e", "hectare": "d0b24510aa", "helmet": "17b9183a08", "hometown": "262c999888", "horticulture": "e9c8af81d3", "industry": "94074ce331", "light": "2ac43aa43b", "long ago": "6946c65d48", "mural": "739d14e0d9", "night": "93a04b066f", "nursery": "a718a874dc", "painting": "6a7c1b1d58", "pioneer": "b39ecd658b", "plant": "9ea0a36b3a", "quiet": "556966c783", "rename": "d7fba04fc8", "ride": "059763450f", "route": "9c46408a3b", "seed": "fe4c0f30aa", "seedling": "282e177897", "settler": "e11c2c8017", "shrub": "2f5bae73b1", "stem": "e730db5c29", "topiary": "22c2ebe8d1", "town": "7198cda575", "travel": "69266c67e7", "tree": "c0af77cf82", "village": "813f8ce580", "visitor": "127870930d", "wall": "2d86bdac01"};
+const AUDIO = {"At night, the lights are on. The fields are bright.": "80b9b48052", "By extending the daylight with electric lamps, farmers delay blooming and control when the chrysanthemums reach the market.": "33e034b86c", "Covering 341 hectares, the garden is Taiwan's largest center for growing and selling flowers, seedlings and bonsai.": "cb252708a7", "Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.": "b234aa836a", "Gardeners shape the shrubs into birds and animals, an art called topiary that shows off Tianwei's horticultural skills.": "aa6432938a", "I ride my bike. I see a bird tree!": "e92c0f4be3", "Long ago, a young man went to China. He saw many flowers. He brought seeds home. Now Tianwei is a flower town!": "3da290e20e", "Look at the wall! It has a big painting.": "60274aefc1", "More than one hundred years ago, Wu Xiu-qi traveled to Zhangzhou and saw people growing flowers. He brought seeds and cuttings back to Tianwei and started a flower farm with his brother. In 1973, the area became the Highway Garden.": "005911acf3", "The road is flat and quiet, so it is easy to ride a bike and enjoy the flowers.": "ddd7ec47c9", "The village took its name from the settlers' ancestral home in Guangdong, and community art has since given it a new identity.": "7bf5617aca", "Tianwei Highway Garden is famous for its flower farms. Visitors can buy plants and seeds there.": "86ffd79105", "Tianwei has many flowers. They are beautiful!": "1747676726", "Tianwei's flower industry began over a century ago, when Wu Xiu-qi brought seeds and cuttings home from Zhangzhou. Plant trading and low-cost seedlings helped it spread, and in 1973 the government designated the area a horticultural zone. It was first called the Highway Park, but visitors kept looking for a park, so it was renamed the Highway Garden.": "377ac548b0", "Young people came back to their hometown and painted the old walls with bright colors.": "eb85882c37", "agriculture": "f8ea9e07f5", "ancestral": "8f2ea402d3", "artist": "0441f9e2d9", "beautiful": "e8008e0690", "bike": "dde2c7ad63", "bloom": "414d49e28e", "bonsai": "90155b2515", "bright": "173309254d", "bring": "3413e60c4b", "century": "151aa0094f", "chrysanthemum": "26da5ba70e", "color": "70dda5dfb8", "colorful": "e280d65e42", "community": "82df41632d", "cutting": "566f517d91", "delay": "7243f8be75", "designate": "18142f8592", "enjoy": "76e3692572", "extend": "e0a91e6db6", "famous": "8d0b660470", "farmer": "97f974881b", "flat": "37fc7edee2", "flower": "608f0b988d", "garden": "e2704f30f5", "graft": "679c24daf0", "harvest": "430e39cf0e", "hectare": "d0b24510aa", "helmet": "17b9183a08", "hometown": "262c999888", "horticulture": "e9c8af81d3", "industry": "94074ce331", "light": "2ac43aa43b", "long ago": "6946c65d48", "mural": "739d14e0d9", "night": "93a04b066f", "nursery": "a718a874dc", "painting": "6a7c1b1d58", "pioneer": "b39ecd658b", "plant": "9ea0a36b3a", "quiet": "556966c783", "rename": "d7fba04fc8", "ride": "059763450f", "route": "9c46408a3b", "seed": "fe4c0f30aa", "seedling": "282e177897", "settler": "e11c2c8017", "shrub": "2f5bae73b1", "stem": "e730db5c29", "topiary": "22c2ebe8d1", "town": "7198cda575", "travel": "69266c67e7", "tree": "c0af77cf82", "village": "813f8ce580", "visitor": "127870930d", "wall": "2d86bdac01", "id|menetapkan": "c04f97f1d1", "id|Pada malam hari, lampu menyala. Ladangnya terang.": "b6e8b5cde4", "id|Industri bunga Tianwei dimulai lebih dari seabad lalu, ketika Wu Xiu-qi membawa pulang biji dan stek dari Zhangzhou. Perdagangan tanaman dan bibit murah membantunya menyebar, dan pada tahun 1973 pemerintah menetapkan kawasan ini sebagai zona hortikultura. Awalnya bernama Taman Umum Jalan Raya, tetapi pengunjung terus mencari tamannya, jadi namanya diganti menjadi Taman Bunga Jalan Raya.": "1697e2b9e2", "id|Petani menyalakan lampu pada malam hari, sehingga batang krisan tumbuh lebih panjang sebelum berbunga.": "c99fa8ee8f", "id|Anak-anak muda pulang ke kampung halaman dan melukis dinding-dinding tua dengan warna-warna cerah.": "c2d221b04c", "id|sepeda": "89a6c3398a", "id|sepi": "5eb1c6ca67", "id|menikmati": "9bd9032714", "id|taman": "1b2cfad424", "id|panen": "777345a8df", "id|berwarna-warni": "f18e2ed92d", "id|lukisan": "5d7056ef22", "id|memperpanjang": "38b2daa899", "id|mural": "8b30eb29bf", "id|pengunjung": "bc374f94e9", "id|dahulu kala": "b1781f201e", "id|seniman": "16ec67f3cd", "id|krisan": "c250dac50c", "id|tanaman": "844fd9d644", "id|berbunga": "830ea9bacb", "id|Lebih dari seratus tahun lalu, Wu Xiu-qi pergi ke Zhangzhou dan melihat orang menanam bunga. Ia membawa biji dan stek pulang ke Tianwei, lalu membuka kebun bunga bersama kakaknya. Pada tahun 1973, kawasan ini menjadi Taman Bunga Jalan Raya.": "8de8be595b", "id|semak": "af84126418", "id|stek": "6a3deddc40", "id|Saya naik sepeda. Saya melihat pohon berbentuk burung!": "d9967c27bd", "id|rute": "58bea1393b", "id|membawa": "c8fc670818", "id|okulasi": "b6318bc41c", "id|Taman Bunga Jalan Raya Tianwei terkenal dengan kebun bunganya. Pengunjung bisa membeli tanaman dan biji di sana.": "38057b9198", "id|terang": "ea8ffd1848", "id|Dengan luas 341 hektar, taman ini adalah pusat penanaman dan penjualan bunga, bibit, dan bonsai terbesar di Taiwan.": "7d45570963", "id|terkenal": "9788a28315", "id|lampu": "9699dfa7c3", "id|Tukang kebun memangkas semak menjadi bentuk burung dan hewan. Seni ini disebut topiari dan menunjukkan keahlian hortikultura Tianwei.": "dd35357ada", "id|abad": "e65e5459f6", "id|pelopor": "2fc079437d", "id|indah": "a76b721946", "id|mengganti nama": "fadb1885ba", "id|hektar": "1d7270a7a0", "id|malam": "4fb68942ca", "id|pertanian": "87bedb2035", "id|datar": "2f933b93e9", "id|hortikultura": "3e024599c1", "id|bepergian": "0e26e9b9d6", "id|helm": "ed29826888", "id|bunga": "9e388b0f4e", "id|kota kecil": "871a801c11", "id|warna": "1f7412d0f4", "id|Lihat dinding itu! Ada lukisan besar di sana.": "1d9e01fe39", "id|industri": "7bc6ef3417", "id|Jalannya datar dan sepi, jadi mudah bersepeda sambil menikmati bunga.": "7cc0e97bda", "id|menunda": "c72b5192fa", "id|leluhur": "cdd16b2119", "id|Dengan memperpanjang waktu siang memakai lampu listrik, petani menunda masa berbunga dan mengatur kapan krisan dijual ke pasar.": "78fe59f211", "id|topiari": "d5cebbaf81", "id|bibit": "2d15bb73b8", "id|kampung halaman": "893d96f2fd", "id|dinding": "cb55ad0f1f", "id|naik (sepeda)": "93489a988f", "id|pembibitan": "88f1221344", "id|biji": "a09221f088", "id|bonsai": "063079cd84", "id|Desa ini mengambil nama dari kampung leluhur para pendatang di Guangdong, dan seni komunitas kemudian memberinya identitas baru.": "f5cc45ebd9", "id|petani": "9694fe733e", "id|pohon": "bc0c850920", "id|desa": "1d776fb887", "id|batang": "f205da4e37", "id|Dahulu kala, seorang pemuda pergi ke Tiongkok. Ia melihat banyak bunga. Ia membawa pulang biji. Sekarang Tianwei adalah kota bunga!": "ebd05b11f3", "id|pendatang": "22e7ca0ddd", "id|Tianwei punya banyak bunga. Bunga-bunganya indah!": "b092c770de", "id|komunitas": "6f70abb0f2"};
 const player = new Audio();
 function speak(text){
   const id = AUDIO[text];
   if(id){ player.pause(); player.src = `audio/${id}.mp3`; player.currentTime = 0; player.play().catch(()=>{}); return; }
   if("speechSynthesis" in window){            // 備援：找不到音檔時改用瀏覽器內建語音
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text); u.lang = "en-US"; u.rate = .85;
+    const [lg, t] = text.includes("|") ? text.split("|") : ["en", text];
+    const u = new SpeechSynthesisUtterance(t);
+    u.lang = {en:"en-US", id:"id-ID", th:"th-TH", vi:"vi-VN", ja:"ja-JP", ko:"ko-KR"}[lg] || "en-US"; u.rate = .85;
     speechSynthesis.speak(u);
   }
 }
 
 /* ================= 渲染 ================= */
 const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* 英文小教室：英文例句＋中文；若所選語言有對照資料（LEARN_L2），再加上該語言的翻譯與發音 */
+function learnBox(L, title){
+  const X = LEARN_L2[lang];
+  const xs = X && X.s[L.s];
+  return `
+    <div class="lv">${["🌱 Level 1","🌿 Level 2","🌳 Level 3"][level-1]} · ${title}</div>
+    <p class="sentence"><span class="tag-lang en">英文 English</span>${esc(L.s)} <button class="say" data-say="${esc(L.s)}">🔊 聽</button></p>
+    <p class="zh"><span class="tag-lang">中文</span>${L.zh}</p>
+    ${xs ? `<p class="l2learn"><span class="tag-lang l2t">${X.name} ${X.native}</span>${esc(xs)} <button class="say l2s" data-say="${lang}|${esc(xs)}">🔊 ${X.name}</button></p>` : ""}
+    ${X ? `<p class="words-legend">單字：英文｜中文｜${X.name}</p>` : ""}
+    <div class="words">${L.w.map(([en,zh])=> X && X.w[en]
+      ? `<span class="wordbox"><button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button><button class="w2" data-say="${lang}|${esc(X.w[en])}" title="${X.name}">🔊 ${esc(X.w[en])}</button></span>`
+      : `<button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button>`).join("")}</div>`;
+}
 
 function renderSpots(){
   document.getElementById("spotList").innerHTML = SPOTS.map((p,i)=>{
@@ -599,12 +661,7 @@ function renderSpots(){
         <p class="h3-l2">${esc(p.name[lang])}${lang!=="en" ? " · "+esc(p.name.en) : ""}</p>
         <p>${p.zhText}</p>
         <p class="l2">${esc(p.l2[lang])}</p>
-        <div class="learn">
-          <div class="lv">${["🌱 Level 1","🌿 Level 2","🌳 Level 3"][level-1]} · English Corner</div>
-          <p class="sentence">${esc(L.s)} <button class="say" data-say="${esc(L.s)}">🔊 聽</button></p>
-          <p class="zh">${L.zh}</p>
-          <div class="words">${L.w.map(([en,zh])=>`<button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button>`).join("")}</div>
-        </div>
+        <div class="learn">${learnBox(L, "English Corner")}</div>
         <div class="meta">${p.meta}</div>
       </div></article>`;
   }).join("");
@@ -619,11 +676,7 @@ function renderStory(){
       ${x.fun?`<div class="fun"><p>${x.fun.zh}</p><p class="l2" style="color:inherit;opacity:.85">${esc(x.fun.l2[lang])}</p></div>`:""}
     </li>`).join("");
   const L = STORY_EN[level-1];
-  document.getElementById("storyEn").innerHTML = `
-    <div class="lv">${["🌱 Level 1","🌿 Level 2","🌳 Level 3"][level-1]} · Tell the story in English</div>
-    <p class="sentence">${esc(L.s)} <button class="say" data-say="${esc(L.s)}">🔊 聽</button></p>
-    <p class="zh">${L.zh}</p>
-    <div class="words">${L.w.map(([en,zh])=>`<button class="word" data-say="${en}">🔊 ${en} <i>${zh}</i></button>`).join("")}</div>`;
+  document.getElementById("storyEn").innerHTML = learnBox(L, "Tell the story in English");
 }
 
 function renderL2(){
@@ -638,8 +691,10 @@ function renderVocab(){
   const all = [];
   SPOTS.forEach(p=>p.lv.slice(0,level).forEach(L=>L.w.forEach(w=>{ if(!all.some(a=>a[0]===w[0])) all.push(w); })));
   STORY_EN.slice(0,level).forEach(L=>L.w.forEach(w=>{ if(!all.some(a=>a[0]===w[0])) all.push(w); }));
+  const X = LEARN_L2[lang];
   document.getElementById("vocab").innerHTML = all.map(([en,zh])=>
-    `<div class="vcard"><div><b>${en}</b><small>${zh}</small></div><button class="say" data-say="${en}">🔊</button></div>`).join("");
+    `<div class="vcard"><div><b>${en}</b><small>${zh}</small>${X && X.w[en] ? `<small style="color:var(--pink)">${X.name}：${esc(X.w[en])}</small>` : ""}</div>
+      <div style="display:flex;gap:6px"><button class="say" data-say="${en}" title="English">🔊</button>${X && X.w[en] ? `<button class="say l2s" data-say="${lang}|${esc(X.w[en])}" title="${X.name}">🔊</button>` : ""}</div></div>`).join("");
 }
 
 const QUIZ = [
@@ -667,7 +722,7 @@ function setLevel(n){
 function setLang(l){
   lang = l;
   try{ localStorage.setItem("tw-lang", l); }catch(e){}
-  renderL2(); renderSpots(); renderStory();
+  renderL2(); renderSpots(); renderStory(); renderVocab();
 }
 
 document.addEventListener("click", e=>{
