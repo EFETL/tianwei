@@ -173,8 +173,11 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .vcard div small{display:block;color:var(--muted);font-size:18px}
 .quiz .q{padding:22px 24px;margin-bottom:16px}
 .quiz .q p{margin:0 0 12px;font-weight:500}
+.quiz .qL{display:block;font-weight:400;color:var(--muted)}
+.opts button small{display:block;font-size:18px;color:var(--muted)}
+.opts button.ok small,.opts button.no small{color:inherit;opacity:.85}
 .opts{display:flex;flex-wrap:wrap;gap:10px}
-.opts button{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:8px 16px;font:inherit;font-size:18px;cursor:pointer}
+.opts button{text-align:left;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:8px 16px;font:inherit;font-size:18px;cursor:pointer}
 .opts button.ok{background:#d8f0e2;border-color:#3a9a68;color:#174d31}
 .opts button.no{background:#fbe1e6;border-color:#d9668a;color:#7a1f38}
 .score{font-weight:700;color:var(--green)}
@@ -336,8 +339,8 @@ footer ul{margin:0;padding-left:18px}
     <p class="sub">點一下單字就能聽發音 · Tap a word to hear it</p>
     <div class="vocab" id="vocab"></div>
 
-    <h2 style="margin-top:64px" id="quiz">小測驗 Quick Quiz</h2>
-    <p class="sub">答對了嗎？ · <span class="score" id="score">0 / 0</span></p>
+    <h2 style="margin-top:64px" id="quiz">小測驗 <span class="l2" data-l2="quiz_t"></span></h2>
+    <p class="sub">答對了嗎？ · <span data-l2="quiz_sub"></span> <span class="score" id="score">0 / 0</span></p>
     <div class="quiz" id="quizList"></div>
   </div>
 </section>
@@ -566,7 +569,7 @@ const LEARN_L2 = {
 
 /* ================= 介面翻譯（第二語言） ================= */
 const T = {
- en:{story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
+ en:{quiz_t:"Quick Quiz", quiz_sub:"How many did you get right?", story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
      hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
      f1:"hectares of garden", f2:"garden opened", f3:"chrysanthemums a year", f4:"villages",
      about_t:"About Tianwei",
@@ -578,7 +581,7 @@ const T = {
      m3t:"Provincial Highway 1", m3:"Taiwan's main north–south road runs right through Tianwei.",
      c1:"Find Tianwei on Google Maps", c2:"Listen and learn the words", c3:"Take the quick quiz",
      nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
- ja:{story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
+ ja:{quiz_t:"ミニクイズ", quiz_sub:"何問正解できたかな？", story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
      hero:"彰化県南部にある、台湾最大の花と植木の町。",
      f1:"ヘクタールの花園", f2:"花園の開設", f3:"本の菊／年", f4:"の村",
      about_t:"田尾について",
@@ -590,7 +593,7 @@ const T = {
      m3t:"台1線", m3:"台湾を南北に貫く幹線道路が田尾の真ん中を通っています。",
      c1:"Googleマップで田尾を探す", c2:"単語を聞いて覚えよう", c3:"クイズに挑戦",
      nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
- th:{story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
+ th:{quiz_t:"แบบทดสอบสั้น", quiz_sub:"ตอบถูกกี่ข้อ?", story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
      hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
      f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f3:"ดอกเบญจมาศต่อปี", f4:"หมู่บ้าน",
      about_t:"รู้จักเทียนเหว่ย",
@@ -602,7 +605,7 @@ const T = {
      m3t:"ทางหลวงหมายเลข 1", m3:"ถนนสายหลักเหนือ–ใต้ของไต้หวันผ่านกลางเทียนเหว่ย",
      c1:"ดูเทียนเหว่ยบน Google Maps", c2:"ฟังและเรียนคำศัพท์", c3:"ทำแบบทดสอบ",
      nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
- id:{story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
+ id:{quiz_t:"Kuis Singkat", quiz_sub:"Berapa yang benar?", story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
      hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
      f1:"hektar taman", f2:"taman dibuka", f3:"tangkai krisan per tahun", f4:"desa",
      about_t:"Tentang Tianwei",
@@ -614,7 +617,7 @@ const T = {
      m3t:"Jalan Provinsi 1", m3:"Jalan utama utara–selatan Taiwan melintas tepat di tengah Tianwei.",
      c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
      nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"},
- vi:{story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
+ vi:{quiz_t:"Câu đố nhanh", quiz_sub:"Bạn trả lời đúng mấy câu?", story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
      hero:"Thị trấn hoa và cây cảnh lớn nhất Đài Loan — ở phía nam huyện Chương Hóa.",
      f1:"hecta vườn hoa", f2:"năm mở vườn", f3:"cành hoa cúc mỗi năm", f4:"làng",
      about_t:"Giới thiệu Tianwei",
@@ -626,7 +629,7 @@ const T = {
      m3t:"Quốc lộ tỉnh số 1", m3:"Con đường chính bắc–nam của Đài Loan chạy ngay qua giữa Tianwei.",
      c1:"Tìm Tianwei trên Google Maps", c2:"Nghe và học từ vựng", c3:"Làm bài kiểm tra nhanh",
      nav_about:"Giới thiệu", nav_spots:"Địa điểm", nav_gallery:"Ảnh", nav_learn:"Tiếng Anh"},
- ko:{story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
+ ko:{quiz_t:"미니 퀴즈", quiz_sub:"몇 개 맞혔나요?", story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
      hero:"장화현 남부에 있는 대만 최대의 꽃과 식물의 마을.",
      f1:"헥타르의 화원", f2:"화원 조성", f3:"송이의 국화 / 연간", f4:"개 마을",
      about_t:"톈웨이 소개",
@@ -722,20 +725,328 @@ function renderVocab(){
       <div style="display:flex;gap:6px"><button class="say" data-say="${en}" title="English">🔊</button>${X && X.w[en] ? `<button class="say l2s" data-say="${lang}|${esc(X.w[en])}" title="${X.name}">🔊</button>` : ""}</div></div>`).join("");
 }
 
+/* 小測驗：中文＋所選語言雙語（o.L＝各語言選項；o.all＝各語言共用，如人名拼音） */
 const QUIZ = [
- {q:"「田尾」的名字是怎麼來的？ Where does the name \"Tianwei\" come from?", o:["田的尾端 The end of the fields","一種花的名字 A flower's name","一條河 A river"], a:0},
- {q:"Farmers turn on lights at night to help the ___ grow.", o:["cactus","chrysanthemums","rice"], a:1},
- {q:"\"Nursery\" 在這裡的意思是？", o:["托兒所","苗圃","醫院"], a:1},
- {q:"海豐崙的祖先是從哪裡來的？ Where did the settlers of Haifenglun come from?", o:["日本 Japan","廣東 Guangdong","泰國 Thailand"], a:1},
- {q:"The Highway Garden opened in ___.", o:["1973","1999","2014"], a:0},
- {q:"把樹修剪成動物形狀，英文叫做？", o:["topiary","bonsai","mural"], a:0},
- {q:"公路花園一開始叫什麼名字？ What was the Highway Garden first called?", o:["公路公園 Highway Park","田尾花市 Flower Market","花卉森林 Flower Forest"], a:0},
- {q:"Who brought flower seeds home from Zhangzhou more than 100 years ago?", o:["Hsieh Tung-min","Wu Xiu-qi","Liu Shu-fang"], a:1}
+{
+"zh": "「田尾」的名字是怎麼來的？",
+"L": {
+"en": "Where does the name \"Tianwei\" come from?",
+"ja": "「田尾」という名前の由来は？",
+"th": "ชื่อ \"เทียนเหว่ย\" มาจากไหน?",
+"id": "Dari mana asal nama \"Tianwei\"?",
+"vi": "Tên \"Tianwei\" có nguồn gốc từ đâu?",
+"ko": "'톈웨이'라는 이름은 어디에서 왔을까요?"
+},
+"o": [
+{
+"zh": "田的尾端",
+"L": {
+"en": "The end of the fields",
+"ja": "田んぼの端",
+"th": "ปลายนา",
+"id": "Ujung sawah",
+"vi": "Cuối cánh đồng",
+"ko": "논의 끝"
+}
+},
+{
+"zh": "一種花的名字",
+"L": {
+"en": "A flower's name",
+"ja": "花の名前",
+"th": "ชื่อดอกไม้ชนิดหนึ่ง",
+"id": "Nama sejenis bunga",
+"vi": "Tên một loài hoa",
+"ko": "꽃 이름"
+}
+},
+{
+"zh": "一條河",
+"L": {
+"en": "A river",
+"ja": "川の名前",
+"th": "ชื่อแม่น้ำ",
+"id": "Nama sungai",
+"vi": "Tên một con sông",
+"ko": "강 이름"
+}
+}
+],
+"a": 0
+},
+{
+"zh": "農夫晚上開燈，是為了幫助哪一種花生長？",
+"L": {
+"en": "Farmers turn on lights at night to help the ___ grow.",
+"ja": "農家が夜に明かりをつけるのは、どの花を育てるため？",
+"th": "เกษตรกรเปิดไฟตอนกลางคืนเพื่อช่วยให้พืชชนิดใดเติบโต?",
+"id": "Petani menyalakan lampu pada malam hari untuk membantu tanaman apa tumbuh?",
+"vi": "Nông dân bật đèn ban đêm để giúp loài cây nào phát triển?",
+"ko": "농부들이 밤에 불을 켜는 것은 어떤 꽃을 기르기 위해서일까요?"
+},
+"o": [
+{
+"zh": "仙人掌",
+"L": {
+"en": "cactus",
+"ja": "サボテン",
+"th": "กระบองเพชร",
+"id": "kaktus",
+"vi": "xương rồng",
+"ko": "선인장"
+}
+},
+{
+"zh": "菊花",
+"L": {
+"en": "chrysanthemums",
+"ja": "菊",
+"th": "ดอกเบญจมาศ",
+"id": "krisan",
+"vi": "hoa cúc",
+"ko": "국화"
+}
+},
+{
+"zh": "稻米",
+"L": {
+"en": "rice",
+"ja": "稲",
+"th": "ข้าว",
+"id": "padi",
+"vi": "lúa",
+"ko": "벼"
+}
+}
+],
+"a": 1
+},
+{
+"zh": "英文 \"nursery\" 在這裡是什麼意思？",
+"L": {
+"en": "What does \"nursery\" mean here?",
+"ja": "ここでの英語 \"nursery\" の意味は？",
+"th": "คำว่า \"nursery\" ในที่นี้หมายถึงอะไร?",
+"id": "Apa arti \"nursery\" di sini?",
+"vi": "Từ \"nursery\" ở đây có nghĩa là gì?",
+"ko": "여기서 영어 \"nursery\"는 무슨 뜻일까요?"
+},
+"o": [
+{
+"zh": "托兒所",
+"L": {
+"en": "a place to care for children",
+"ja": "託児所",
+"th": "สถานรับเลี้ยงเด็ก",
+"id": "tempat penitipan anak",
+"vi": "nhà trẻ",
+"ko": "어린이집"
+}
+},
+{
+"zh": "苗圃",
+"L": {
+"en": "a place to grow young plants",
+"ja": "苗圃",
+"th": "เรือนเพาะชำ",
+"id": "tempat pembibitan",
+"vi": "vườn ươm",
+"ko": "묘포"
+}
+},
+{
+"zh": "醫院",
+"L": {
+"en": "a hospital",
+"ja": "病院",
+"th": "โรงพยาบาล",
+"id": "rumah sakit",
+"vi": "bệnh viện",
+"ko": "병원"
+}
+}
+],
+"a": 1
+},
+{
+"zh": "海豐崙的祖先是從哪裡來的？",
+"L": {
+"en": "Where did the settlers of Haifenglun come from?",
+"ja": "海豊崙の人々の祖先はどこから来た？",
+"th": "บรรพบุรุษของชาวไห่เฟิงหลุนมาจากที่ใด?",
+"id": "Dari mana leluhur warga Haifenglun berasal?",
+"vi": "Tổ tiên của người dân Haifenglun đến từ đâu?",
+"ko": "하이펑룬 사람들의 조상은 어디에서 왔을까요?"
+},
+"o": [
+{
+"zh": "日本",
+"L": {
+"en": "Japan",
+"ja": "日本",
+"th": "ญี่ปุ่น",
+"id": "Jepang",
+"vi": "Nhật Bản",
+"ko": "일본"
+}
+},
+{
+"zh": "廣東",
+"L": {
+"en": "Guangdong",
+"ja": "広東",
+"th": "กวางตุ้ง",
+"id": "Guangdong",
+"vi": "Quảng Đông",
+"ko": "광둥"
+}
+},
+{
+"zh": "泰國",
+"L": {
+"en": "Thailand",
+"ja": "タイ",
+"th": "ประเทศไทย",
+"id": "Thailand",
+"vi": "Thái Lan",
+"ko": "태국"
+}
+}
+],
+"a": 1
+},
+{
+"zh": "公路花園是哪一年開闢的？",
+"L": {
+"en": "The Highway Garden opened in ___.",
+"ja": "公路花園が開かれたのは何年？",
+"th": "สวนดอกไม้ริมทางเปิดในปีใด?",
+"id": "Tahun berapa Taman Bunga Jalan Raya dibuka?",
+"vi": "Vườn hoa Quốc lộ được mở năm nào?",
+"ko": "공로화원은 몇 년에 만들어졌을까요?"
+},
+"o": [
+{
+"zh": "1973"
+},
+{
+"zh": "1999"
+},
+{
+"zh": "2014"
+}
+],
+"a": 0
+},
+{
+"zh": "把樹修剪成動物形狀，英文叫做？",
+"L": {
+"en": "What is the English word for trimming trees into animal shapes?",
+"ja": "木を動物の形に刈り込むことを英語で何という？",
+"th": "การตัดแต่งต้นไม้เป็นรูปสัตว์ ภาษาอังกฤษเรียกว่าอะไร?",
+"id": "Apa bahasa Inggris untuk memangkas pohon menjadi bentuk hewan?",
+"vi": "Cắt tỉa cây thành hình con vật, tiếng Anh gọi là gì?",
+"ko": "나무를 동물 모양으로 다듬는 것을 영어로 무엇이라고 할까요?"
+},
+"o": [
+{
+"zh": "topiary"
+},
+{
+"zh": "bonsai"
+},
+{
+"zh": "mural"
+}
+],
+"a": 0
+},
+{
+"zh": "公路花園一開始叫什麼名字？",
+"L": {
+"en": "What was the Highway Garden first called?",
+"ja": "公路花園の最初の名前は？",
+"th": "สวนดอกไม้ริมทางเดิมชื่ออะไร?",
+"id": "Apa nama awal Taman Bunga Jalan Raya?",
+"vi": "Vườn hoa Quốc lộ ban đầu tên là gì?",
+"ko": "공로화원의 처음 이름은 무엇이었을까요?"
+},
+"o": [
+{
+"zh": "公路公園",
+"L": {
+"en": "Highway Park",
+"ja": "公路公園",
+"th": "สวนสาธารณะริมทาง",
+"id": "Taman Umum Jalan Raya",
+"vi": "Công viên Quốc lộ",
+"ko": "도로 공원"
+}
+},
+{
+"zh": "田尾花市",
+"L": {
+"en": "Tianwei Flower Market",
+"ja": "田尾花市場",
+"th": "ตลาดดอกไม้เทียนเหว่ย",
+"id": "Pasar Bunga Tianwei",
+"vi": "Chợ hoa Tianwei",
+"ko": "톈웨이 꽃시장"
+}
+},
+{
+"zh": "花卉森林",
+"L": {
+"en": "Flower Forest",
+"ja": "花の森",
+"th": "ป่าดอกไม้",
+"id": "Hutan Bunga",
+"vi": "Rừng hoa",
+"ko": "꽃 숲"
+}
+}
+],
+"a": 0
+},
+{
+"zh": "一百多年前，誰從漳州帶回花的種子？",
+"L": {
+"en": "Who brought flower seeds home from Zhangzhou more than 100 years ago?",
+"ja": "100年以上前、漳州から花の種を持ち帰ったのは誰？",
+"th": "เมื่อกว่า 100 ปีก่อน ใครนำเมล็ดดอกไม้กลับมาจากจางโจว?",
+"id": "Lebih dari 100 tahun lalu, siapa yang membawa pulang biji bunga dari Zhangzhou?",
+"vi": "Hơn 100 năm trước, ai đã mang hạt giống hoa từ Chương Châu về?",
+"ko": "100여 년 전, 장저우에서 꽃씨를 가져온 사람은 누구일까요?"
+},
+"o": [
+{
+"zh": "謝東閔",
+"all": "Hsieh Tung-min"
+},
+{
+"zh": "巫修齊",
+"all": "Wu Xiu-qi"
+},
+{
+"zh": "劉淑芳",
+"all": "Liu Shu-fang"
+}
+],
+"a": 1
+}
 ];
 let answered = 0, correct = 0;
+const picks = {};   // 已作答：題號 → 選項，切換語言時保留作答狀態
 function renderQuiz(){
-  document.getElementById("quizList").innerHTML = QUIZ.map((x,i)=>
-    `<div class="card q"><p>${i+1}. ${esc(x.q)}</p><div class="opts">${x.o.map((o,j)=>`<button data-q="${i}" data-j="${j}">${esc(o)}</button>`).join("")}</div></div>`).join("");
+  document.getElementById("quizList").innerHTML = QUIZ.map((x,i)=>{
+    const done = i in picks;
+    return `<div class="card q"><p>${i+1}. ${esc(x.zh)}<span class="qL">${esc(x.L[lang])}</span></p>
+      <div class="opts"${done?' data-done="1"':""}>${x.o.map((o,j)=>{
+        const sub = o.L ? o.L[lang] : o.all;
+        const cls = done ? (j===x.a ? "ok" : (picks[i]===j ? "no" : "")) : "";
+        return `<button class="${cls}" data-q="${i}" data-j="${j}">${esc(o.zh)}${sub ? `<small>${esc(sub)}</small>` : ""}</button>`;
+      }).join("")}</div></div>`;
+  }).join("");
 }
 
 function setLevel(n){
@@ -747,7 +1058,7 @@ function setLevel(n){
 function setLang(l){
   lang = l;
   try{ localStorage.setItem("tw-lang", l); }catch(e){}
-  renderL2(); renderSpots(); renderStory(); renderVocab();
+  renderL2(); renderSpots(); renderStory(); renderVocab(); renderQuiz();
 }
 
 document.addEventListener("click", e=>{
@@ -757,7 +1068,7 @@ document.addEventListener("click", e=>{
   const qb = e.target.closest("[data-q]");
   if(qb){
     const box = qb.parentElement; if(box.dataset.done) return;
-    box.dataset.done = 1; answered++;
+    box.dataset.done = 1; answered++; picks[+qb.dataset.q] = +qb.dataset.j;
     const x = QUIZ[+qb.dataset.q], j = +qb.dataset.j;
     if(j === x.a) correct++; else qb.classList.add("no");
     box.children[x.a].classList.add("ok");
