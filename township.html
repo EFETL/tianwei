@@ -15,7 +15,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"田尾鄉 20 村 3D 地圖","url":"https://tianwei.efetl.com/township.html","about":{"@type":"AdministrativeArea","name":"田尾鄉","alternateName":"Tianwei Township","containedInPlace":{"@type":"AdministrativeArea","name":"彰化縣"}}}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --green:#2f6b4f; --green-dark:#1f4a36; --gold:#e3a33a; --pink:#d9668a;
@@ -24,7 +24,7 @@
 }
 body.night{ --card:rgba(24,34,48,.9); --text:#eef2f7; --muted:#aab6c6; --line:#32425a; --green-dark:#9fdcbc; --green:#7cc3a0; }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;overflow:hidden;background:#dfeee9;font-family:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;color:var(--text)}
+html,body{margin:0;height:100%;overflow:hidden;background:#dfeee9;font-family:"Noto Sans TC","Noto Sans JP","Noto Sans KR","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;color:var(--text)}
 #stage{position:fixed;inset:0}
 canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 #stage.hover canvas{cursor:pointer}
@@ -69,9 +69,14 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 #loading small{display:block;font-size:16px;opacity:.7;margin-top:6px}
 #nogl{display:none;position:fixed;inset:0;place-items:center;text-align:center;padding:24px;z-index:30;background:#fbfaf6}
 #nogl.show{display:grid}
+#langSel{font:inherit;font-size:16px;color:var(--text);background:transparent;border:0;max-width:8em;cursor:pointer;padding:0}
 @media (max-width:760px){
-  #title{padding:10px 14px;max-width:calc(100vw - 190px)}
-  #title b{font-size:18px;white-space:nowrap}
+  #langSel{max-width:4.6em}
+  #title{padding:10px 12px;max-width:calc(100vw - 262px)}
+  #title b{font-size:17px;white-space:nowrap}
+  #title b span{display:none}
+  #tools{gap:6px;right:10px}
+  #tools .btn{padding:10px 11px}
   #title small{display:none}
   .chip{display:none}
   #dock{z-index:7}
@@ -80,18 +85,20 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
   #panel.open{transform:none}
   #tools .lbl{display:none}
 }
+@media (max-width:520px){ #title{display:none} #tools{left:10px;right:10px;justify-content:space-between} #tools .btn{padding:10px 12px} }
 @media (prefers-reduced-motion:reduce){ #panel{transition:none} }
 </style>
 </head>
 <body>
 <div id="stage" aria-label="田尾鄉 20 村 3D 互動地圖：拖曳旋轉，點選村莊"></div>
 <div id="chips"></div>
-<div id="title" class="card"><b>🌼 田尾鄉 <span>20 村</span></b><small>3D 地圖 · 拖曳旋轉，點村莊看特色</small></div>
+<div id="title" class="card"><b>🌼 田尾鄉 <span>20 村</span></b><small id="tSub">3D 地圖 · 拖曳旋轉，點村莊看特色</small></div>
 <div id="tools">
-  <button class="btn card" id="distBtn" aria-pressed="false" title="顯示四個選區的顏色">🗳️ <span class="lbl">選區</span></button>
+  <label class="btn card" title="Language">🌐 <select id="langSel" aria-label="Language"></select></label>
+  <button class="btn card" id="distBtn" aria-pressed="false" title="顯示四個選區的顏色">🗳️ <span class="lbl" id="dLbl">選區</span></button>
   <button class="btn card" id="nightBtn" aria-pressed="false" title="切換白天／夜晚">🌙 <span class="lbl">夜晚</span></button>
-  <button class="btn card" id="resetBtn" title="回到初始視角">↺ <span class="lbl">重置</span></button>
-  <a class="btn card" href="index.html" title="回到完整網站">🏠 <span class="lbl">主網站</span></a>
+  <button class="btn card" id="resetBtn" title="回到初始視角">↺ <span class="lbl" id="rLbl">重置</span></button>
+  <a class="btn card" id="homeBtn" href="index.html" title="回到完整網站">🏠 <span class="lbl" id="hLbl">主網站</span></a>
 </div>
 <div id="legend" class="card"></div>
 <aside id="panel" class="card" aria-live="polite">
@@ -107,8 +114,8 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
   <p><a id="pPage" href="villages.html" style="font-weight:700;color:var(--green);text-decoration:none">📄 看這個村的文字介紹頁 →</a></p>
 </aside>
 <nav id="dock" aria-label="村莊列表"></nav>
-<div id="loading"><div>🌷 正在種花…<small>Loading Tianwei Township</small></div></div>
-<div id="nogl"><div><h2>這個瀏覽器不支援 3D</h2><p>請改用最新版的 Chrome、Safari 或 Edge，或看<a href="villages.html">田尾鄉 20 村文字總覽</a>、回到<a href="index.html">完整網站</a>。</p></div></div>
+<div id="loading"><div id="ldMsg">🌷 正在種花…<small>Loading Tianwei Township</small></div></div>
+<div id="nogl"><div id="noglBox"><h2>這個瀏覽器不支援 3D</h2><p>請改用最新版的 Chrome、Safari 或 Edge，或看<a href="villages.html">田尾鄉 20 村文字總覽</a>、回到<a href="index.html">完整網站</a>。</p></div></div>
 <noscript><div style="position:fixed;inset:0;z-index:40;background:#fbfaf6;color:#24302a;padding:24px;font-size:18px"><h2>田尾鄉 20 村 3D 地圖</h2><p>這個頁面需要 JavaScript 才能顯示 3D 地圖。請看<a href="villages.html">田尾鄉 20 村文字總覽</a>。</p></div></noscript>
 
 <script>if(/[?&]timer/.test(location.search)){window.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),33)}  /* 測試用：背景分頁 rAF 不跑時改用計時器 */
@@ -211,6 +218,193 @@ const INFO = {
 };
 
 
+/* ================= 多語：介面文字與各村說明（英文以外的譯文由 AI 初譯，建議請母語者校對） ================= */
+const LANGS = { en:'English', ja:'日本語', th:'ไทย', id:'Indonesia', vi:'Tiếng Việt', ko:'한국어', de:'Deutsch' };
+const UI = {
+ en:{ sub:'3D map · drag to rotate, tap a village', dist:'Districts', night:'Night', day:'Day', reset:'Reset', home:'Main site',
+      tDist:'Show the four electoral districts', tNight:'Switch day / night', tReset:'Back to the first view', tHome:'Back to the main site',
+      page:'Read about this village (text page) →', note:'3D scenes are illustrative. Population: Ministry of the Interior, September 2026 (ROC year 115). Text checked against public sources (the township office\'s village pages are currently unavailable).',
+      pop:'👥 {n} residents (Sept. 2026)', load:'🌷 Planting flowers…', loadSub:'Loading Tianwei Township', glH:'This browser does not support 3D',
+      glP:'Please use a recent Chrome, Safari or Edge, or read the <a href="villages.html">text overview of the 20 villages</a> or go back to the <a href="index.html">main site</a>.', vil:'{x} Village', dnames:['Electoral District 1','Electoral District 2','Electoral District 3','Electoral District 4'], list:'Village list' },
+ ja:{ sub:'3Dマップ · ドラッグで回転、村をタップ', dist:'選挙区', night:'夜', day:'昼', reset:'リセット', home:'メインサイト',
+      tDist:'4つの選挙区を色分けして表示', tNight:'昼と夜を切り替え', tReset:'最初の視点に戻る', tHome:'メインサイトに戻る',
+      page:'この村のテキストページを見る →', note:'3Dの場面はイメージです。人口は内政部戸政司の2026年9月（民国115年）のデータ。文章は公開資料で確認しています（郷公所の村ページは現在開けません）。',
+      pop:'👥 {n}人（2026年9月）', load:'🌷 花を植えています…', loadSub:'田尾郷を読み込み中', glH:'このブラウザは3Dに対応していません',
+      glP:'新しいChrome・Safari・Edgeをお使いいただくか、<a href="villages.html">20村のテキスト一覧</a>、または<a href="index.html">メインサイト</a>をご覧ください。', vil:'{x}', dnames:['第一選挙区','第二選挙区','第三選挙区','第四選挙区'], list:'村の一覧' },
+ th:{ sub:'แผนที่ 3 มิติ · ลากเพื่อหมุน แตะหมู่บ้านเพื่อดู', dist:'เขตเลือกตั้ง', night:'กลางคืน', day:'กลางวัน', reset:'รีเซ็ต', home:'เว็บหลัก',
+      tDist:'แสดงสีของเขตเลือกตั้งทั้งสี่', tNight:'สลับกลางวัน/กลางคืน', tReset:'กลับมามุมมองเริ่มต้น', tHome:'กลับไปเว็บหลัก',
+      page:'อ่านเกี่ยวกับหมู่บ้านนี้ (หน้าข้อความ) →', note:'ฉาก 3 มิติเป็นภาพประกอบ ประชากรจากกรมทะเบียนราษฎร์ กระทรวงมหาดไทย กันยายน 2026 (ปีที่ 115 ของสาธารณรัฐจีน) ข้อความตรวจสอบกับข้อมูลสาธารณะแล้ว (หน้าหมู่บ้านบนเว็บที่ว่าการอำเภอขณะนี้เปิดไม่ได้)',
+      pop:'👥 ประชากร {n} คน (ก.ย. 2026)', load:'🌷 กำลังปลูกดอกไม้…', loadSub:'กำลังโหลดอำเภอเทียนเหว่ย', glH:'เบราว์เซอร์นี้ไม่รองรับ 3 มิติ',
+      glP:'โปรดใช้ Chrome, Safari หรือ Edge รุ่นล่าสุด หรืออ่าน<a href="villages.html">ภาพรวมข้อความของ 20 หมู่บ้าน</a> หรือกลับไป<a href="index.html">เว็บหลัก</a>', vil:'หมู่บ้าน{x}', dnames:['เขตเลือกตั้งที่ 1','เขตเลือกตั้งที่ 2','เขตเลือกตั้งที่ 3','เขตเลือกตั้งที่ 4'], list:'รายชื่อหมู่บ้าน' },
+ id:{ sub:'Peta 3D · seret untuk memutar, ketuk desa', dist:'Dapil', night:'Malam', day:'Siang', reset:'Atur ulang', home:'Situs utama',
+      tDist:'Tampilkan warna keempat daerah pemilihan', tNight:'Ganti siang / malam', tReset:'Kembali ke tampilan awal', tHome:'Kembali ke situs utama',
+      page:'Baca tentang desa ini (halaman teks) →', note:'Adegan 3D hanya ilustrasi. Penduduk: Kementerian Dalam Negeri, September 2026 (tahun ke-115 Republik Tiongkok). Teks sudah dicek dengan sumber publik (halaman desa di situs kantor kecamatan saat ini tidak dapat dibuka).',
+      pop:'👥 {n} jiwa (Sep 2026)', load:'🌷 Sedang menanam bunga…', loadSub:'Memuat Kecamatan Tianwei', glH:'Peramban ini tidak mendukung 3D',
+      glP:'Gunakan Chrome, Safari, atau Edge terbaru, atau baca <a href="villages.html">ringkasan teks 20 desa</a>, atau kembali ke <a href="index.html">situs utama</a>.', vil:'Desa {x}', dnames:['Daerah Pemilihan 1','Daerah Pemilihan 2','Daerah Pemilihan 3','Daerah Pemilihan 4'], list:'Daftar desa' },
+ vi:{ sub:'Bản đồ 3D · kéo để xoay, chạm vào làng', dist:'Khu vực bầu cử', night:'Đêm', day:'Ngày', reset:'Đặt lại', home:'Trang chính',
+      tDist:'Hiện màu của bốn khu vực bầu cử', tNight:'Chuyển ngày / đêm', tReset:'Về góc nhìn ban đầu', tHome:'Về trang chính',
+      page:'Đọc về làng này (trang văn bản) →', note:'Cảnh 3D chỉ mang tính minh họa. Dân số: Bộ Nội vụ, tháng 9/2026 (năm thứ 115 Trung Hoa Dân Quốc). Nội dung đã đối chiếu với nguồn công khai (các trang về làng trên website văn phòng hương hiện không mở được).',
+      pop:'👥 {n} người (tháng 9/2026)', load:'🌷 Đang trồng hoa…', loadSub:'Đang tải hương Tianwei', glH:'Trình duyệt này không hỗ trợ 3D',
+      glP:'Hãy dùng Chrome, Safari hoặc Edge mới nhất, hoặc đọc <a href="villages.html">tổng quan bằng văn bản về 20 làng</a>, hoặc quay lại <a href="index.html">trang chính</a>.', vil:'Làng {x}', dnames:['Khu vực bầu cử 1','Khu vực bầu cử 2','Khu vực bầu cử 3','Khu vực bầu cử 4'], list:'Danh sách làng' },
+ ko:{ sub:'3D 지도 · 드래그로 회전, 마을을 탭하세요', dist:'선거구', night:'밤', day:'낮', reset:'초기화', home:'메인 사이트',
+      tDist:'네 개 선거구를 색으로 표시', tNight:'낮/밤 전환', tReset:'처음 시점으로', tHome:'메인 사이트로 돌아가기',
+      page:'이 마을의 텍스트 페이지 보기 →', note:'3D 장면은 이해를 돕기 위한 그림입니다. 인구: 내정부 호정사 2026년 9월(민국 115년). 내용은 공개 자료로 확인했습니다(향공소 사이트의 마을 페이지는 현재 열리지 않습니다).',
+      pop:'👥 {n}명 (2026년 9월)', load:'🌷 꽃을 심는 중…', loadSub:'톈웨이향을 불러오는 중', glH:'이 브라우저는 3D를 지원하지 않습니다',
+      glP:'최신 Chrome, Safari, Edge를 사용하시거나, <a href="villages.html">20개 마을 텍스트 안내</a> 또는 <a href="index.html">메인 사이트</a>를 이용해 주세요.', vil:'{x}촌', dnames:['제1선거구','제2선거구','제3선거구','제4선거구'], list:'마을 목록' },
+ de:{ sub:'3D-Karte · zum Drehen ziehen, Dorf antippen', dist:'Wahlbezirke', night:'Nacht', day:'Tag', reset:'Zurücksetzen', home:'Hauptseite',
+      tDist:'Die vier Wahlbezirke farbig anzeigen', tNight:'Zwischen Tag und Nacht wechseln', tReset:'Zur Startansicht zurück', tHome:'Zurück zur Hauptseite',
+      page:'Mehr über dieses Dorf (Textseite) →', note:'Die 3D-Szenen sind Illustrationen. Einwohnerzahl: Innenministerium, September 2026 (Jahr 115 der Republik China). Texte wurden mit öffentlichen Quellen abgeglichen (die Dorfseiten des Gemeindeamts sind derzeit nicht erreichbar).',
+      pop:'👥 {n} Einwohner (Sept. 2026)', load:'🌷 Blumen werden gepflanzt…', loadSub:'Gemeinde Tianwei wird geladen', glH:'Dieser Browser unterstützt kein 3D',
+      glP:'Bitte verwenden Sie ein aktuelles Chrome, Safari oder Edge, lesen Sie die <a href="villages.html">Textübersicht der 20 Dörfer</a> oder gehen Sie zurück zur <a href="index.html">Hauptseite</a>.', vil:'Dorf {x}', dnames:['Wahlbezirk 1','Wahlbezirk 2','Wahlbezirk 3','Wahlbezirk 4'], list:'Dorfliste' },
+};
+/* 村名：越南文、印尼文、德文、英文用漢語拼音；日文用漢字；韓文、泰文用音譯 */
+const NAME_KO = { '田尾村':'톈웨이','打簾村':'다롄','溪畔村':'시판','北曾村':'베이청','南曾村':'난청','饒平村':'라오핑','正義村':'정이','豐田村':'펑톈','溪頂村':'시딩','新厝村':'신춰','仁里村':'런리','柳鳳村':'류펑','陸豐村':'루펑','海豐村':'하이펑','北鎮村':'베이전','新興村':'신싱','福田村':'푸톈','新生村':'신성','南鎮村':'난전','睦宜村':'무이' };
+const NAME_TH = { '田尾村':'เทียนเหว่ย','打簾村':'ต่าเหลียน','溪畔村':'ซีพ่าน','北曾村':'เป่ยเจิง','南曾村':'หนานเจิง','饒平村':'เหราผิง','正義村':'เจิ้งอี้','豐田村':'เฟิงเถียน','溪頂村':'ซีติ่ง','新厝村':'ซินชั่ว','仁里村':'เหรินหลี่','柳鳳村':'หลิ่วเฟิง','陸豐村':'ลู่เฟิง','海豐村':'ไห่เฟิง','北鎮村':'เป่ยเจิ้น','新興村':'ซินซิง','福田村':'ฝูเถียน','新生村':'ซินเซิง','南鎮村':'หนานเจิ้น','睦宜村':'มู่อี๋' };
+/* 各村說明譯文（en 沿用 INFO.enText） */
+const VT = {
+ '田尾村': {
+  ja:'「田尾」という名は、八堡圳（はちほちゅう）の灌漑システムの下流に由来します。上流の人々が下流を「田尾」と呼んだのです。村には順安宮があります。',
+  th:'ชื่อ "เทียนเหว่ย" มาจากปลายน้ำของระบบชลประทานคลองปาเป่า — คนที่อยู่ต้นน้ำเรียกปลายน้ำว่า "เทียนเหว่ย" ในหมู่บ้านมีศาลเจ้าซุ่นอัน (順安宮)',
+  id:'Nama "Tianwei" berasal dari hilir sistem irigasi Terusan Bazhen: orang di hulu menyebut hilir sebagai "Tianwei". Di desa ini ada Kuil Shun\'an.',
+  vi:'Cái tên "Tianwei" bắt nguồn từ hạ lưu hệ thống thủy lợi kênh Bazhen: người ở thượng nguồn gọi vùng hạ lưu là "Tianwei". Trong làng có đền Shun\'an.',
+  ko:'\'톈웨이\'라는 이름은 바젠(八堡) 수로 관개 시스템의 하류에서 왔습니다. 상류 사람들이 하류를 \'톈웨이\'라고 불렀습니다. 마을에는 순안궁이 있습니다.',
+  de:'„Tianwei“ stammt vom unteren Ende des Bazhen-Bewässerungskanals: Die Menschen flussaufwärts nannten das untere Ende „Tianwei“. Im Dorf steht der Shun\'an-Tempel.' },
+ '打簾村': {
+  ja:'ハイウェイ・ガーデンのビジターセンターは打簾村にあります。100年以上前、打簾の人・巫修齊（ウー・シウチー）が漳州から花木の種や枝を持ち帰り、兄の巫規矩と一緒に植えたことが、田尾の花卉産業の始まりと伝えられています。',
+  th:'ศูนย์บริการนักท่องเที่ยวของสวนดอกไม้ริมทางอยู่ในหมู่บ้านต่าเหลียน เล่ากันว่าเมื่อกว่า 100 ปีก่อน อู๋ซิวฉี ชาวต่าเหลียน นำเมล็ดและกิ่งพันธุ์ไม้ดอกกลับมาจากจางโจว แล้วปลูกร่วมกับพี่ชายอู๋กุยจวี่ ธุรกิจดอกไม้ของเทียนเหว่ยจึงเริ่มต้นขึ้น',
+  id:'Pusat pengunjung Taman Bunga Jalan Raya berada di Desa Dalian. Konon, lebih dari 100 tahun lalu Wu Xiu-qi dari Dalian membawa pulang biji dan stek tanaman bunga dari Zhangzhou dan menanamnya bersama kakaknya, Wu Gui-ju — awal bisnis bunga Tianwei.',
+  vi:'Trung tâm đón khách của Vườn hoa Quốc lộ nằm ở làng Dalian. Tương truyền hơn 100 năm trước, Wu Xiu-qi, người làng Dalian, mang hạt giống và cành giâm từ Zhangzhou về trồng cùng anh trai Wu Gui-ju — khởi đầu của nghề hoa Tianwei.',
+  ko:'공로화원 방문자센터는 다롄촌에 있습니다. 100여 년 전 다롄 사람 우슈치가 장저우에서 꽃나무 씨앗과 가지를 가져와 형 우구이쥐와 함께 심었다고 전해지며, 이것이 톈웨이 꽃 산업의 시작입니다.',
+  de:'Das Besucherzentrum des Highway Garden liegt in Dalian. Der Überlieferung nach brachte vor über 100 Jahren Wu Xiu-qi aus Dalian Samen und Stecklinge aus Zhangzhou mit und pflanzte sie mit seinem Bruder Wu Gui-ju — der Beginn von Tianweis Blumengeschäft.' },
+ '溪畔村': {
+  ja:'村にある朝天宮は、天上聖母（媽祖）をまつっています。',
+  th:'ศาลเจ้าเฉาเทียน (朝天宮) ในหมู่บ้านบูชาเทียนซั่งเซิ่งหมู่ (หมาจู่)',
+  id:'Kuil Chaotian di desa ini memuliakan Mazu, Ibu Suci Surgawi.',
+  vi:'Đền Chaotian trong làng thờ Mazu (Thiên Thượng Thánh Mẫu).',
+  ko:'마을의 차오톈궁(朝天宮)은 마조(천상성모)를 모십니다.',
+  de:'Der Chaotian-Tempel im Dorf ist der Himmlischen Mutter Mazu geweiht.' },
+ '北曾村': {
+  ja:'北曾と南曾のあたりは、日本統治時代は「曾厝崙」（八大字のひとつ）に属し、戦後に二つの村に分かれました。',
+  th:'พื้นที่เป่ยเจิงและหนานเจิงเคยเป็นส่วนหนึ่งของ "เจิงชั่วหลุน" (หนึ่งในแปดตำบลเก่า) ในสมัยญี่ปุ่นปกครอง และแยกเป็นสองหมู่บ้านหลังสงคราม',
+  id:'Beizeng dan Nanzeng dahulu termasuk "Zengcuolun" (salah satu dari delapan wilayah lama kecamatan) pada masa pendudukan Jepang, dan baru dipisah menjadi dua desa setelah perang.',
+  vi:'Beizeng và Nanzeng thời Nhật thuộc từng là một phần của "Zengcuolun" (một trong tám khu vực cũ của hương), và chỉ tách thành hai làng sau chiến tranh.',
+  ko:'베이청과 난청 일대는 일제강점기에 \'청춰룬\'(옛 8대자 중 하나)에 속했고, 전쟁 후 두 개의 마을로 나뉘었습니다.',
+  de:'Beizeng und Nanzeng gehörten in der japanischen Zeit zu „Zengcuolun“ (einem der acht alten Bezirke der Gemeinde) und wurden erst nach dem Krieg in zwei Dörfer geteilt.' },
+ '南曾村': {
+  ja:'南曾と北曾のあたりは、日本統治時代は「曾厝崙」に属し、戦後に二つの村に分かれました。村には廣霖宮があります。',
+  th:'พื้นที่หนานเจิงและเป่ยเจิงเคยเป็นส่วนหนึ่งของ "เจิงชั่วหลุน" ในสมัยญี่ปุ่นปกครอง และแยกเป็นสองหมู่บ้านหลังสงคราม ในหมู่บ้านมีศาลเจ้ากว่างหลิน (廣霖宮)',
+  id:'Nanzeng dan Beizeng dahulu termasuk "Zengcuolun" pada masa pendudukan Jepang dan dipisah menjadi dua desa setelah perang. Di desa ini ada Kuil Guanglin.',
+  vi:'Nanzeng và Beizeng thời Nhật thuộc từng thuộc "Zengcuolun" và chỉ tách thành hai làng sau chiến tranh. Trong làng có đền Guanglin.',
+  ko:'난청과 베이청 일대는 일제강점기에 \'청춰룬\'에 속했고, 전쟁 후 두 개의 마을로 나뉘었습니다. 마을에는 광린궁이 있습니다.',
+  de:'Nanzeng und Beizeng gehörten in der japanischen Zeit zu „Zengcuolun“ und wurden nach dem Krieg in zwei Dörfer geteilt. Im Dorf steht der Guanglin-Tempel.' },
+ '饒平村': {
+  ja:'郷内で最も人口の多い村。田尾国民小学校と田尾国民中学校があり、天乙宮は蘇府王爺をまつっています。',
+  th:'หมู่บ้านที่มีประชากรมากที่สุดในอำเภอ โรงเรียนประถมและมัธยมต้นเทียนเหว่ยตั้งอยู่ที่นี่ ศาลเจ้าเทียนอี่ (天乙宮) บูชาซูฝู่หวาง (蘇府王爺)',
+  id:'Desa berpenduduk terbanyak di kecamatan ini. SD dan SMP Tianwei sama-sama berada di sini; Kuil Tianyi memuliakan Su Fu Wangye (Pangeran Su).',
+  vi:'Làng đông dân nhất trong hương. Trường tiểu học và trung học cơ sở Tianwei đều nằm ở đây; đền Tianyi thờ Tô Phủ Vương Gia (Su Fu Wangye).',
+  ko:'향에서 인구가 가장 많은 마을. 톈웨이 초등학교와 중학교가 모두 이곳에 있으며, 톈이궁은 쑤푸왕예(蘇府王爺)를 모십니다.',
+  de:'Das einwohnerreichste Dorf der Gemeinde. Die Grund- und die Mittelschule von Tianwei liegen beide hier; der Tianyi-Tempel ist Fürst Su (Su Fu Wangye) geweiht.' },
+ '正義村': {
+  ja:'郷の南西部にあり、南は北斗鎮に接しています。',
+  th:'ตั้งอยู่ทางตะวันตกเฉียงใต้ของอำเภอ ทิศใต้ติดกับเมืองเป่ยโต่ว',
+  id:'Terletak di barat daya kecamatan, berbatasan dengan Kota Beidou di selatan.',
+  vi:'Nằm ở phía tây nam của hương, giáp thị trấn Beidou ở phía nam.',
+  ko:'향의 남서부에 있으며 남쪽으로 베이더우진과 맞닿아 있습니다.',
+  de:'Im Südwesten der Gemeinde gelegen, im Süden an die Stadt Beidou grenzend.' },
+ '豐田村': {
+  ja:'県の観光サイトは、豊田をハイウェイ・ガーデン周辺の村のひとつに挙げており、花で知られています。田尾郷は台湾最大のカーネーション産地です。',
+  th:'เว็บท่องเที่ยวของเทศมณฑลจัดให้เฟิงเถียนเป็นหนึ่งในหมู่บ้านบริเวณสวนดอกไม้ริมทาง และขึ้นชื่อเรื่องดอกไม้ เทียนเหว่ยเป็นแหล่งปลูกคาร์เนชันใหญ่ที่สุดของไต้หวัน',
+  id:'Situs wisata kabupaten mencantumkan Fengtian sebagai salah satu desa di kawasan Taman Bunga Jalan Raya, terkenal dengan bunga. Tianwei adalah daerah penghasil anyelir (carnation) terbesar di Taiwan.',
+  vi:'Trang du lịch của huyện liệt kê Fengtian là một trong những làng thuộc khu Vườn hoa Quốc lộ, nổi tiếng về hoa. Tianwei là vùng trồng hoa cẩm chướng lớn nhất Đài Loan.',
+  ko:'현(縣) 관광 사이트는 펑톈을 공로화원 일대의 마을 중 하나로 소개하며, 꽃으로 유명합니다. 톈웨이는 대만 최대의 카네이션 산지입니다.',
+  de:'Die Tourismusseite des Landkreises führt Fengtian als eines der Dörfer im Gebiet des Highway Garden auf; es ist für Blumen bekannt. Tianwei ist Taiwans größtes Nelkenanbaugebiet.' },
+ '溪頂村': {
+  ja:'清水渓の上流側にあるため「溪頂」と呼ばれ、村に土の小山が多いことから「塗墩頭」（土の山の頭）の別名もあります。かつては三十張犂に属し、仁里・新厝とともに北玄宮の信仰圏に入っています。',
+  th:'ชื่อ "ซีติ่ง" แปลว่า "เหนือลำธาร" เพราะอยู่เหนือแม่น้ำชิงสุ่ย และมีฉายาว่า "ถู๋ตุนโถว" (หัวเนินดิน) เพราะมีเนินดินมากมายในหมู่บ้าน ในอดีตเป็นส่วนหนึ่งของซานสือจางหลี๋ และอยู่ในเขตศรัทธาของศาลเจ้าเป่ยเสวียน ร่วมกับเหรินหลี่และซินชั่ว',
+  id:'"Xiding" berarti "di atas sungai kecil" karena letaknya di hulu Sungai Qingshui. Desa ini berjuluk "Tudunton" (Kepala Gundukan) karena banyaknya gundukan tanah. Dahulu termasuk wilayah Sanshizhangli, dan bersama Renli serta Xincuo berada dalam lingkar pemujaan Kuil Beixuan.',
+  vi:'"Xiding" nghĩa là "phía trên con suối" vì nằm ở thượng lưu sông Qingshui. Làng còn có biệt danh "Tudunton" (Đầu gò đất) vì có nhiều gò đất. Trước đây thuộc vùng Sanshizhangli, cùng Renli và Xincuo nằm trong vòng tín ngưỡng của đền Beixuan.',
+  ko:'\'시딩\'은 칭수이(清水)강 위쪽에 있다는 뜻입니다. 마을에 흙 언덕이 많아 \'투둔터우\'(흙더미 머리)라고도 불립니다. 예전에는 싼스장리 지역에 속했으며, 런리·신춰와 함께 베이쉬안궁의 신앙권에 속합니다.',
+  de:'„Xiding“ bedeutet „oberhalb des Baches“, denn das Dorf liegt am oberen Qingshui-Fluss. Wegen der vielen Erdhügel heißt es auch „Tudunton“ (Hügelkopf). Früher gehörte es zum Gebiet Sanshizhangli und zählt mit Renli und Xincuo zum Gläubigenkreis des Beixuan-Tempels.' },
+ '新厝村': {
+  ja:'彰化県で最も人口が少ない村のひとつで、住民は200人あまり。仁豊国民小学校があります。',
+  th:'เป็นหนึ่งในหมู่บ้านที่มีประชากรน้อยที่สุดในเทศมณฑลจางฮั่ว มีผู้อยู่อาศัยเพียงสองร้อยกว่าคน โรงเรียนประถมเหรินเฟิงตั้งอยู่ที่นี่',
+  id:'Salah satu desa berpenduduk paling sedikit di Kabupaten Changhua, hanya sedikit di atas 200 jiwa. SD Renfeng berada di sini.',
+  vi:'Một trong những làng ít dân nhất huyện Changhua, chỉ hơn 200 người. Trường tiểu học Renfeng nằm ở đây.',
+  ko:'창화현에서 인구가 가장 적은 마을 중 하나로 주민은 200여 명입니다. 런펑 초등학교가 이곳에 있습니다.',
+  de:'Eines der einwohnerärmsten Dörfer im Landkreis Changhua, mit nur etwas über 200 Einwohnern. Die Grundschule Renfeng liegt hier.' },
+ '仁里村': {
+  ja:'北玄宮は玄天上帝をまつり、宮内には三将爺も祀られています。メディアでは「廟の中の廟」と呼ばれています。',
+  th:'ศาลเจ้าเป่ยเสวียน (北玄宮) บูชาเสวียนเทียนซั่งตี้ และภายในยังประดิษฐานซานเจียงเหย (三將爺) สื่อเรียกว่า "ศาลในศาล"',
+  id:'Kuil Beixuan memuliakan Xuantian Shangdi dan di dalamnya juga disemayamkan Tiga Jenderal (Sanjiang Ye) — oleh media disebut "kuil di dalam kuil".',
+  vi:'Đền Beixuan thờ Huyền Thiên Thượng Đế (Xuantian Shangdi), bên trong còn thờ Tam Tướng Gia (Sanjiang Ye); báo chí gọi là "đền trong đền".',
+  ko:'베이쉬안궁은 쉬안톈상디(玄天上帝)를 모시고, 궁 안에 싼장예(三將爺)도 모십니다. 언론은 이를 \'사당 속의 사당\'이라고 부릅니다.',
+  de:'Der Beixuan-Tempel ist Xuantian Shangdi geweiht und beherbergt zudem die drei Generäle (Sanjiang Ye) – von der Presse ein „Tempel im Tempel“ genannt.' },
+ '柳鳳村': {
+  ja:'郷公所の公式サイトのグルメページに、柳鳳路にある庭園レストラン「阿嬤私房菜」（おばあちゃんの家庭料理）が載っています。',
+  th:'หน้าอาหารของเว็บไซต์ที่ว่าการอำเภอระบุร้านอาหารสวน "อาหม่าซือฝางไช่" (ครัวคุณยาย) บนถนนหลิ่วเฟิง',
+  id:'Halaman kuliner situs kantor kecamatan mencantumkan restoran taman "Grandma\'s Kitchen" (A-ma Sifang Cai) di Jalan Liufeng.',
+  vi:'Trang ẩm thực trên website văn phòng hương liệt kê nhà hàng sân vườn "Bếp của Bà" (A-ma Sifang Cai) trên đường Liufeng.',
+  ko:'향공소 공식 사이트의 맛집 페이지에는 류펑로에 있는 정원 식당 \'할머니의 부엌\'(아마스팡차이)이 올라 있습니다.',
+  de:'Auf der Gastronomie-Seite des Gemeindeamts ist das Gartenrestaurant „Omas Küche“ (A-ma Sifang Cai) in der Liufeng-Straße aufgeführt.' },
+ '陸豐村': {
+  ja:'陸豊と海豊はもともと合わせて「海豊崙」と呼ばれ、先人は広東省恵州府の海豊県から来ました。村人は花卉・野菜・稲作などの農業が中心で、2011年に天寿宮を陸豊の村廟とすることが取り決められました。',
+  th:'ลู่เฟิงกับไห่เฟิงเดิมเรียกรวมกันว่า "ไห่เฟิงหลุน" บรรพบุรุษมาจากอำเภอไห่เฟิง เมืองฮุ่ยโจว มณฑลกวางตุ้ง ชาวบ้านทำเกษตร ปลูกดอกไม้ ผัก และข้าวเป็นหลัก ในปี 2011 มีมติให้ศาลเจ้าเทียนโส่ว (天壽宮) เป็นศาลประจำหมู่บ้านของลู่เฟิง',
+  id:'Lufeng dan Haifeng dahulu bersama-sama disebut "Haifenglun"; leluhurnya berasal dari Kabupaten Haifeng, Prefektur Huizhou, Guangdong. Warga bertani bunga, sayur, dan padi; pada 2011 disepakati Kuil Tianshou sebagai kuil desa Lufeng.',
+  vi:'Lufeng và Haifeng trước đây được gọi chung là "Haifenglun"; tổ tiên đến từ huyện Haifeng, phủ Huizhou, Quảng Đông. Dân làng làm nông nghiệp: hoa, rau, lúa; năm 2011 đền Tianshou được thống nhất là đền làng của Lufeng.',
+  ko:'루펑과 하이펑은 원래 합쳐서 \'하이펑룬\'이라 불렸으며, 선조들은 광둥성 후이저우부 하이펑현에서 왔습니다. 주민들은 꽃, 채소, 벼농사 등 농업을 주로 하며, 2011년 톈서우궁을 루펑의 마을 사당으로 정하기로 합의했습니다.',
+  de:'Lufeng und Haifeng hießen früher zusammen „Haifenglun“; die Vorfahren stammen aus dem Kreis Haifeng in Huizhou, Guangdong. Die Dorfbewohner betreiben Landwirtschaft – Blumen, Gemüse, Reis; 2011 wurde der Tianshou-Tempel als Dorftempel von Lufeng vereinbart.' },
+ '海豐村': {
+  ja:'郷内で最も面積の大きい村。沛霖宮は三山国王をまつり、1889年の創建です。海豊崙一帯の路地は壁画で彩られ、「海豊崙ペイント村」と呼ばれています。',
+  th:'เป็นหมู่บ้านที่มีพื้นที่ใหญ่ที่สุดในอำเภอ ศาลเจ้าเพ่ยหลิน (沛霖宮) บูชาซานซานกั๋วหวาง (三山國王) สร้างเมื่อปี 1889 ตรอกซอกซอยบริเวณไห่เฟิงหลุนเต็มไปด้วยภาพวาดบนผนัง จึงได้ชื่อว่า "หมู่บ้านภาพวาดไห่เฟิงหลุน"',
+  id:'Desa terluas di kecamatan ini. Kuil Peilin memuliakan Tiga Raja Gunung (Sanshan Guowang) dan dibangun pada 1889. Gang-gang di kawasan Haifenglun dipenuhi mural, sehingga dijuluki "Desa Lukisan Haifenglun".',
+  vi:'Làng có diện tích lớn nhất hương. Đền Peilin thờ Tam Sơn Quốc Vương (Sanshan Guowang), xây năm 1889. Các con hẻm ở khu Haifenglun phủ đầy tranh tường nên được gọi là "Làng bích họa Haifenglun".',
+  ko:'향에서 면적이 가장 넓은 마을입니다. 페이린궁은 싼산궈왕(三山國王)을 모시며 1889년에 세워졌습니다. 하이펑룬 일대의 골목은 벽화로 가득해 \'하이펑룬 벽화마을\'이라 불립니다.',
+  de:'Das flächenmäßig größte Dorf der Gemeinde. Der Peilin-Tempel ist den Drei Bergkönigen (Sanshan Guowang) geweiht und wurde 1889 erbaut. Die Gassen rund um Haifenglun sind voller Wandbilder – daher „Malerdorf Haifenglun“.' },
+ '北鎮村': {
+  ja:'北鎮と南鎮のあたりは、日本統治時代は「鎮平」（八大字のひとつ）に属していました。村には鎮平鎮安宮があります。',
+  th:'พื้นที่เป่ยเจิ้นและหนานเจิ้นอยู่ใน "เจิ้นผิง" (หนึ่งในแปดตำบลเก่า) ในสมัยญี่ปุ่นปกครอง ในหมู่บ้านมีศาลเจ้าเจิ้นผิงเจิ้นอัน (鎮平鎮安宮)',
+  id:'Beizhen dan Nanzhen pada masa pendudukan Jepang termasuk "Zhenping" (salah satu dari delapan wilayah lama). Di desa ini ada Kuil Zhenping Zhen\'an.',
+  vi:'Beizhen và Nanzhen thời Nhật thuộc nằm trong "Zhenping" (một trong tám khu vực cũ). Trong làng có đền Zhenping Zhen\'an.',
+  ko:'베이전과 난전 일대는 일제강점기에 \'전핑\'(옛 8대자 중 하나)에 속했습니다. 마을에는 전핑전안궁이 있습니다.',
+  de:'Beizhen und Nanzhen gehörten in der japanischen Zeit zu „Zhenping“ (einem der acht alten Bezirke). Im Dorf steht der Zhenping-Zhen\'an-Tempel.' },
+ '新興村': {
+  ja:'村には福徳爺廟があり、土地公（土地の神）をまつっています。',
+  th:'ในหมู่บ้านมีศาลฝูเต๋ออีเหมี่ยว (福德爺廟) บูชาเจ้าที่ (ถู่ตี้กง)',
+  id:'Desa ini memiliki Kuil Fude Ye yang memuliakan Dewa Bumi (Tudigong).',
+  vi:'Làng có miếu Phúc Đức Gia (Fude Ye), thờ Thổ Địa (Tudigong).',
+  ko:'마을에는 푸더예먀오(福德爺廟)가 있으며 토지공(土地公)을 모십니다.',
+  de:'Im Dorf steht der Fude-Ye-Tempel, der dem Erdgott (Tudigong) geweiht ist.' },
+ '福田村': {
+  ja:'郷の最東端にあり、社頭と田中に接しています。住民は稲と野菜を育てています。旧名は「小紅毛社」で、日本統治時代の八大字のひとつでした。',
+  th:'อยู่ทางตะวันออกสุดของอำเภอ ติดกับเส้อโถวและเถียนจง ชาวบ้านปลูกข้าวและผัก ชื่อเดิมคือ "เสี่ยวหงเหมาเซ่อ" หนึ่งในแปดตำบลเก่าสมัยญี่ปุ่น',
+  id:'Terletak di ujung timur kecamatan, berbatasan dengan Shetou dan Tianzhong. Warga menanam padi dan sayuran. Nama lamanya "Xiaohongmaoshe", salah satu dari delapan wilayah lama pada masa Jepang.',
+  vi:'Nằm ở cực đông của hương, giáp Shetou và Tianzhong. Người dân trồng lúa và rau. Tên cũ là "Xiaohongmaoshe", một trong tám khu vực cũ thời Nhật thuộc.',
+  ko:'향의 가장 동쪽에 있으며 서터우, 톈중과 맞닿아 있습니다. 주민들은 벼와 채소를 재배합니다. 옛 이름은 \'샤오훙마오서\'로 일제강점기의 8대자 중 하나였습니다.',
+  de:'Am östlichen Rand der Gemeinde, angrenzend an Shetou und Tianzhong. Die Einwohner bauen Reis und Gemüse an. Der alte Name war „Xiaohongmaoshe“, einer der acht alten Bezirke der japanischen Zeit.' },
+ '新生村': {
+  ja:'國聖宮は新生村にあり、国姓爺（鄭成功）をまつっています。',
+  th:'ศาลเจ้ากั๋วเซิ่ง (國聖宮) ตั้งอยู่ในหมู่บ้านซินเซิง บูชากั๋วซิ่งเหย (เจิ้งเฉิงกง)',
+  id:'Kuil Guosheng berada di Desa Xinsheng dan memuliakan Koxinga (Zheng Chenggong).',
+  vi:'Đền Guosheng nằm ở làng Xinsheng, thờ Quốc Tính Gia (Trịnh Thành Công – Koxinga).',
+  ko:'궈성궁(國聖宮)은 신성촌에 있으며 궈싱예(國姓爺), 즉 정성공을 모십니다.',
+  de:'Der Guosheng-Tempel steht in Xinsheng und ist Koxinga (Zheng Chenggong) geweiht.' },
+ '南鎮村': {
+  ja:'北鎮と南鎮のあたりは、日本統治時代は「鎮平」に属していました。南鎮国民小学校があり、住民の多くは農業を営んでいます。',
+  th:'พื้นที่เป่ยเจิ้นและหนานเจิ้นอยู่ใน "เจิ้นผิง" ในสมัยญี่ปุ่นปกครอง โรงเรียนประถมหนานเจิ้นตั้งอยู่ที่นี่ และชาวบ้านส่วนใหญ่ทำเกษตร',
+  id:'Nanzhen dan Beizhen pada masa Jepang termasuk "Zhenping". SD Nanzhen berada di sini, dan sebagian besar warga bertani.',
+  vi:'Nanzhen và Beizhen thời Nhật thuộc nằm trong "Zhenping". Trường tiểu học Nanzhen ở đây và phần lớn người dân làm nông.',
+  ko:'난전과 베이전 일대는 일제강점기에 \'전핑\'에 속했습니다. 난전 초등학교가 이곳에 있으며 주민 대부분이 농업에 종사합니다.',
+  de:'Nanzhen und Beizhen gehörten in der japanischen Zeit zu „Zhenping“. Die Grundschule Nanzhen liegt hier, die meisten Einwohner betreiben Landwirtschaft.' },
+ '睦宜村': {
+  ja:'住民は稲作を営んでいます。聖德宮は天上聖母（媽祖）をまつり、毎年お祭り（廟会）が開かれます。',
+  th:'ชาวบ้านปลูกข้าว ศาลเจ้าเซิ่งเต๋อ (聖德宮) บูชาเทียนซั่งเซิ่งหมู่ (หมาจู่) และจัดงานเทศกาลศาลเจ้าทุกปี',
+  id:'Warga menanam padi. Kuil Shengde memuliakan Mazu dan menyelenggarakan perayaan kuil setiap tahun.',
+  vi:'Người dân trồng lúa. Đền Shengde thờ Mazu và tổ chức lễ hội đền hằng năm.',
+  ko:'주민들은 벼농사를 짓습니다. 성더궁(聖德宮)은 마조를 모시며 해마다 묘회 축제를 엽니다.',
+  de:'Die Einwohner bauen Reis an. Der Shengde-Tempel ist Mazu geweiht und veranstaltet jährlich ein Tempelfest.' },
+};
+
+
 /* ================= 工具 ================= */
 const S = .026;                                   // 像素 → 世界單位
 const CX = (POLY._bbox[0] + POLY._bbox[2]) / 2, CY = (POLY._bbox[1] + POLY._bbox[3]) / 2;
@@ -250,6 +444,13 @@ function W(c = 0xffffff, sway = .03){           // 會隨風搖的材質（給�
   }
   return windCache.get(k);
 }
+let LANG = 'en'; try { const sv = localStorage.getItem('tw-lang'); if (sv && LANGS[sv]) LANG = sv; } catch (e) {}   // 與主網站共用語言設定
+const tr = k => UI[LANG][k];
+const shortName = n => LANG === 'ja' ? n.replace('村', '') : LANG === 'ko' ? NAME_KO[n] : LANG === 'th' ? NAME_TH[n] : INFO[n].en.replace(' Village', '');
+const fullName = n => LANG === 'ja' ? n : tr('vil').replace('{x}', shortName(n));
+const popLine = n => { const m = (INFO[n].meta || '').match(/([\d,]+)/); return m ? tr('pop').replace('{n}', m[1]) : ''; };
+const vtext = n => LANG === 'en' ? INFO[n].enText : ((VT[n] && VT[n][LANG]) || INFO[n].enText);
+{ const ld = document.getElementById('ldMsg'); if (ld) ld.innerHTML = UI[LANG].load + '<small>' + UI[LANG].loadSub + '</small>'; }
 function shade(m){ m.castShadow = true; m.receiveShadow = true; return m; }
 function box(w, h, d, c, x = 0, y = 0, z = 0, o){ const m = shade(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
 function cyl(rt, rb, h, c, x = 0, y = 0, z = 0, seg = 8, o){ const m = shade(new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
@@ -630,38 +831,61 @@ const $ = id => document.getElementById(id);
 const chipMap = new Map();
 const order = villages.slice().sort((a, b) => (INFO[a.name]?.dist || 9) - (INFO[b.name]?.dist || 9));
 for (const v of order){
-  const emo = v.info.emoji || '📍';
-  const chip = document.createElement('button'); chip.className = 'chip'; chip.textContent = `${emo} ${v.name.replace('村', '')}`; chip.onclick = () => select(v.name); chipsEl.appendChild(chip);
-  const d = document.createElement('button'); d.className = 'btn card'; d.textContent = `${emo} ${v.name}`; d.onclick = () => select(v.name); dockEl.appendChild(d);
+  const chip = document.createElement('button'); chip.className = 'chip'; chip.onclick = () => select(v.name); chipsEl.appendChild(chip);
+  const d = document.createElement('button'); d.className = 'btn card'; d.onclick = () => select(v.name); dockEl.appendChild(d);
   chipMap.set(v.name, { chip, d });
 }
 let selected = null, hoverName = null, showDist = false;
+const distBtn = $('distBtn'), nightBtn = $('nightBtn'), legend = $('legend');
+const hex6 = c => '#' + c.toString(16).padStart(6, '0');
+function renderNames(){
+  for (const v of order){
+    const emo = v.info.emoji || '📍', zs = v.name.replace('村', ''), local = LANG === 'ja' ? '' : shortName(v.name), c = chipMap.get(v.name);
+    c.chip.textContent = `${emo} ${zs}${local ? ' ' + local : ''}`; c.d.textContent = `${emo} ${v.name}${local ? ' · ' + local : ''}`;
+  }
+}
+function fillPanel(name){
+  const v = byName[name], i = v.info, dd = DIST[i.dist], u = UI[LANG];
+  $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = LANG === 'ja' ? i.en : fullName(name);
+  const tag = $('pTag'); tag.textContent = dd ? `${dd.name} · ${u.dnames[i.dist - 1]}` : ''; tag.style.background = dd ? hex6(dd.c) : '#888'; tag.hidden = !dd;
+  $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta;
+  $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。<br>' + u.note;
+  $('pPage').textContent = u.page; $('pPage').href = `village/${SLUG[name]}.html`;
+}
 function select(name){
   selected = name;
   for (const [k, c] of chipMap){ c.chip.classList.toggle('on', k === name); c.d.classList.toggle('on', k === name); }
   if (!name){ panel.classList.remove('open'); try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} return; }
-  const v = byName[name], i = v.info, dd = DIST[i.dist];
-  $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = i.en || '';
-  const tag = $('pTag'); tag.textContent = dd ? dd.name : ''; tag.style.background = dd ? '#' + dd.c.toString(16).padStart(6, '0') : '#888'; tag.hidden = !dd;
-  $('pText').textContent = i.text || ''; $('pEnText').textContent = i.enText || ''; $('pMeta').textContent = i.meta || ''; $('pMeta').hidden = !i.meta;
-  $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。';
-  $('pPage').href = `village/${SLUG[name]}.html`; try { history.replaceState(null, '', '#' + SLUG[name]); } catch (e) {}
+  const v = byName[name];
+  fillPanel(name);
+  try { history.replaceState(null, '', '#' + SLUG[name]); } catch (e) {}
   panel.classList.add('open');
   goalTarget.copy(v.pos); goalDist = clamp(v.r * 7 + 9, 11, defaultDist() * .55); tweening = true; controls.autoRotate = false;
 }
 $('closeBtn').onclick = () => select(null);
 $('resetBtn').onclick = resetView;
 addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
-const nightBtn = $('nightBtn');
-function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); nightBtn.innerHTML = on ? '☀️ <span class="lbl">白天</span>' : '🌙 <span class="lbl">夜晚</span>'; }
+function setNightLabel(){ nightBtn.innerHTML = nightGoal ? `☀️ <span class="lbl">${tr('day')}</span>` : `🌙 <span class="lbl">${tr('night')}</span>`; }
+function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); setNightLabel(); }
 nightBtn.onclick = () => setNight(!nightGoal);
-const distBtn = $('distBtn'), legend = $('legend');
-legend.innerHTML = Object.values(DIST).map(d => `<div><i style="background:#${d.c.toString(16).padStart(6, '0')}"></i>${d.name}</div>`).join('');
+function renderLegend(){ legend.innerHTML = Object.entries(DIST).map(([k, d]) => `<div><i style="background:${hex6(d.c)}"></i>${d.name} · ${tr('dnames')[k - 1]}</div>`).join(''); }
 function setDist(on){ showDist = on; distBtn.setAttribute('aria-pressed', String(on)); legend.classList.toggle('show', on); for (const v of villages){ const dd = DIST[v.info.dist]; v.topMat.color.set(on && dd ? dd.c : v.baseTop); } }
 distBtn.onclick = () => setDist(!showDist);
+function applyLang(){
+  const u = UI[LANG];
+  $('tSub').textContent = u.sub; $('dLbl').textContent = u.dist; $('rLbl').textContent = u.reset; $('hLbl').textContent = u.home;
+  distBtn.title = u.tDist; nightBtn.title = u.tNight; $('resetBtn').title = u.tReset; $('homeBtn').title = u.tHome; dockEl.setAttribute('aria-label', u.list);
+  $('noglBox').innerHTML = `<h2>${u.glH}</h2><p>${u.glP}</p>`;
+  setNightLabel(); renderLegend(); renderNames(); if (selected) fillPanel(selected);
+}
+const langSel = $('langSel');
+langSel.innerHTML = Object.entries(LANGS).map(([k, n]) => `<option value="${k}">${n}</option>`).join(''); langSel.value = LANG;
+langSel.onchange = () => { LANG = langSel.value; try { localStorage.setItem('tw-lang', LANG); } catch (e) {} applyLang(); };
+applyLang();
 const qs = new URLSearchParams(location.search);
 if (qs.has('night')) setNight(true);
 if (qs.has('dist')) setDist(true);
+if (UI[qs.get('lang')]) { LANG = qs.get('lang'); langSel.value = LANG; applyLang(); }
 
 /* ================= 點選／懸停 ================= */
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(); let downX = 0, downY = 0;
