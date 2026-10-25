@@ -88,11 +88,11 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .hero-cta .cta{display:inline-block;font-size:18px;font-weight:700;text-decoration:none;color:#2b1d05;background:var(--gold);border-radius:999px;padding:10px 24px}
 .hero-cta .cta.alt{background:rgba(255,255,255,.14);color:#fff;border:2px solid #fff}
 .hero-cta .cta:hover{filter:brightness(1.08)}
-.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-48px;position:relative;z-index:2}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:-48px;position:relative;z-index:2}
 .fact{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;text-align:center}
 .fact b{display:block;font-size:28px;color:var(--green)}
 .fact small{color:var(--muted);font-size:18px;line-height:1.4;display:block}
-@media (max-width:700px){.facts{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:700px){.facts{grid-template-columns:repeat(3,1fr);gap:8px}.fact{padding:14px 6px}.fact b{font-size:24px}}
 
 /* ---------- 認識田尾 ---------- */
 .about{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
@@ -262,7 +262,6 @@ footer ul{margin:0;padding-left:18px}
   <div class="facts">
     <div class="fact"><b>341</b><small>公頃 公路花園<br><span data-l2="f1"></span></small></div>
     <div class="fact"><b>1973</b><small>開闢公路花園<br><span data-l2="f2"></span></small></div>
-    <div class="fact"><b>4,000萬</b><small>支菊花／年<br><span data-l2="f3"></span></small></div>
     <div class="fact"><b>20</b><small>個村<br><span data-l2="f4"></span></small></div>
   </div>
 </div>
@@ -432,11 +431,11 @@ const SPOTS = [
 
  { img:"chrysanthemum-lights.jpg", cap:{"zh": "示意照：夜間開燈的電照菊溫室（攝於日本）", "L": {"en": "Illustration: a lit chrysanthemum greenhouse in Japan", "ja": "イメージ写真：夜に電照する菊の温室（日本で撮影）", "th": "ภาพประกอบ: โรงเรือนเบญจมาศที่เปิดไฟตอนกลางคืน (ถ่ายที่ญี่ปุ่น)", "id": "Ilustrasi: rumah kaca krisan yang diterangi lampu pada malam hari (difoto di Jepang)", "vi": "Ảnh minh họa: nhà kính hoa cúc thắp đèn ban đêm (chụp tại Nhật Bản)", "ko": "참고 사진: 밤에 불을 밝힌 국화 온실(일본에서 촬영)", "de": "Symbolbild: beleuchtetes Chrysanthemen-Gewächshaus (aufgenommen in Japan)"}}, zh:"菊花不夜城", icon:"💡",
    name:{en:"Chrysanthemum Fields at Night", ja:"菊畑の不夜城", th:"ทุ่งเบญจมาศยามค่ำคืน", id:"Ladang Krisan di Malam Hari", vi:"Cánh đồng hoa cúc về đêm", ko:"국화밭의 불야성", de:"Chrysanthemenfelder bei Nacht"},
-   zhText:"田尾有 120 公頃的菊花田。秋冬夜晚，花農會打開一排排電燈，讓菊花晚一點開花、花莖長得更高。整片田亮晶晶的，像一座不睡覺的城市。",
-   l2:{en:"Tianwei has 120 hectares of chrysanthemum fields. On autumn and winter nights, farmers switch on rows of lights so the flowers grow taller stems — the fields glow like a city that never sleeps.",
-       ja:"田尾には120ヘクタールの菊畑があります。秋から冬の夜、農家は電灯をともして開花を調整し、茎を長く育てます。畑全体が光り輝き、まるで眠らない街のようです。",
-       th:"เทียนเหว่ยมีทุ่งเบญจมาศ 120 เฮกตาร์ ในคืนฤดูใบไม้ร่วงและฤดูหนาว เกษตรกรจะเปิดไฟเป็นแถว ๆ เพื่อให้ก้านดอกยาวขึ้น ทุ่งทั้งทุ่งจึงสว่างไสวเหมือนเมืองที่ไม่เคยหลับใหล",
-       id:"Tianwei memiliki 120 hektar ladang krisan. Pada malam musim gugur dan dingin, petani menyalakan deretan lampu agar batang bunga tumbuh lebih tinggi — ladang bersinar seperti kota yang tak pernah tidur.", vi:"Tianwei có 120 hecta ruộng hoa cúc. Vào những đêm thu đông, nông dân bật từng hàng đèn để thân hoa mọc cao hơn — cả cánh đồng sáng rực như một thành phố không ngủ.", ko:"톈웨이에는 120헥타르의 국화밭이 있습니다. 가을과 겨울밤이면 농부들이 줄지어 전등을 켜서 꽃대를 더 길게 키웁니다. 들판 전체가 잠들지 않는 도시처럼 환하게 빛납니다.", de:"Tianwei hat 120 Hektar Chrysanthemenfelder. In Herbst- und Winternächten schalten die Bauern reihenweise Lampen ein, damit die Stiele länger wachsen – die Felder leuchten wie eine Stadt, die niemals schläft."},
+   zhText:"秋冬夜晚，花農會打開一排排電燈，讓菊花晚一點開花、花莖長得更高。整片田亮晶晶的，像一座不睡覺的城市。",
+   l2:{en:"On autumn and winter nights, farmers switch on rows of lights so the flowers grow taller stems — the fields glow like a city that never sleeps.",
+       ja:"秋から冬の夜、農家は電灯をともして開花を調整し、茎を長く育てます。畑全体が光り輝き、まるで眠らない街のようです。",
+       th:"ในคืนฤดูใบไม้ร่วงและฤดูหนาว เกษตรกรจะเปิดไฟเป็นแถว ๆ เพื่อให้ก้านดอกยาวขึ้น ทุ่งทั้งทุ่งจึงสว่างไสวเหมือนเมืองที่ไม่เคยหลับใหล",
+       id:"Pada malam musim gugur dan dingin, petani menyalakan deretan lampu agar batang bunga tumbuh lebih tinggi — ladang bersinar seperti kota yang tak pernah tidur.", vi:"Vào những đêm thu đông, nông dân bật từng hàng đèn để thân hoa mọc cao hơn — cả cánh đồng sáng rực như một thành phố không ngủ.", ko:"가을과 겨울밤이면 농부들이 줄지어 전등을 켜서 꽃대를 더 길게 키웁니다. 들판 전체가 잠들지 않는 도시처럼 환하게 빛납니다.", de:"In Herbst- und Winternächten schalten die Bauern reihenweise Lampen ein, damit die Stiele länger wachsen – die Felder leuchten wie eine Stadt, die niemals schläft."},
    meta:"🕖 最佳時間：約 10 月至隔年 2 月的晚上 · 請在路邊欣賞，不要進入田裡",
    lv:[ {s:"At night, the lights are on. The fields are bright.", zh:"晚上燈亮了，田裡很明亮。", w:[["night","晚上"],["light","燈"],["bright","明亮的"]]},
         {s:"Farmers turn on the lights at night, so the chrysanthemums grow longer stems before they bloom.", zh:"農夫在晚上開燈，讓菊花在開花前長出更長的莖。", w:[["farmer","農夫"],["chrysanthemum","菊花"],["stem","莖"],["bloom","開花"]]},
@@ -592,7 +591,7 @@ const T = {
  en:{g1:"Flower sculpture", g2:"Cactus", g3:"Moth orchid", g4:"Foliage plant", g5:"African daisy", g6:"Gazania", g7:"Flower close-up", g8:"Cactus with a face", gal_sub:"Something is blooming in every season", spots_sub:"Each card has an English corner — pick your level below", learn_sub:"Tap a word to hear it", next_sub:"Step out of the classroom and see it for yourself", story_cap:"Rows of plants in a Tianwei nursery today",
      quiz_t:"Quick Quiz", quiz_sub:"How many did you get right?", story_t:"The Story of the Flower Town", story_sub:"It all began with a bag of seeds", nav_story:"Story",
      hero:"Taiwan's largest flower and plant town — in southern Changhua County.",
-     f1:"hectares of garden", f2:"garden opened", f3:"chrysanthemums a year", f4:"villages",
+     f1:"hectares of garden", f2:"garden opened", f4:"villages",
      about_t:"About Tianwei",
      about_1:"Tianwei is in southern Changhua, between Yongjing and Beidou. Early settlers lived at the lower end of the irrigation canals — the \"tail\" (wěi) of the rice fields (tián). That is how Tianwei got its name.",
      about_2:"With rich soil and plenty of water, Tianwei is great for growing plants. The Highway Garden opened in 1973, and today Tianwei is known as \"the hometown of flowers.\"",
@@ -605,7 +604,7 @@ const T = {
  ja:{g1:"花のオブジェ", g2:"サボテン", g3:"胡蝶蘭", g4:"観葉植物", g5:"アフリカンデージー", g6:"ガザニア", g7:"花のクローズアップ", g8:"顔のあるサボテン", gal_sub:"田尾では一年中、花が咲いています", spots_sub:"各カードに英語コーナーがあります。下でレベルを選んでね", learn_sub:"単語をタップすると発音が聞けます", next_sub:"教室を出て、自分の目で見てみよう", story_cap:"今の田尾の苗圃には植物がずらり",
      quiz_t:"ミニクイズ", quiz_sub:"何問正解できたかな？", story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
      hero:"彰化県南部にある、台湾最大の花と植木の町。",
-     f1:"ヘクタールの花園", f2:"花園の開設", f3:"本の菊／年", f4:"の村",
+     f1:"ヘクタールの花園", f2:"花園の開設", f4:"の村",
      about_t:"田尾について",
      about_1:"田尾は彰化県の南部、永靖と北斗の間にあります。清の時代、移民は灌漑用水路の下流、つまり「田の尾（はし）」に住んだため、「田尾」と呼ばれるようになりました。",
      about_2:"肥えた土と豊かな水に恵まれ、植物を育てるのに最適です。1973年に公路花園が開かれ、今では「花のふるさと」と呼ばれています。",
@@ -618,7 +617,7 @@ const T = {
  th:{g1:"ประติมากรรมดอกไม้", g2:"กระบองเพชร", g3:"กล้วยไม้ฟาแลนนอปซิส", g4:"ไม้ประดับใบ", g5:"เดซี่แอฟริกา", g6:"ดอกกาซาเนีย", g7:"ดอกไม้ระยะใกล้", g8:"กระบองเพชรหน้ายิ้ม", gal_sub:"ที่เทียนเหว่ยมีดอกไม้บานตลอดทั้งปี", spots_sub:"ทุกการ์ดมีมุมภาษาอังกฤษ เลือกระดับได้ด้านล่าง", learn_sub:"แตะคำศัพท์เพื่อฟังเสียง", next_sub:"ออกจากห้องเรียนไปดูด้วยตัวเอง", story_cap:"แถวต้นไม้ในเรือนเพาะชำของเทียนเหว่ยในปัจจุบัน",
      quiz_t:"แบบทดสอบสั้น", quiz_sub:"ตอบถูกกี่ข้อ?", story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
      hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
-     f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f3:"ดอกเบญจมาศต่อปี", f4:"หมู่บ้าน",
+     f1:"เฮกตาร์ของสวน", f2:"ปีที่เปิดสวน", f4:"หมู่บ้าน",
      about_t:"รู้จักเทียนเหว่ย",
      about_1:"เทียนเหว่ยอยู่ทางใต้ของจางฮว่า ระหว่างหย่งจิ้งและเป่ยโต่ว ในอดีตผู้บุกเบิกอาศัยอยู่ปลายคลองชลประทาน คือ \"ปลายนา\" จึงได้ชื่อว่า \"เทียนเหว่ย\" (เทียน = นา, เหว่ย = ปลาย)",
      about_2:"ดินอุดมสมบูรณ์และน้ำบริบูรณ์ เหมาะกับการปลูกต้นไม้ สวนดอกไม้ริมทางเปิดในปี 1973 ปัจจุบันได้ชื่อว่า \"บ้านเกิดของดอกไม้\"",
@@ -631,7 +630,7 @@ const T = {
  id:{g1:"Patung bunga", g2:"Kaktus", g3:"Anggrek bulan", g4:"Tanaman hias daun", g5:"Daisy Afrika", g6:"Gazania", g7:"Bunga dari dekat", g8:"Kaktus berwajah", gal_sub:"Di Tianwei, selalu ada bunga yang mekar sepanjang tahun", spots_sub:"Setiap kartu punya pojok bahasa Inggris — pilih tingkatnya di bawah", learn_sub:"Ketuk kata untuk mendengar pengucapannya", next_sub:"Keluar dari kelas dan lihat sendiri", story_cap:"Deretan tanaman di pembibitan Tianwei saat ini",
      quiz_t:"Kuis Singkat", quiz_sub:"Berapa yang benar?", story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
      hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
-     f1:"hektar taman", f2:"taman dibuka", f3:"tangkai krisan per tahun", f4:"desa",
+     f1:"hektar taman", f2:"taman dibuka", f4:"desa",
      about_t:"Tentang Tianwei",
      about_1:"Tianwei terletak di selatan Changhua, di antara Yongjing dan Beidou. Para pendatang dulu tinggal di ujung bawah saluran irigasi — \"ujung sawah\" (tián = sawah, wěi = ujung). Dari situlah nama Tianwei berasal.",
      about_2:"Tanahnya subur dan airnya melimpah, sangat cocok untuk menanam. Taman Bunga Jalan Raya dibuka tahun 1973, dan kini Tianwei dikenal sebagai \"kampung halaman bunga\".",
@@ -644,7 +643,7 @@ const T = {
  vi:{g1:"Tiểu cảnh hoa", g2:"Xương rồng", g3:"Lan hồ điệp", g4:"Cây cảnh lá", g5:"Cúc châu Phi", g6:"Cúc huân chương", g7:"Cận cảnh hoa", g8:"Xương rồng có mặt", gal_sub:"Ở Tianwei, hoa nở quanh năm", spots_sub:"Mỗi thẻ đều có góc tiếng Anh — chọn cấp độ bên dưới", learn_sub:"Chạm vào từ để nghe phát âm", next_sub:"Hãy bước ra khỏi lớp học và tự mình khám phá", story_cap:"Những hàng cây trong vườn ươm ở Tianwei ngày nay",
      quiz_t:"Câu đố nhanh", quiz_sub:"Bạn trả lời đúng mấy câu?", story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
      hero:"Thị trấn hoa và cây cảnh lớn nhất Đài Loan — ở phía nam huyện Chương Hóa.",
-     f1:"hecta vườn hoa", f2:"năm mở vườn", f3:"cành hoa cúc mỗi năm", f4:"làng",
+     f1:"hecta vườn hoa", f2:"năm mở vườn", f4:"làng",
      about_t:"Giới thiệu Tianwei",
      about_1:"Tianwei nằm ở phía nam Chương Hóa, giữa Yongjing và Beidou. Những người khai hoang đầu tiên sống ở cuối kênh tưới tiêu — \"phần đuôi\" (wěi) của ruộng lúa (tián). Đó là nguồn gốc của tên Tianwei.",
      about_2:"Đất đai màu mỡ và nguồn nước dồi dào giúp Tianwei rất thích hợp để trồng cây. Vườn hoa Quốc lộ mở cửa năm 1973, và ngày nay Tianwei được gọi là \"quê hương của hoa\".",
@@ -657,7 +656,7 @@ const T = {
  ko:{g1:"꽃 조형물", g2:"선인장", g3:"호접란", g4:"관엽식물", g5:"아프리칸 데이지", g6:"가자니아", g7:"꽃 클로즈업", g8:"얼굴 있는 선인장", gal_sub:"톈웨이에서는 사계절 내내 꽃이 핍니다", spots_sub:"카드마다 영어 코너가 있어요. 아래에서 난이도를 고르세요", learn_sub:"단어를 누르면 발음을 들을 수 있어요", next_sub:"교실 밖으로 나가 직접 보러 가요", story_cap:"오늘날 톈웨이 묘포에 줄지어 선 식물들",
      quiz_t:"미니 퀴즈", quiz_sub:"몇 개 맞혔나요?", story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
      hero:"장화현 남부에 있는 대만 최대의 꽃과 식물의 마을.",
-     f1:"헥타르의 화원", f2:"화원 조성", f3:"송이의 국화 / 연간", f4:"개 마을",
+     f1:"헥타르의 화원", f2:"화원 조성", f4:"개 마을",
      about_t:"톈웨이 소개",
      about_1:"톈웨이는 장화현 남부, 융징과 베이더우 사이에 있습니다. 옛 개척민들이 관개 수로의 끝, 즉 논(tián)의 '꼬리(wěi)'에 살았기 때문에 '톈웨이(田尾)'라는 이름이 붙었습니다.",
      about_2:"비옥한 땅과 풍부한 물 덕분에 식물을 기르기에 아주 좋습니다. 1973년 공로화원이 조성되었고, 오늘날 톈웨이는 '꽃의 고향'으로 불립니다.",
@@ -667,7 +666,7 @@ const T = {
      m3t:"성도 1호선", m3:"대만을 남북으로 잇는 간선도로가 톈웨이 한가운데를 지나갑니다.",
      c1:"구글 지도에서 톈웨이 찾기", c2:"단어 듣고 배우기", c3:"퀴즈 도전하기",
      nav_map:"3D 지도", nav_vil:"20개 마을", cta_map:"🗺️ 3D 꽃마을 지도 탐험", cta_vil:"📋 20개 마을 보기", nav_about:"소개", nav_spots:"명소", nav_gallery:"사진", nav_learn:"영어"},
- de:{"g1": "Blumenskulptur", "g2": "Kaktus", "g3": "Schmetterlingsorchidee", "g4": "Blattpflanze", "g5": "Kapkörbchen", "g6": "Gazanie", "g7": "Blüte in Nahaufnahme", "g8": "Kaktus mit Gesicht", "gal_sub": "Hier blüht zu jeder Jahreszeit etwas", "spots_sub": "Jede Karte hat eine Englisch-Ecke – wähle unten dein Niveau", "learn_sub": "Tippe auf ein Wort, um es zu hören", "next_sub": "Raus aus dem Klassenzimmer – sieh es dir selbst an", "story_cap": "Reihen von Pflanzen in einer Gärtnerei in Tianwei heute", "quiz_t": "Kurzes Quiz", "quiz_sub": "Wie viele hast du richtig?", "story_t": "Die Geschichte der Blumenstadt", "story_sub": "Alles begann mit einer Tüte Samen", "nav_story": "Geschichte", "hero": "Taiwans größte Blumen- und Pflanzenstadt – im Süden des Landkreises Changhua.", "f1": "Hektar Gartenfläche", "f2": "Eröffnung des Gartens", "f3": "Chrysanthemen pro Jahr", "f4": "Dörfer", "about_t": "Über Tianwei", "about_1": "Tianwei liegt im Süden von Changhua, zwischen Yongjing und Beidou. Die ersten Siedler lebten am unteren Ende der Bewässerungskanäle – am „Schwanz“ (wěi) der Reisfelder (tián). Daher hat Tianwei seinen Namen.", "about_2": "Fruchtbarer Boden und viel Wasser machen Tianwei ideal für den Pflanzenanbau. Der Blumengarten an der Landstraße wurde 1973 eröffnet, und heute gilt Tianwei als „Heimat der Blumen“.", "spots_t": "Vier öffentliche Orte, die man sehen sollte", "gal_t": "Fotowand", "learn_t": "Wörter aus der Blumenstadt", "next_t": "Nächste Schritte", "m1t": "Spielplatz Yixin-Park", "m1": "Ein inklusiver Spielplatz am Eingang des Gartens, den ganzen Tag geöffnet.", "m2t": "Örtliche Tempel", "m2": "Der Guosheng-Tempel ehrt Koxinga; der Peilin-Tempel ist das Glaubenszentrum der Hakka in Haifenglun.", "m3t": "Provinzstraße 1", "m3": "Taiwans wichtigste Nord-Süd-Straße führt mitten durch Tianwei.", "c1": "Tianwei in Google Maps finden", "c2": "Wörter anhören und lernen", "c3": "Zum Quiz", "nav_map": "3D-Karte", "nav_vil": "20 Dörfer", "cta_map": "🗺️ 3D-Karte erkunden", "cta_vil": "📋 Alle 20 Dörfer", "nav_about": "Über Tianwei", "nav_spots": "Orte", "nav_gallery": "Fotos", "nav_learn": "Englisch"}
+ de:{"g1": "Blumenskulptur", "g2": "Kaktus", "g3": "Schmetterlingsorchidee", "g4": "Blattpflanze", "g5": "Kapkörbchen", "g6": "Gazanie", "g7": "Blüte in Nahaufnahme", "g8": "Kaktus mit Gesicht", "gal_sub": "Hier blüht zu jeder Jahreszeit etwas", "spots_sub": "Jede Karte hat eine Englisch-Ecke – wähle unten dein Niveau", "learn_sub": "Tippe auf ein Wort, um es zu hören", "next_sub": "Raus aus dem Klassenzimmer – sieh es dir selbst an", "story_cap": "Reihen von Pflanzen in einer Gärtnerei in Tianwei heute", "quiz_t": "Kurzes Quiz", "quiz_sub": "Wie viele hast du richtig?", "story_t": "Die Geschichte der Blumenstadt", "story_sub": "Alles begann mit einer Tüte Samen", "nav_story": "Geschichte", "hero": "Taiwans größte Blumen- und Pflanzenstadt – im Süden des Landkreises Changhua.", "f1": "Hektar Gartenfläche", "f2": "Eröffnung des Gartens", "f4": "Dörfer", "about_t": "Über Tianwei", "about_1": "Tianwei liegt im Süden von Changhua, zwischen Yongjing und Beidou. Die ersten Siedler lebten am unteren Ende der Bewässerungskanäle – am „Schwanz“ (wěi) der Reisfelder (tián). Daher hat Tianwei seinen Namen.", "about_2": "Fruchtbarer Boden und viel Wasser machen Tianwei ideal für den Pflanzenanbau. Der Blumengarten an der Landstraße wurde 1973 eröffnet, und heute gilt Tianwei als „Heimat der Blumen“.", "spots_t": "Vier öffentliche Orte, die man sehen sollte", "gal_t": "Fotowand", "learn_t": "Wörter aus der Blumenstadt", "next_t": "Nächste Schritte", "m1t": "Spielplatz Yixin-Park", "m1": "Ein inklusiver Spielplatz am Eingang des Gartens, den ganzen Tag geöffnet.", "m2t": "Örtliche Tempel", "m2": "Der Guosheng-Tempel ehrt Koxinga; der Peilin-Tempel ist das Glaubenszentrum der Hakka in Haifenglun.", "m3t": "Provinzstraße 1", "m3": "Taiwans wichtigste Nord-Süd-Straße führt mitten durch Tianwei.", "c1": "Tianwei in Google Maps finden", "c2": "Wörter anhören und lernen", "c3": "Zum Quiz", "nav_map": "3D-Karte", "nav_vil": "20 Dörfer", "cta_map": "🗺️ 3D-Karte erkunden", "cta_vil": "📋 Alle 20 Dörfer", "nav_about": "Über Tianwei", "nav_spots": "Orte", "nav_gallery": "Fotos", "nav_learn": "Englisch"}
 };
 
 let lang = "en", level = 1;
