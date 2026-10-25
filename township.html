@@ -55,6 +55,10 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 #panel.open{transform:none;opacity:1;pointer-events:auto}
 #panel .x{position:absolute;right:10px;top:10px;width:44px;height:44px;border-radius:50%;padding:0;justify-content:center;font-size:20px;background:transparent}
 #panel .emoji{font-size:40px;line-height:1}
+#panel .photo{margin:14px 0 4px}
+#panel .photo img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:var(--soft)}
+#panel .photo figcaption{font-size:14px;color:var(--muted);margin-top:4px}
+body.shot #chips,body.shot #tools,body.shot #title,body.shot #dock,body.shot #legend,body.shot #panel,body.shot #loading{display:none!important}
 #panel h2{margin:6px 0 0;font-size:26px;color:var(--green-dark);line-height:1.3;padding-right:40px}
 #panel .en{color:var(--muted);margin:2px 0 8px}
 #panel .tag{display:inline-block;font-size:15px;border-radius:999px;padding:2px 12px;margin-bottom:10px;color:#fff;background:#888}
@@ -71,7 +75,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 #nogl.show{display:grid}
 #langSel{font:inherit;font-size:16px;color:var(--text);background:transparent;border:0;max-width:8em;cursor:pointer;padding:0}
 @media (max-width:760px){
-  #langSel{max-width:4.6em}
+  #langSel{max-width:6.3em}
   #title{padding:10px 12px;max-width:calc(100vw - 262px)}
   #title b{font-size:17px;white-space:nowrap}
   #title b span{display:none}
@@ -107,6 +111,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
   <h2 id="pZh"></h2>
   <div class="en" id="pEn"></div>
   <span class="tag" id="pTag"></span>
+  <figure class="photo" id="pPhotoBox" style="margin-left:0;margin-right:0"><img id="pPhoto" alt="" loading="lazy"><figcaption id="pCap"></figcaption></figure>
   <p id="pText"></p>
   <p class="enp" id="pEnText"></p>
   <p class="meta" id="pMeta"></p>
@@ -221,42 +226,42 @@ const INFO = {
 /* ================= 多語：介面文字與各村說明（英文以外的譯文由 AI 初譯，建議請母語者校對） ================= */
 const LANGS = { zh:'中文', en:'English', ja:'日本語', th:'ไทย', id:'Indonesia', vi:'Tiếng Việt', ko:'한국어', de:'Deutsch' };
 const UI = {
- zh:{ sub:'3D 地圖 · 拖曳旋轉，點村莊看特色', dist:'選區', night:'夜晚', day:'白天', reset:'重置', home:'主網站',
+ zh:{ shotCap:'3D 示意圖（非實景照片）', sub:'3D 地圖 · 拖曳旋轉，點村莊看特色', dist:'選區', night:'夜晚', day:'白天', reset:'重置', home:'主網站',
       tDist:'顯示四個選區的顏色', tNight:'切換白天／夜晚', tReset:'回到初始視角', tHome:'回到完整網站',
       page:'看這個村的文字介紹頁 →', note:'',
       pop:'👥 {n} 人（115 年 9 月）', load:'🌷 正在種花…', loadSub:'載入田尾鄉中', glH:'這個瀏覽器不支援 3D',
       glP:'請改用最新版的 Chrome、Safari 或 Edge，或看<a href="villages.html">田尾鄉 20 村文字總覽</a>、回到<a href="index.html">完整網站</a>。', vil:'{x}', dnames:['第一選區','第二選區','第三選區','第四選區'], list:'村莊列表' },
- en:{ sub:'3D map · drag to rotate, tap a village', dist:'Districts', night:'Night', day:'Day', reset:'Reset', home:'Main site',
+ en:{ shotCap:'3D illustration — not a real photo', sub:'3D map · drag to rotate, tap a village', dist:'Districts', night:'Night', day:'Day', reset:'Reset', home:'Main site',
       tDist:'Show the four electoral districts', tNight:'Switch day / night', tReset:'Back to the first view', tHome:'Back to the main site',
       page:'Read about this village (text page) →', note:'3D scenes are illustrative. Population: Ministry of the Interior, September 2026 (ROC year 115). Text checked against public sources (the township office\'s village pages are currently unavailable).',
       pop:'👥 {n} residents (Sept. 2026)', load:'🌷 Planting flowers…', loadSub:'Loading Tianwei Township', glH:'This browser does not support 3D',
       glP:'Please use a recent Chrome, Safari or Edge, or read the <a href="villages.html">text overview of the 20 villages</a> or go back to the <a href="index.html">main site</a>.', vil:'{x} Village', dnames:['Electoral District 1','Electoral District 2','Electoral District 3','Electoral District 4'], list:'Village list' },
- ja:{ sub:'3Dマップ · ドラッグで回転、村をタップ', dist:'選挙区', night:'夜', day:'昼', reset:'リセット', home:'メインサイト',
+ ja:{ shotCap:'3Dイメージ図（実際の写真ではありません）', sub:'3Dマップ · ドラッグで回転、村をタップ', dist:'選挙区', night:'夜', day:'昼', reset:'リセット', home:'メインサイト',
       tDist:'4つの選挙区を色分けして表示', tNight:'昼と夜を切り替え', tReset:'最初の視点に戻る', tHome:'メインサイトに戻る',
       page:'この村のテキストページを見る →', note:'3Dの場面はイメージです。人口は内政部戸政司の2026年9月（民国115年）のデータ。文章は公開資料で確認しています（郷公所の村ページは現在開けません）。',
       pop:'👥 {n}人（2026年9月）', load:'🌷 花を植えています…', loadSub:'田尾郷を読み込み中', glH:'このブラウザは3Dに対応していません',
       glP:'新しいChrome・Safari・Edgeをお使いいただくか、<a href="villages.html">20村のテキスト一覧</a>、または<a href="index.html">メインサイト</a>をご覧ください。', vil:'{x}', dnames:['第一選挙区','第二選挙区','第三選挙区','第四選挙区'], list:'村の一覧' },
- th:{ sub:'แผนที่ 3 มิติ · ลากเพื่อหมุน แตะหมู่บ้านเพื่อดู', dist:'เขตเลือกตั้ง', night:'กลางคืน', day:'กลางวัน', reset:'รีเซ็ต', home:'เว็บหลัก',
+ th:{ shotCap:'ภาพประกอบ 3 มิติ (ไม่ใช่ภาพถ่ายจริง)', sub:'แผนที่ 3 มิติ · ลากเพื่อหมุน แตะหมู่บ้านเพื่อดู', dist:'เขตเลือกตั้ง', night:'กลางคืน', day:'กลางวัน', reset:'รีเซ็ต', home:'เว็บหลัก',
       tDist:'แสดงสีของเขตเลือกตั้งทั้งสี่', tNight:'สลับกลางวัน/กลางคืน', tReset:'กลับมามุมมองเริ่มต้น', tHome:'กลับไปเว็บหลัก',
       page:'อ่านเกี่ยวกับหมู่บ้านนี้ (หน้าข้อความ) →', note:'ฉาก 3 มิติเป็นภาพประกอบ ประชากรจากกรมทะเบียนราษฎร์ กระทรวงมหาดไทย กันยายน 2026 (ปีที่ 115 ของสาธารณรัฐจีน) ข้อความตรวจสอบกับข้อมูลสาธารณะแล้ว (หน้าหมู่บ้านบนเว็บที่ว่าการอำเภอขณะนี้เปิดไม่ได้)',
       pop:'👥 ประชากร {n} คน (ก.ย. 2026)', load:'🌷 กำลังปลูกดอกไม้…', loadSub:'กำลังโหลดอำเภอเทียนเหว่ย', glH:'เบราว์เซอร์นี้ไม่รองรับ 3 มิติ',
       glP:'โปรดใช้ Chrome, Safari หรือ Edge รุ่นล่าสุด หรืออ่าน<a href="villages.html">ภาพรวมข้อความของ 20 หมู่บ้าน</a> หรือกลับไป<a href="index.html">เว็บหลัก</a>', vil:'หมู่บ้าน{x}', dnames:['เขตเลือกตั้งที่ 1','เขตเลือกตั้งที่ 2','เขตเลือกตั้งที่ 3','เขตเลือกตั้งที่ 4'], list:'รายชื่อหมู่บ้าน' },
- id:{ sub:'Peta 3D · seret untuk memutar, ketuk desa', dist:'Dapil', night:'Malam', day:'Siang', reset:'Atur ulang', home:'Situs utama',
+ id:{ shotCap:'Ilustrasi 3D (bukan foto asli)', sub:'Peta 3D · seret untuk memutar, ketuk desa', dist:'Dapil', night:'Malam', day:'Siang', reset:'Atur ulang', home:'Situs utama',
       tDist:'Tampilkan warna keempat daerah pemilihan', tNight:'Ganti siang / malam', tReset:'Kembali ke tampilan awal', tHome:'Kembali ke situs utama',
       page:'Baca tentang desa ini (halaman teks) →', note:'Adegan 3D hanya ilustrasi. Penduduk: Kementerian Dalam Negeri, September 2026 (tahun ke-115 Republik Tiongkok). Teks sudah dicek dengan sumber publik (halaman desa di situs kantor kecamatan saat ini tidak dapat dibuka).',
       pop:'👥 {n} jiwa (Sep 2026)', load:'🌷 Sedang menanam bunga…', loadSub:'Memuat Kecamatan Tianwei', glH:'Peramban ini tidak mendukung 3D',
       glP:'Gunakan Chrome, Safari, atau Edge terbaru, atau baca <a href="villages.html">ringkasan teks 20 desa</a>, atau kembali ke <a href="index.html">situs utama</a>.', vil:'Desa {x}', dnames:['Daerah Pemilihan 1','Daerah Pemilihan 2','Daerah Pemilihan 3','Daerah Pemilihan 4'], list:'Daftar desa' },
- vi:{ sub:'Bản đồ 3D · kéo để xoay, chạm vào làng', dist:'Khu vực bầu cử', night:'Đêm', day:'Ngày', reset:'Đặt lại', home:'Trang chính',
+ vi:{ shotCap:'Hình minh họa 3D (không phải ảnh thật)', sub:'Bản đồ 3D · kéo để xoay, chạm vào làng', dist:'Khu vực bầu cử', night:'Đêm', day:'Ngày', reset:'Đặt lại', home:'Trang chính',
       tDist:'Hiện màu của bốn khu vực bầu cử', tNight:'Chuyển ngày / đêm', tReset:'Về góc nhìn ban đầu', tHome:'Về trang chính',
       page:'Đọc về làng này (trang văn bản) →', note:'Cảnh 3D chỉ mang tính minh họa. Dân số: Bộ Nội vụ, tháng 9/2026 (năm thứ 115 Trung Hoa Dân Quốc). Nội dung đã đối chiếu với nguồn công khai (các trang về làng trên website văn phòng hương hiện không mở được).',
       pop:'👥 {n} người (tháng 9/2026)', load:'🌷 Đang trồng hoa…', loadSub:'Đang tải hương Tianwei', glH:'Trình duyệt này không hỗ trợ 3D',
       glP:'Hãy dùng Chrome, Safari hoặc Edge mới nhất, hoặc đọc <a href="villages.html">tổng quan bằng văn bản về 20 làng</a>, hoặc quay lại <a href="index.html">trang chính</a>.', vil:'Làng {x}', dnames:['Khu vực bầu cử 1','Khu vực bầu cử 2','Khu vực bầu cử 3','Khu vực bầu cử 4'], list:'Danh sách làng' },
- ko:{ sub:'3D 지도 · 드래그로 회전, 마을을 탭하세요', dist:'선거구', night:'밤', day:'낮', reset:'초기화', home:'메인 사이트',
+ ko:{ shotCap:'3D 일러스트(실제 사진 아님)', sub:'3D 지도 · 드래그로 회전, 마을을 탭하세요', dist:'선거구', night:'밤', day:'낮', reset:'초기화', home:'메인 사이트',
       tDist:'네 개 선거구를 색으로 표시', tNight:'낮/밤 전환', tReset:'처음 시점으로', tHome:'메인 사이트로 돌아가기',
       page:'이 마을의 텍스트 페이지 보기 →', note:'3D 장면은 이해를 돕기 위한 그림입니다. 인구: 내정부 호정사 2026년 9월(민국 115년). 내용은 공개 자료로 확인했습니다(향공소 사이트의 마을 페이지는 현재 열리지 않습니다).',
       pop:'👥 {n}명 (2026년 9월)', load:'🌷 꽃을 심는 중…', loadSub:'톈웨이향을 불러오는 중', glH:'이 브라우저는 3D를 지원하지 않습니다',
       glP:'최신 Chrome, Safari, Edge를 사용하시거나, <a href="villages.html">20개 마을 텍스트 안내</a> 또는 <a href="index.html">메인 사이트</a>를 이용해 주세요.', vil:'{x}촌', dnames:['제1선거구','제2선거구','제3선거구','제4선거구'], list:'마을 목록' },
- de:{ sub:'3D-Karte · zum Drehen ziehen, Dorf antippen', dist:'Wahlbezirke', night:'Nacht', day:'Tag', reset:'Zurücksetzen', home:'Hauptseite',
+ de:{ shotCap:'3D-Illustration (kein echtes Foto)', sub:'3D-Karte · zum Drehen ziehen, Dorf antippen', dist:'Wahlbezirke', night:'Nacht', day:'Tag', reset:'Zurücksetzen', home:'Hauptseite',
       tDist:'Die vier Wahlbezirke farbig anzeigen', tNight:'Zwischen Tag und Nacht wechseln', tReset:'Zur Startansicht zurück', tHome:'Zurück zur Hauptseite',
       page:'Mehr über dieses Dorf (Textseite) →', note:'Die 3D-Szenen sind Illustrationen. Einwohnerzahl: Innenministerium, September 2026 (Jahr 115 der Republik China). Texte wurden mit öffentlichen Quellen abgeglichen (die Dorfseiten des Gemeindeamts sind derzeit nicht erreichbar).',
       pop:'👥 {n} Einwohner (Sept. 2026)', load:'🌷 Blumen werden gepflanzt…', loadSub:'Gemeinde Tianwei wird geladen', glH:'Dieser Browser unterstützt kein 3D',
@@ -416,6 +421,7 @@ const CX = (POLY._bbox[0] + POLY._bbox[2]) / 2, CY = (POLY._bbox[1] + POLY._bbox
 const toW = ([x, y]) => [(x - CX) * S, (y - CY) * S];
 const SLUG = { '田尾村':'tianwei','打簾村':'dalian','溪畔村':'xipan','北曾村':'beizeng','南曾村':'nanzeng','饒平村':'raoping','正義村':'zhengyi','豐田村':'fengtian','溪頂村':'xiding','新厝村':'xincuo','仁里村':'renli','柳鳳村':'liufeng','陸豐村':'lufeng','海豐村':'haifeng','北鎮村':'beizhen','新興村':'xinxing','福田村':'futian','新生村':'xinsheng','南鎮村':'nanzhen','睦宜村':'muyi' };
 const START_HASH = decodeURIComponent(location.hash.slice(1));
+let PHOTO_CREDITS = {}; fetch('photos/credits.json').then(r => r.ok ? r.json() : {}).then(j => { PHOTO_CREDITS = j || {}; if (selected) fillPanel(selected); }).catch(() => {});
 const SLUG_REV = Object.fromEntries(Object.entries(SLUG).map(([k, v]) => [v, k]));
 const DIST = { 1: { name: '第一選區', c: 0x3fa58a }, 2: { name: '第二選區', c: 0xe3b53a }, 3: { name: '第三選區', c: 0x4a9bd6 }, 4: { name: '第四選區', c: 0xe0742f } };
 function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -789,7 +795,7 @@ function buildVillage(name){
   // 田野／房屋
   for (const f of (info.fill || [])){ const [kind, opt] = Array.isArray(f) ? f : [f, null]; if (FILL[kind]) FILL[kind](content, poly, rnd, occ, { ...info, ...(opt || {}) }); }
   world.add(g);
-  const v = { name, info, group: g, mesh, topMat, poly, pole, pos: new THREE.Vector3(pole[0], 0, pole[1]), y: 0, r: rpx, baseTop: new THREE.Color(info.top || 0xa7d18a) };
+  const v = { name, info, group: g, mesh, topMat, content, poly, pole, pos: new THREE.Vector3(pole[0], 0, pole[1]), y: 0, r: rpx, baseTop: new THREE.Color(info.top || 0xa7d18a) };
   mesh.userData.village = name;
   villages.push(v);
   return v;
@@ -855,6 +861,10 @@ function fillPanel(name){
   const tag = $('pTag'); tag.textContent = dd ? (LANG === 'zh' ? dd.name : `${dd.name} · ${u.dnames[i.dist - 1]}`) : ''; tag.style.background = dd ? hex6(dd.c) : '#888'; tag.hidden = !dd;
   $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pEnText').hidden = !vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta;
   $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。' + (u.note ? '<br>' + u.note : '');
+  const ph = $('pPhoto'), slug = SLUG[name], real = `photos/${slug}.jpg`, fake = `photos/3d/${slug}.jpg`, hasReal = Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, slug);
+  ph.alt = `${name} · ${i.en}`; $('pPhotoBox').hidden = false; ph.dataset.fb = '';
+  ph.onerror = () => { if (hasReal && !ph.dataset.fb){ ph.dataset.fb = '1'; $('pCap').textContent = u.shotCap; ph.src = fake; } else $('pPhotoBox').hidden = true; };
+  $('pCap').textContent = hasReal ? (PHOTO_CREDITS[slug] || '') : u.shotCap; ph.src = hasReal ? real : fake;
   $('pPage').textContent = u.page; $('pPage').href = `village/${SLUG[name]}.html`;
 }
 function select(name){
@@ -939,6 +949,16 @@ function frame(){
 }
 if (SLUG_REV[START_HASH]) select(SLUG_REV[START_HASH]);
 frame();
+if (qs.has('shot')){ document.body.classList.add('shot'); controls.autoRotate = false; clouds.forEach(c => c.visible = false); birds.forEach(o => o.b.visible = false); }
+window.__shot = (name) => {   // 產生「3D 示意圖」用：把鏡頭擺到某個村，其餘村先隱藏
+  const v = byName[name]; selected = name; v.y = .22; v.group.position.y = .22; panel.classList.remove('open');
+  for (const o of villages){ o.group.visible = o === v; }
+  const bb = bounds(v.poly), dx = bb[2] - bb[0], dz = bb[3] - bb[1], asp = Math.min(camera.aspect, 1.78), dW = (dx * .9 + dz * .5 + .3) * 1.15 / (.63 * asp), dH = (dz * .8 + dx * .3 + 1) * 1.15 / .63, d = clamp(Math.max(dW, dH) * .76, 2.2, 22);
+  const ctr = new THREE.Vector3(v.pos.x + (bb[0] + bb[2]) / 2, -.3, v.pos.z + (bb[1] + bb[3]) / 2);
+  goalTarget.copy(ctr); controls.target.copy(ctr);
+  camera.position.copy(ctr).add(new THREE.Vector3(.5, .78, 1).normalize().multiplyScalar(d)); tweening = false; controls.update();
+};
+if (qs.get('shot')){ const sn = qs.get('shot'); const go = () => { if (byName[sn]) window.__shot(sn); }; setTimeout(go, 300); setTimeout(go, 1500); }
 window.__tw = { select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
 </script>
 </body>
