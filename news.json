@@ -1,0 +1,33 @@
+{
+  "_說明": "3D 地圖的「最新消息」。每則消息在 start～end（含）之間才會顯示，過期自動隱藏。要新增就複製一則改內容；village 填要掛小旗幟的村（不要就刪掉 banner）。事實須來自可靠新聞或鄉公所公告，並附來源。",
+  "items": [
+    {
+      "id": "2026-welcome-festival",
+      "start": "2026-10-24",
+      "end": "2026-11-09",
+      "village": "打簾村",
+      "banner": { "l1": "花鄉田尾迎賓祭", "l2": "11/7 · 11/8" },
+      "source": { "name": "彰化新聞（2026-10-24）", "url": "https://www.changhuanews.com/2026/10/news-2407.html" },
+      "title": {
+        "zh": "2026 花鄉田尾迎賓祭「花田療癒探索」",
+        "en": "2026 Tianwei Flower Town Welcome Festival — “Flower Field Healing Journey”",
+        "ja": "2026 花郷田尾 迎賓祭「花畑ヒーリング探検」",
+        "th": "เทศกาลต้อนรับแขกเมืองดอกไม้เทียนเหว่ย 2026 “สำรวจทุ่งดอกไม้เพื่อการผ่อนคลาย”",
+        "id": "Welcome Festival Kota Bunga Tianwei 2026 “Penjelajahan Penyembuhan di Ladang Bunga”",
+        "vi": "Lễ hội chào đón Thị trấn Hoa Tianwei 2026 “Khám phá chữa lành giữa cánh đồng hoa”",
+        "ko": "2026 화향 톈웨이 환영제 ‘꽃밭 힐링 탐험’",
+        "de": "Willkommensfest der Blumenstadt Tianwei 2026 – „Heilsame Entdeckungsreise im Blumenfeld“"
+      },
+      "text": {
+        "zh": "11 月 7、8 日舉行，共 22 項療癒體驗活動，主題是「循環永續」，串聯花卉、園藝、農業、餐飲與地方觀光。11 月 7 日晚間另有售票活動「花田囍事」，結合在地食材、花卉與辦桌文化。主辦單位：田尾鄉公所。詳細內容以鄉公所公告為準。",
+        "en": "Nov 7–8: 22 healing activities themed on circular sustainability, linking flowers, horticulture, farming, dining and local tourism. On the evening of Nov 7 there is also a ticketed event, “Huatian Xishi” (a feast in the flower fields), combining local ingredients, flowers and banquet culture. Organizer: Tianwei Township Office. Please check the township office's announcements for details.",
+        "ja": "11月7日・8日に開催。22のヒーリング体験があり、テーマは「循環と持続可能性」。花、園芸、農業、飲食、地域観光を結びます。7日の夜には有料イベント「花田囍事」（花畑の祝宴）もあり、地元の食材・花・宴席文化を楽しめます。主催：田尾郷公所。詳細は郷公所のお知らせをご確認ください。",
+        "th": "จัดวันที่ 7–8 พฤศจิกายน มีกิจกรรมเยียวยาใจ 22 รายการ ธีม “หมุนเวียนอย่างยั่งยืน” เชื่อมดอกไม้ พืชสวน เกษตร อาหาร และการท่องเที่ยวท้องถิ่น ค่ำวันที่ 7 มีกิจกรรมจำหน่ายบัตร “ฮวาเถียนซีซื่อ” (งานเลี้ยงกลางทุ่งดอกไม้) ผสานวัตถุดิบท้องถิ่น ดอกไม้ และวัฒนธรรมงานเลี้ยงโต๊ะจีน ผู้จัด: ที่ว่าการอำเภอเทียนเหว่ย รายละเอียดโปรดดูประกาศของที่ว่าการอำเภอ",
+        "id": "Berlangsung 7–8 November dengan 22 kegiatan yang menenangkan, bertema keberlanjutan sirkular, menghubungkan bunga, hortikultura, pertanian, kuliner, dan wisata lokal. Pada malam 7 November ada acara berbayar “Huatian Xishi” (pesta di ladang bunga) yang memadukan bahan lokal, bunga, dan budaya pesta jamuan. Penyelenggara: Kantor Kecamatan Tianwei. Rincian mengikuti pengumuman kantor kecamatan.",
+        "vi": "Diễn ra ngày 7–8/11 với 22 hoạt động thư giãn, chủ đề “tuần hoàn bền vững”, kết nối hoa, làm vườn, nông nghiệp, ẩm thực và du lịch địa phương. Tối 7/11 còn có sự kiện bán vé “Huatian Xishi” (tiệc giữa cánh đồng hoa), kết hợp nguyên liệu địa phương, hoa và văn hóa tiệc bàn. Đơn vị tổ chức: Văn phòng hương Tianwei. Chi tiết theo thông báo của văn phòng hương.",
+        "ko": "11월 7~8일 열리며, ‘순환과 지속가능성’을 주제로 22가지 힐링 체험이 있습니다. 꽃, 원예, 농업, 음식, 지역 관광을 잇습니다. 7일 저녁에는 유료 행사 ‘화톈시스’(꽃밭 잔치)도 있어 지역 식재료와 꽃, 잔치 문화를 즐길 수 있습니다. 주최: 톈웨이향공소. 자세한 내용은 향공소 공지를 확인하세요.",
+        "de": "Am 7. und 8. November mit 22 entspannenden Erlebnissen zum Thema „nachhaltiger Kreislauf“, die Blumen, Gartenbau, Landwirtschaft, Gastronomie und lokalen Tourismus verbinden. Am Abend des 7. November gibt es zusätzlich die kostenpflichtige Veranstaltung „Huatian Xishi“ (Festmahl im Blumenfeld) mit lokalen Zutaten, Blumen und Banketttradition. Veranstalter: Gemeindeamt Tianwei. Details bitte den Ankündigungen des Gemeindeamts entnehmen."
+      }
+    }
+  ]
+}
