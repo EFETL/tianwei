@@ -100,6 +100,54 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
   #tools .lbl{display:none}
 }
 @media (max-width:520px){ #title{display:none} #tools{left:10px;right:10px;justify-content:space-between} #tools .btn{padding:10px 12px} }
+
+.stack{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:8px}
+.sbtn{width:46px;height:46px;border:0;border-radius:14px;display:grid;place-items:center;font:inherit;font-size:20px;color:var(--text);cursor:pointer;text-decoration:none;padding:0}
+.sbtn:hover{outline:2px solid var(--gold)}
+.sbtn:focus-visible{outline:3px solid var(--pink)}
+.sbtn[aria-pressed="true"]{background:var(--gold);color:#2b2208}
+.sbtn.t{font-size:15px;font-weight:700}
+#compass{display:block;width:26px;height:26px}
+#searchBox{position:fixed;top:50%;left:72px;transform:translateY(-50%);width:min(360px,calc(100vw - 100px));z-index:6;padding:10px}
+#sInput{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text)}
+#sList{list-style:none;margin:6px 0 0;padding:0;max-height:40vh;overflow:auto}
+#sList button{width:100%;text-align:left;font:inherit;font-size:16px;border:0;background:transparent;color:var(--text);padding:10px 8px;border-radius:10px;cursor:pointer}
+#sList button:hover,#sList button:focus-visible{background:var(--soft)}
+#sList .none{padding:10px 8px;color:var(--muted);font-size:16px}
+#tags{position:fixed;left:14px;right:80px;bottom:68px;z-index:5;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center;padding:4px 0}
+#tags::-webkit-scrollbar{display:none}
+#tags .tg{flex:0 0 auto;font:inherit;font-size:15px;border:0;border-radius:999px;padding:6px 14px;background:var(--card);color:var(--text);box-shadow:0 3px 10px rgba(0,0,0,.14);cursor:pointer;white-space:nowrap;min-height:36px}
+#tags .tg[aria-pressed="true"]{background:var(--green);color:#fff}
+#tags .tg.quizbtn{background:var(--pink);color:#fff}
+.tgcount{flex:0 0 auto;font-size:14px;color:var(--text);background:var(--card);border-radius:999px;padding:4px 10px}
+.chip.dimmed,#dock .btn.dimmed{opacity:.35}
+#legend{bottom:116px}
+#hint{position:fixed;left:50%;transform:translateX(-50%);bottom:126px;z-index:6;padding:10px 18px;font-size:15px;max-width:calc(100vw - 100px);text-align:center;pointer-events:none}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:130px;z-index:8;padding:12px 16px;width:min(420px,calc(100vw - 100px));font-size:15px}
+#toast .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+#toast .acts button{font:inherit;font-size:14px;border:0;border-radius:999px;padding:6px 12px;cursor:pointer;background:var(--gold);color:#2b2208}
+#quiz{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:6;padding:14px 18px;width:min(460px,calc(100vw - 28px));text-align:center}
+#qProg{font-size:14px;color:var(--muted)}
+#qPrompt{font-size:20px;font-weight:700;color:var(--green-dark);margin:2px 0}
+#qMsg{min-height:1.6em;font-size:16px}
+#qMsg.ok{color:#2e7d32}
+#qMsg.bad{color:#c0392b}
+#quiz .qb{display:flex;gap:8px;justify-content:center;margin-top:6px}
+body.quiz #chips,body.quiz #dock,body.quiz #news,body.quiz #tags,body.quiz #legend,body.quiz #searchBox,body.quiz #bSearch,body.quiz #panel,body.quiz #hint{display:none!important}
+body.shot #stack,body.shot #tags,body.shot #hint,body.shot #toast,body.shot #searchBox,body.shot #quiz{display:none!important}
+.grab{display:none}
+@media (max-width:760px){
+  .stack{left:auto;right:10px;top:70px;transform:none}
+  #tags{left:10px;right:66px;bottom:68px}
+  #searchBox{top:66px;right:66px;left:10px;width:auto;transform:none}
+  #quiz{top:66px}
+  #panel{max-height:62vh}
+  #panel.peek{max-height:200px;overflow:hidden;padding-bottom:20px}
+  #panel.peek .emoji{display:none}
+  #panel .grab{display:block;position:absolute;left:0;right:0;top:0;height:34px;touch-action:none;cursor:grab}
+  #panel .grab::after{content:"";display:block;width:46px;height:5px;border-radius:3px;background:var(--line);margin:10px auto 0}
+  #panel{padding-top:30px}
+}
 @media (prefers-reduced-motion:reduce){ #panel{transition:none} }
 </style>
 </head>
@@ -114,6 +162,23 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
   <button class="btn card" id="resetBtn" title="回到初始視角">↺ <span class="lbl" id="rLbl">重置</span></button>
   <a class="btn card" id="homeBtn" href="index.html" title="回到完整網站">🏠 <span class="lbl" id="hLbl">主網站</span></a>
 </div>
+<div id="stack" class="stack">
+  <button class="sbtn card" id="bSearch" aria-label="search">🔍</button>
+  <button class="sbtn card" id="bZin" aria-label="zoom in">＋</button>
+  <button class="sbtn card" id="bZout" aria-label="zoom out">－</button>
+  <button class="sbtn card" id="bNorth" aria-label="north"><svg id="compass" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" stroke-opacity=".3"/><path d="M13 3 L17.5 13 L13 11 L8.5 13 Z" fill="#d9382a"/><path d="M13 23 L8.5 13 L13 15 L17.5 13 Z" fill="currentColor" opacity=".45"/></svg></button>
+  <a class="sbtn t card" id="b2d" href="villages.html">2D</a>
+  <button class="sbtn card" id="bLite" aria-pressed="false" aria-label="lite">⚡</button>
+</div>
+<div id="searchBox" class="card" hidden><input id="sInput" type="search" autocomplete="off"><ul id="sList"></ul></div>
+<div id="tags" aria-label="filter"></div>
+<div id="hint" class="card" hidden></div>
+<div id="toast" class="card" hidden><div id="tMsg"></div><div class="acts" id="tActs"><button id="tLite"></button><button id="t2d"></button><button id="tX">✕</button></div></div>
+<div id="quiz" class="card" hidden>
+  <div id="qProg"></div><div id="qPrompt"></div><div id="qMsg" aria-live="polite"></div>
+  <div class="qb" id="qBtns1"><button class="btn" id="qSkip"></button><button class="btn" id="qExit"></button></div>
+  <div class="qb" id="qBtns2" hidden><button class="btn" id="qAgain"></button><button class="btn" id="qExit2"></button></div>
+</div>
 <div id="news" class="card" hidden>
   <button class="head" id="newsHead" aria-expanded="false"><span class="nTag" id="nTag">最新消息</span><b id="nTitle"></b></button>
   <button class="nx" id="newsClose" aria-label="close">✕</button>
@@ -121,6 +186,7 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
 </div>
 <div id="legend" class="card"></div>
 <aside id="panel" class="card" aria-live="polite">
+  <div class="grab" id="grab"></div>
   <button class="btn x" id="closeBtn" aria-label="關閉">✕</button>
   <div class="emoji" id="pEmoji"></div>
   <h2 id="pZh"></h2>
@@ -429,6 +495,19 @@ const VT = {
   ko:'주민들은 벼농사를 짓습니다. 성더궁(聖德宮)은 마조를 모시며 해마다 묘회 축제를 엽니다.',
   de:'Die Einwohner bauen Reis an. Der Shengde-Tempel ist Mazu geweiht und veranstaltet jährlich ein Tempelfest.' },
 };
+
+/* ===== 階段 1–3 新增的介面文字 ===== */
+const UI2 = {
+ zh:{ zin:'放大', zout:'縮小', north:'轉回正北', search:'搜尋村名或關鍵字（例如：學校、廟）', nores:'找不到符合的村', hint:'拖曳旋轉・兩指或滾輪縮放・點村莊看特色', slow:'畫面好像有點卡，要改用輕量模式或 2D 地圖嗎？', lite:'輕量模式', liteOn:'已開啟輕量模式', to2d:'2D 地圖', tagAll:'全部', tagSchool:'學校', tagTemple:'廟宇', tagFarm:'農業', tagHistory:'歷史地名', tagGarden:'公路花園', tagCount:'符合 {n} 個村', quiz:'找村莊遊戲', qPrompt:'請在地圖上點出：{name}', qRight:'答對了！', qWrong:'你點的是{name}，再試一次！', qHint:'提示：它在{dist}', qReveal:'答案是{name}', qProg:'第 {i}/{n} 題 · 答對 {s} 題', qDone:'完成！你答對了 {s}/{n} 題', qAgain:'再玩一次', qExit:'離開', qSkip:'跳過', sheet:'列印學習單', close:'關閉' },
+ en:{ zin:'Zoom in', zout:'Zoom out', north:'Reset to north', search:'Search a village or keyword (e.g. school, temple)', nores:'No matching village', hint:'Drag to rotate · pinch or scroll to zoom · tap a village', slow:'The map seems slow. Switch to lite mode or the 2D map?', lite:'Lite mode', liteOn:'Lite mode is on', to2d:'2D map', tagAll:'All', tagSchool:'Schools', tagTemple:'Temples', tagFarm:'Farming', tagHistory:'Place names', tagGarden:'Highway Garden', tagCount:'{n} villages match', quiz:'Find the village', qPrompt:'Find on the map: {name}', qRight:'Correct!', qWrong:'That is {name}. Try again!', qHint:'Hint: it is in {dist}', qReveal:'The answer is {name}', qProg:'Question {i}/{n} · Score {s}', qDone:'Done! You got {s} of {n}', qAgain:'Play again', qExit:'Exit', qSkip:'Skip', sheet:'Printable worksheet', close:'Close' },
+ ja:{ zin:'拡大', zout:'縮小', north:'北に戻す', search:'村名やキーワードで検索（例：学校、廟）', nores:'該当する村がありません', hint:'ドラッグで回転・ピンチやスクロールで拡大縮小・村をタップ', slow:'動作が重いようです。軽量モードまたは2Dマップに切り替えますか？', lite:'軽量モード', liteOn:'軽量モードをオンにしました', to2d:'2Dマップ', tagAll:'すべて', tagSchool:'学校', tagTemple:'廟', tagFarm:'農業', tagHistory:'地名の由来', tagGarden:'ハイウェイ・ガーデン', tagCount:'{n}村が該当', quiz:'村さがしゲーム', qPrompt:'地図でタップしてください：{name}', qRight:'正解！', qWrong:'それは{name}です。もう一度！', qHint:'ヒント：{dist}にあります', qReveal:'答えは{name}', qProg:'{i}/{n}問目・正解 {s}', qDone:'おしまい！{n}問中{s}問正解', qAgain:'もう一度', qExit:'終了', qSkip:'スキップ', sheet:'印刷用学習シート', close:'閉じる' },
+ th:{ zin:'ขยายเข้า', zout:'ย่อออก', north:'หันกลับทิศเหนือ', search:'ค้นหาหมู่บ้านหรือคำสำคัญ (เช่น โรงเรียน ศาลเจ้า)', nores:'ไม่พบหมู่บ้านที่ตรงกัน', hint:'ลากเพื่อหมุน · บีบหรือเลื่อนเพื่อซูม · แตะหมู่บ้าน', slow:'แผนที่ดูช้า ต้องการเปลี่ยนเป็นโหมดเบาหรือแผนที่ 2 มิติไหม', lite:'โหมดเบา', liteOn:'เปิดโหมดเบาแล้ว', to2d:'แผนที่ 2 มิติ', tagAll:'ทั้งหมด', tagSchool:'โรงเรียน', tagTemple:'ศาลเจ้า', tagFarm:'เกษตร', tagHistory:'ที่มาของชื่อ', tagGarden:'สวนดอกไม้ริมทาง', tagCount:'พบ {n} หมู่บ้าน', quiz:'เกมหาหมู่บ้าน', qPrompt:'แตะบนแผนที่: {name}', qRight:'ถูกต้อง!', qWrong:'นั่นคือ {name} ลองอีกครั้ง!', qHint:'คำใบ้: อยู่ใน{dist}', qReveal:'คำตอบคือ {name}', qProg:'ข้อ {i}/{n} · ถูก {s}', qDone:'เสร็จแล้ว! ถูก {s} จาก {n} ข้อ', qAgain:'เล่นอีกครั้ง', qExit:'ออก', qSkip:'ข้าม', sheet:'ใบงานสำหรับพิมพ์', close:'ปิด' },
+ id:{ zin:'Perbesar', zout:'Perkecil', north:'Kembali ke utara', search:'Cari desa atau kata kunci (mis. sekolah, kuil)', nores:'Tidak ada desa yang cocok', hint:'Seret untuk memutar · cubit atau gulir untuk zoom · ketuk desa', slow:'Peta tampak lambat. Beralih ke mode ringan atau peta 2D?', lite:'Mode ringan', liteOn:'Mode ringan aktif', to2d:'Peta 2D', tagAll:'Semua', tagSchool:'Sekolah', tagTemple:'Kuil', tagFarm:'Pertanian', tagHistory:'Asal nama', tagGarden:'Taman Bunga Jalan Raya', tagCount:'{n} desa cocok', quiz:'Cari desa', qPrompt:'Temukan di peta: {name}', qRight:'Benar!', qWrong:'Itu {name}. Coba lagi!', qHint:'Petunjuk: ada di {dist}', qReveal:'Jawabannya {name}', qProg:'Soal {i}/{n} · Skor {s}', qDone:'Selesai! Benar {s} dari {n}', qAgain:'Main lagi', qExit:'Keluar', qSkip:'Lewati', sheet:'Lembar kerja cetak', close:'Tutup' },
+ vi:{ zin:'Phóng to', zout:'Thu nhỏ', north:'Quay về hướng bắc', search:'Tìm làng hoặc từ khóa (vd: trường học, đền)', nores:'Không có làng phù hợp', hint:'Kéo để xoay · chụm hoặc cuộn để thu phóng · chạm vào làng', slow:'Bản đồ có vẻ chậm. Chuyển sang chế độ nhẹ hoặc bản đồ 2D?', lite:'Chế độ nhẹ', liteOn:'Đã bật chế độ nhẹ', to2d:'Bản đồ 2D', tagAll:'Tất cả', tagSchool:'Trường học', tagTemple:'Đền', tagFarm:'Nông nghiệp', tagHistory:'Nguồn gốc tên', tagGarden:'Vườn hoa Quốc lộ', tagCount:'{n} làng phù hợp', quiz:'Trò chơi tìm làng', qPrompt:'Hãy chạm vào bản đồ: {name}', qRight:'Đúng rồi!', qWrong:'Đó là {name}. Thử lại nhé!', qHint:'Gợi ý: ở {dist}', qReveal:'Đáp án là {name}', qProg:'Câu {i}/{n} · Điểm {s}', qDone:'Xong! Bạn đúng {s}/{n} câu', qAgain:'Chơi lại', qExit:'Thoát', qSkip:'Bỏ qua', sheet:'Phiếu bài tập in', close:'Đóng' },
+ ko:{ zin:'확대', zout:'축소', north:'북쪽으로 돌리기', search:'마을 이름이나 키워드 검색 (예: 학교, 사당)', nores:'일치하는 마을이 없습니다', hint:'드래그로 회전 · 핀치 또는 스크롤로 확대/축소 · 마을을 탭', slow:'지도가 느린 것 같아요. 경량 모드나 2D 지도로 바꿀까요?', lite:'경량 모드', liteOn:'경량 모드를 켰습니다', to2d:'2D 지도', tagAll:'전체', tagSchool:'학교', tagTemple:'사당', tagFarm:'농업', tagHistory:'지명 유래', tagGarden:'공로화원', tagCount:'{n}개 마을 해당', quiz:'마을 찾기 게임', qPrompt:'지도에서 찾아 탭하세요: {name}', qRight:'정답!', qWrong:'그곳은 {name}입니다. 다시 해보세요!', qHint:'힌트: {dist}에 있어요', qReveal:'정답은 {name}', qProg:'{i}/{n}번 · 점수 {s}', qDone:'완료! {n}문제 중 {s}문제 정답', qAgain:'다시 하기', qExit:'나가기', qSkip:'건너뛰기', sheet:'인쇄용 학습지', close:'닫기' },
+ de:{ zin:'Vergrößern', zout:'Verkleinern', north:'Nach Norden ausrichten', search:'Dorf oder Stichwort suchen (z. B. Schule, Tempel)', nores:'Kein passendes Dorf', hint:'Ziehen zum Drehen · Pinch oder Scrollen zum Zoomen · Dorf antippen', slow:'Die Karte wirkt langsam. Zum Lite-Modus oder zur 2D-Karte wechseln?', lite:'Lite-Modus', liteOn:'Lite-Modus ist an', to2d:'2D-Karte', tagAll:'Alle', tagSchool:'Schulen', tagTemple:'Tempel', tagFarm:'Landwirtschaft', tagHistory:'Ortsnamen', tagGarden:'Highway Garden', tagCount:'{n} Dörfer passen', quiz:'Dorf finden', qPrompt:'Tippe auf der Karte auf: {name}', qRight:'Richtig!', qWrong:'Das ist {name}. Versuch es nochmal!', qHint:'Tipp: Es liegt im {dist}', qReveal:'Die Antwort ist {name}', qProg:'Frage {i}/{n} · Punkte {s}', qDone:'Geschafft! {s} von {n} richtig', qAgain:'Nochmal spielen', qExit:'Beenden', qSkip:'Überspringen', sheet:'Arbeitsblatt zum Drucken', close:'Schließen' },
+};
+for (const k in UI2) Object.assign(UI[k], UI2[k]);
 
 
 /* ================= 工具 ================= */
@@ -895,7 +974,7 @@ function select(name){
   const v = byName[name];
   fillPanel(name);
   try { history.replaceState(null, '', '#' + SLUG[name]); } catch (e) {}
-  panel.classList.add('open');
+  panel.classList.toggle('peek', innerWidth <= 760); panel.classList.add('open');
   goalTarget.copy(v.pos); goalDist = clamp(v.r * 7 + 9, 11, defaultDist() * .55); tweening = true; controls.autoRotate = false;
 }
 $('closeBtn').onclick = () => select(null);
@@ -905,8 +984,157 @@ function setNightLabel(){ nightBtn.innerHTML = nightGoal ? `☀️ <span class="
 function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); setNightLabel(); }
 nightBtn.onclick = () => setNight(!nightGoal);
 function renderLegend(){ legend.innerHTML = Object.entries(DIST).map(([k, d]) => `<div><i style="background:${hex6(d.c)}"></i>${LANG === 'zh' ? d.name : d.name + ' · ' + tr('dnames')[k - 1]}</div>`).join(''); }
-function setDist(on){ showDist = on; distBtn.setAttribute('aria-pressed', String(on)); legend.classList.toggle('show', on); for (const v of villages){ const dd = DIST[v.info.dist]; v.topMat.color.set(on && dd ? dd.c : v.baseTop); } }
+function setDist(on){ showDist = on; distBtn.setAttribute('aria-pressed', String(on)); legend.classList.toggle('show', on); applyTopColors(); }
 distBtn.onclick = () => setDist(!showDist);
+/* ================= 階段 1：縮放、指北針、搜尋、手勢提示、輕量模式、2D 備援 ================= */
+const compassEl = $('compass'), tmpV = new THREE.Vector3(), tmpS = new THREE.Spherical();
+let azGoal = null, lastAz = 999, LITE = false, fpsStart = 0, fpsN = 0, fpsDone = new URLSearchParams(location.search).has('nofps');
+const zoomBy = f => { goalTarget.copy(controls.target); goalDist = clamp(camera.position.distanceTo(controls.target) * f, controls.minDistance, controls.maxDistance); tweening = true; controls.autoRotate = false; };
+$('bZin').onclick = () => zoomBy(.7);
+$('bZout').onclick = () => zoomBy(1.45);
+$('bNorth').onclick = () => { azGoal = 0; tweening = false; controls.autoRotate = false; };
+function setLite(on){
+  LITE = on; try { localStorage.setItem('tw-lite', on ? '1' : '0'); } catch (e) {}
+  renderer.setPixelRatio(on ? 1 : Math.min(devicePixelRatio, coarse ? 1.75 : 2));
+  renderer.shadowMap.enabled = !on; sun.castShadow = !on;
+  scene.traverse(o => { const m = o.material; if (m) (Array.isArray(m) ? m : [m]).forEach(x => { x.needsUpdate = true; }); });
+  clouds.forEach(c => c.visible = !on); birds.forEach(o => o.b.visible = !on);
+  resize(); $('bLite').setAttribute('aria-pressed', String(on));
+}
+$('bLite').onclick = () => { setLite(!LITE); if (LITE) showToast(tr('liteOn'), false); };
+const toastEl = $('toast'); let toastTimer = 0;
+function showToast(msg, withActions = true){
+  $('tMsg').textContent = msg; $('tActs').hidden = !withActions; toastEl.hidden = false; clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toastEl.hidden = true; }, withActions ? 14000 : 2500);
+}
+$('tLite').onclick = () => { setLite(true); toastEl.hidden = true; };
+$('t2d').onclick = () => { location.href = 'villages.html'; };
+$('tX').onclick = () => { toastEl.hidden = true; };
+const hintEl = $('hint'); let hintShown = false;
+function hideHint(){ if (!hintShown) return; hintShown = false; hintEl.hidden = true; try { localStorage.setItem('tw-hint', '1'); } catch (e) {} }
+function showHint(){
+  let seen = false; try { seen = localStorage.getItem('tw-hint') === '1'; } catch (e) {}
+  if (seen || new URLSearchParams(location.search).has('shot') || selected || quizOn) return;
+  hintEl.textContent = tr('hint'); hintEl.hidden = false; hintShown = true; setTimeout(hideHint, 7000);
+}
+renderer.domElement.addEventListener('pointerdown', hideHint);
+setTimeout(showHint, 2500);
+function extraFrame(dt){
+  if (azGoal !== null){   // 轉回正北
+    const off = tmpV.copy(camera.position).sub(controls.target), sp = tmpS.setFromVector3(off);
+    let d = azGoal - sp.theta; d = ((d + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI;
+    sp.theta += d * Math.min(1, dt * 7); if (Math.abs(d) < .004){ sp.theta = azGoal; azGoal = null; }
+    off.setFromSpherical(sp); camera.position.copy(controls.target).add(off);
+  }
+  const az = controls.getAzimuthalAngle();
+  if (Math.abs(az - lastAz) > .004){ lastAz = az; compassEl.style.transform = `rotate(${az}rad)`; }
+  if (!fpsDone && T > 4){   // 畫面太卡就提示改用輕量模式或 2D
+    if (!fpsStart){ fpsStart = performance.now(); fpsN = 0; }
+    fpsN++; const el = performance.now() - fpsStart;
+    if (el > 3000){ fpsDone = true; if (fpsN / (el / 1000) < 20 && !LITE) showToast(tr('slow')); }
+  }
+}
+/* 搜尋 */
+const TAGDEF = {
+  school:  { emoji: '🏫', key: 'tagSchool',  set: new Set(['饒平村', '新厝村', '南鎮村']) },
+  temple:  { emoji: '⛩️', key: 'tagTemple',  set: new Set(['田尾村', '溪畔村', '南曾村', '饒平村', '仁里村', '陸豐村', '海豐村', '北鎮村', '新興村', '新生村', '睦宜村']) },
+  farm:    { emoji: '🌾', key: 'tagFarm',    rx: /花卉|稻|蔬菜|農|花木/ },
+  history: { emoji: '📜', key: 'tagHistory', rx: /曾厝崙|鎮平|海豐崙|小紅毛社|塗墩頭|八堡圳|八大字|相傳/ },
+  garden:  { emoji: '🌷', key: 'tagGarden',  rx: /公路花園/ },
+};
+const TAGSET = {};
+for (const k in TAGDEF){ const d = TAGDEF[k]; TAGSET[k] = new Set(villages.filter(v => d.set ? d.set.has(v.name) : d.rx.test(INFO[v.name].text || '')).map(v => v.name)); }
+const tagLabels = k => Object.values(UI).map(u => u[TAGDEF[k].key]).join(' ');
+const HAY = {};
+for (const v of villages){ const n = v.name, i = INFO[n]; HAY[n] = [n, i.en, i.text, i.enText, NAME_KO[n], NAME_TH[n], ...Object.values(VT[n] || {}), ...Object.keys(TAGDEF).filter(k => TAGSET[k].has(n)).map(tagLabels)].join(' ').toLowerCase(); }
+const sBox = $('searchBox'), sIn = $('sInput'), sList = $('sList');
+function closeSearch(){ sBox.hidden = true; sIn.value = ''; sList.innerHTML = ''; }
+function doSearch(){
+  const q = sIn.value.trim().toLowerCase(); sList.innerHTML = ''; if (!q) return;
+  const hits = order.filter(v => HAY[v.name].includes(q)).slice(0, 8);
+  if (!hits.length){ const li = document.createElement('li'); li.className = 'none'; li.textContent = tr('nores'); sList.appendChild(li); return; }
+  for (const v of hits){
+    const li = document.createElement('li'), b = document.createElement('button');
+    b.textContent = `${v.info.emoji || '📍'} ${v.name} · ${(LANG === 'zh' || LANG === 'ja') ? v.info.en : fullName(v.name)}`;
+    b.onclick = () => { closeSearch(); select(v.name); }; li.appendChild(b); sList.appendChild(li);
+  }
+}
+$('bSearch').onclick = () => { if (sBox.hidden){ sBox.hidden = false; sIn.focus(); } else closeSearch(); };
+sIn.addEventListener('input', doSearch);
+sIn.addEventListener('keydown', e => { if (e.key === 'Enter'){ const b = sList.querySelector('button'); if (b) b.click(); } else if (e.key === 'Escape') closeSearch(); });
+/* ================= 階段 2：主題標籤篩選、手機兩段式抽屜 ================= */
+let tagSel = null; const tagsEl = $('tags');
+function renderTags(){
+  tagsEl.innerHTML = '';
+  const mk = (label, on, fn, cls = '') => { const b = document.createElement('button'); b.className = 'tg ' + cls; b.textContent = label; b.setAttribute('aria-pressed', String(on)); b.onclick = fn; tagsEl.appendChild(b); };
+  mk(tr('tagAll'), tagSel === null, () => setTag(null));
+  for (const k in TAGDEF) mk(`${TAGDEF[k].emoji} ${tr(TAGDEF[k].key)}`, tagSel === k, () => setTag(tagSel === k ? null : k));
+  mk('🎯 ' + tr('quiz'), false, () => startQuiz(), 'quizbtn');
+  const sh = document.createElement('a'); sh.className = 'tg'; sh.href = 'worksheet.html'; sh.target = '_blank'; sh.rel = 'noopener'; sh.textContent = '🖨️ ' + tr('sheet'); sh.style.textDecoration = 'none'; tagsEl.appendChild(sh);
+  const sp = document.createElement('span'); sp.className = 'tgcount'; sp.id = 'tgCount'; sp.hidden = !tagSel; sp.textContent = tagSel ? tr('tagCount').replace('{n}', TAGSET[tagSel].size) : ''; tagsEl.appendChild(sp);
+}
+function applyTopColors(){ for (const v of villages){ const dd = DIST[v.info.dist]; v.topMat.color.set(v.dim ? 0xdde7d3 : (showDist && dd ? dd.c : v.baseTop)); } }
+function setTag(k){
+  tagSel = k;
+  for (const v of villages){ v.dim = !!k && !TAGSET[k].has(v.name); v.content.visible = !v.dim; const c = chipMap.get(v.name); c.chip.classList.toggle('dimmed', v.dim); c.d.classList.toggle('dimmed', v.dim); }
+  applyTopColors(); renderTags();
+}
+let gy = null;
+$('grab').addEventListener('pointerdown', e => { gy = e.clientY; try { $('grab').setPointerCapture(e.pointerId); } catch (x) {} });
+$('grab').addEventListener('pointerup', e => {
+  if (gy === null) return; const dy = e.clientY - gy; gy = null;
+  if (Math.abs(dy) < 10) panel.classList.toggle('peek');
+  else if (dy < -24) panel.classList.remove('peek');
+  else if (dy > 24){ if (!panel.classList.contains('peek')) panel.classList.add('peek'); else select(null); }
+});
+/* ================= 階段 3：「找出村莊」遊戲 ================= */
+let quizOn = false, Q = null, quizTimer = 0;
+const qName = n => (LANG === 'zh' || LANG === 'ja') ? n : `${n}（${fullName(n)}）`;
+const distOf = n => LANG === 'zh' ? DIST[INFO[n].dist].name : tr('dnames')[INFO[n].dist - 1];
+function resetViewForQuiz(){ goalTarget.set(0, 0, 0); goalDist = defaultDist(); tweening = true; controls.autoRotate = false; }
+function startQuiz(){
+  if (quizOn) return; select(null); closeSearch(); setTag(null); hideHint();
+  const names = villages.map(v => v.name);
+  for (let i = names.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [names[i], names[j]] = [names[j], names[i]]; }
+  Q = { list: names.slice(0, 10), i: 0, s: 0, wrong: 0, lock: false }; quizOn = true; hoverName = null;
+  document.body.classList.add('quiz'); resetViewForQuiz(); showQ();
+}
+function qTexts(){
+  if (!Q) return;
+  if (Q.i >= Q.list.length){ const e = Q.s >= 9 ? '🏆' : Q.s >= 6 ? '🎉' : Q.s >= 3 ? '👍' : '🌱'; $('qProg').textContent = ''; $('qPrompt').textContent = `${e} ${tr('qDone').replace('{s}', Q.s).replace('{n}', Q.list.length)}`; }
+  else { $('qProg').textContent = tr('qProg').replace('{i}', Q.i + 1).replace('{n}', Q.list.length).replace('{s}', Q.s); $('qPrompt').textContent = tr('qPrompt').replace('{name}', qName(Q.list[Q.i])); }
+  $('qSkip').textContent = tr('qSkip'); $('qExit').textContent = $('qExit2').textContent = tr('qExit'); $('qAgain').textContent = tr('qAgain');
+}
+function showQ(){
+  $('quiz').hidden = false; $('qMsg').textContent = ''; $('qMsg').className = '';
+  const done = Q.i >= Q.list.length; $('qBtns1').hidden = done; $('qBtns2').hidden = !done; Q.wrong = 0; Q.lock = false; qTexts();
+}
+function flashTop(v, color){ v.topMat.color.set(color); setTimeout(applyTopColors, 650); }
+function quizAnswer(n){
+  if (!quizOn || !Q || Q.lock || Q.i >= Q.list.length) return;
+  const want = Q.list[Q.i], v = byName[n], msg = $('qMsg');
+  if (n === want){
+    Q.lock = true; Q.s++; Q.i++; flashTop(v, 0x4caf50); msg.textContent = '✅ ' + tr('qRight'); msg.className = 'ok'; clearTimeout(quizTimer); quizTimer = setTimeout(showQ, 1100);
+  } else {
+    Q.wrong++; flashTop(v, 0xe0645a); msg.className = 'bad';
+    if (Q.wrong >= 3){
+      Q.lock = true; Q.i++; const t = byName[want]; flashTop(t, 0x4caf50); goalTarget.copy(t.pos); goalDist = 16; tweening = true;
+      msg.textContent = '💡 ' + tr('qReveal').replace('{name}', qName(want)); clearTimeout(quizTimer); quizTimer = setTimeout(() => { resetViewForQuiz(); showQ(); }, 2300);
+    } else {
+      let m = tr('qWrong').replace('{name}', qName(n)); if (Q.wrong >= 2) m += '  ' + tr('qHint').replace('{dist}', distOf(want)); msg.textContent = '❌ ' + m;
+    }
+  }
+}
+$('qSkip').onclick = () => { if (!Q || Q.lock) return; Q.i++; showQ(); };
+function exitQuiz(){ quizOn = false; Q = null; clearTimeout(quizTimer); document.body.classList.remove('quiz'); $('quiz').hidden = true; applyTopColors(); }
+$('qExit').onclick = $('qExit2').onclick = exitQuiz;
+$('qAgain').onclick = () => { quizOn = false; document.body.classList.remove('quiz'); startQuiz(); };
+function renderExtra(){
+  const u = UI[LANG], t = (id, k) => { const el = $(id); el.title = u[k]; el.setAttribute('aria-label', u[k]); };
+  t('bSearch', 'search'); t('bZin', 'zin'); t('bZout', 'zout'); t('bNorth', 'north'); t('b2d', 'to2d'); t('bLite', 'lite');
+  sIn.placeholder = u.search; $('tLite').textContent = u.lite; $('t2d').textContent = u.to2d; if (hintShown) hintEl.textContent = u.hint;
+  renderTags(); qTexts(); if (sIn.value) doSearch();
+}
 let NEWS = [];   // 目前有效的消息（news.json；過了 end 日期自動不顯示）
 const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 let newsClosed = false; try { newsClosed = sessionStorage.getItem('tw-news-closed') === '1'; } catch (e) {}
@@ -945,7 +1173,7 @@ function applyLang(){
   $('tSub').textContent = u.sub; $('dLbl').textContent = u.dist; $('rLbl').textContent = u.reset; $('hLbl').textContent = u.home;
   distBtn.title = u.tDist; nightBtn.title = u.tNight; $('resetBtn').title = u.tReset; $('homeBtn').title = u.tHome; dockEl.setAttribute('aria-label', u.list);
   $('noglBox').innerHTML = `<h2>${u.glH}</h2><p>${u.glP}</p>`;
-  setNightLabel(); renderLegend(); renderNames(); renderNews(); if (selected) fillPanel(selected);
+  setNightLabel(); renderLegend(); renderNames(); renderNews(); renderExtra(); if (selected) fillPanel(selected);
 }
 const langSel = $('langSel');
 langSel.innerHTML = Object.entries(LANGS).map(([k, n]) => `<option value="${k}">${n}</option>`).join(''); langSel.value = LANG;
@@ -962,9 +1190,9 @@ function pickVillage(e){
   const r = renderer.domElement.getBoundingClientRect(); mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(mouse, camera);
   const hit = ray.intersectObjects(villages.map(v => v.mesh), false)[0]; return hit ? hit.object.userData.village : null;
 }
-renderer.domElement.addEventListener('pointermove', e => { if (e.pointerType === 'mouse'){ hoverName = pickVillage(e); stage.classList.toggle('hover', !!hoverName); } });
+renderer.domElement.addEventListener('pointermove', e => { if (e.pointerType === 'mouse'){ hoverName = quizOn ? null : pickVillage(e); stage.classList.toggle('hover', !!hoverName); } });
 renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
-renderer.domElement.addEventListener('pointerup', e => { if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return; const n = pickVillage(e); if (n) select(n); });
+renderer.domElement.addEventListener('pointerup', e => { if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return; const n = pickVillage(e); if (quizOn){ if (n) quizAnswer(n); return; } if (n) select(n); });
 
 /* ================= 主迴圈 ================= */
 const v3 = new THREE.Vector3(), tc = new THREE.Color();
@@ -987,15 +1215,16 @@ function frame(){
   anim.forEach(f => f(T, dt));
   clouds.forEach(c => { c.position.x += c.userData.v * dt; if (c.position.x > 34) c.position.x = -34; });
   birds.forEach(o => { const a = T * o.sp + o.ph; o.b.position.set(Math.cos(a) * o.rad, o.h + Math.sin(T * 1.2 + o.ph) * .3, Math.sin(a) * o.rad * .6); o.b.rotation.y = -a + Math.PI; const f = Math.sin(T * 9 + o.ph) * .7; o.L.rotation.z = f; o.Rr.rotation.z = -f; });
-  for (const v of villages){ const goal = v.name === selected ? .22 : v.name === hoverName ? .12 : 0; v.y += (goal - v.y) * Math.min(1, dt * 10); v.group.position.y = v.y; }
+  for (const v of villages){ const goal = v.name === selected ? .22 : v.name === hoverName ? .12 : (tagSel && !v.dim ? .08 : 0); v.y += (goal - v.y) * Math.min(1, dt * 10); v.group.position.y = v.y; }
   if (tweening){
     const off = v3.copy(camera.position).sub(controls.target);
     controls.target.lerp(goalTarget, Math.min(1, dt * 3.2)); off.setLength(lerp(off.length(), goalDist, Math.min(1, dt * 3.2))); camera.position.copy(controls.target).add(off);
   }
   const W_ = innerWidth, H_ = innerHeight, narrow = W_ <= 760, open = panel.classList.contains('open');
-  const wantX = open && !narrow ? W_ * .17 : 0, wantY = open && narrow ? H_ * .2 : 0;
+  const wantX = open && !narrow ? W_ * .17 : 0, wantY = open && narrow ? H_ * (panel.classList.contains('peek') ? .1 : .26) : 0;
   shiftX += (wantX - shiftX) * Math.min(1, dt * 6); shiftY += (wantY - shiftY) * Math.min(1, dt * 6);
   if (Math.abs(shiftX) + Math.abs(shiftY) > .5) camera.setViewOffset(W_, H_, shiftX, shiftY, W_, H_); else if (camera.view) camera.clearViewOffset();
+  extraFrame(dt);
   controls.update();
   if (!narrow) for (const v of villages){ tmp.copy(v.pos).add(v3.set(0, .55, 0)).project(camera); const el = chipMap.get(v.name).chip; el.classList.toggle('hidden', tmp.z > 1); el.style.transform = `translate(${(tmp.x * .5 + .5) * W_}px,${(-tmp.y * .5 + .5) * H_}px) translate(-50%,-100%)`; }
   renderer.render(scene, camera);
@@ -1013,7 +1242,8 @@ window.__shot = (name) => {   // 產生「3D 示意圖」用：把鏡頭擺到�
   camera.position.copy(ctr).add(new THREE.Vector3(.5, .78, 1).normalize().multiplyScalar(d)); tweening = false; controls.update();
 };
 if (qs.get('shot')){ const sn = qs.get('shot'); const go = () => { if (byName[sn]) window.__shot(sn); }; setTimeout(go, 300); setTimeout(go, 1500); }
-window.__tw = { select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
+{ let lite = false; try { lite = localStorage.getItem('tw-lite') === '1'; } catch (e) {} if (lite || qs.has('lite')) setLite(true); }
+window.__tw = { quizState: () => Q, quizAnswer, startQuiz, setLite, select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
 </script>
 </body>
 </html>
