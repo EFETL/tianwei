@@ -219,8 +219,13 @@ const INFO = {
 
 
 /* ================= 多語：介面文字與各村說明（英文以外的譯文由 AI 初譯，建議請母語者校對） ================= */
-const LANGS = { en:'English', ja:'日本語', th:'ไทย', id:'Indonesia', vi:'Tiếng Việt', ko:'한국어', de:'Deutsch' };
+const LANGS = { zh:'中文', en:'English', ja:'日本語', th:'ไทย', id:'Indonesia', vi:'Tiếng Việt', ko:'한국어', de:'Deutsch' };
 const UI = {
+ zh:{ sub:'3D 地圖 · 拖曳旋轉，點村莊看特色', dist:'選區', night:'夜晚', day:'白天', reset:'重置', home:'主網站',
+      tDist:'顯示四個選區的顏色', tNight:'切換白天／夜晚', tReset:'回到初始視角', tHome:'回到完整網站',
+      page:'看這個村的文字介紹頁 →', note:'',
+      pop:'👥 {n} 人（115 年 9 月）', load:'🌷 正在種花…', loadSub:'載入田尾鄉中', glH:'這個瀏覽器不支援 3D',
+      glP:'請改用最新版的 Chrome、Safari 或 Edge，或看<a href="villages.html">田尾鄉 20 村文字總覽</a>、回到<a href="index.html">完整網站</a>。', vil:'{x}', dnames:['第一選區','第二選區','第三選區','第四選區'], list:'村莊列表' },
  en:{ sub:'3D map · drag to rotate, tap a village', dist:'Districts', night:'Night', day:'Day', reset:'Reset', home:'Main site',
       tDist:'Show the four electoral districts', tNight:'Switch day / night', tReset:'Back to the first view', tHome:'Back to the main site',
       page:'Read about this village (text page) →', note:'3D scenes are illustrative. Population: Ministry of the Interior, September 2026 (ROC year 115). Text checked against public sources (the township office\'s village pages are currently unavailable).',
@@ -446,10 +451,10 @@ function W(c = 0xffffff, sway = .03){           // 會隨風搖的材質（給�
 }
 let LANG = 'en'; try { const sv = localStorage.getItem('tw-lang'); if (sv && LANGS[sv]) LANG = sv; } catch (e) {}   // 與主網站共用語言設定
 const tr = k => UI[LANG][k];
-const shortName = n => LANG === 'ja' ? n.replace('村', '') : LANG === 'ko' ? NAME_KO[n] : LANG === 'th' ? NAME_TH[n] : INFO[n].en.replace(' Village', '');
-const fullName = n => LANG === 'ja' ? n : tr('vil').replace('{x}', shortName(n));
+const shortName = n => (LANG === 'ja' || LANG === 'zh') ? n.replace('村', '') : LANG === 'ko' ? NAME_KO[n] : LANG === 'th' ? NAME_TH[n] : INFO[n].en.replace(' Village', '');
+const fullName = n => (LANG === 'ja' || LANG === 'zh') ? n : tr('vil').replace('{x}', shortName(n));
 const popLine = n => { const m = (INFO[n].meta || '').match(/([\d,]+)/); return m ? tr('pop').replace('{n}', m[1]) : ''; };
-const vtext = n => LANG === 'en' ? INFO[n].enText : ((VT[n] && VT[n][LANG]) || INFO[n].enText);
+const vtext = n => LANG === 'zh' ? '' : LANG === 'en' ? INFO[n].enText : ((VT[n] && VT[n][LANG]) || INFO[n].enText);
 { const ld = document.getElementById('ldMsg'); if (ld) ld.innerHTML = UI[LANG].load + '<small>' + UI[LANG].loadSub + '</small>'; }
 function shade(m){ m.castShadow = true; m.receiveShadow = true; return m; }
 function box(w, h, d, c, x = 0, y = 0, z = 0, o){ const m = shade(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
@@ -840,16 +845,16 @@ const distBtn = $('distBtn'), nightBtn = $('nightBtn'), legend = $('legend');
 const hex6 = c => '#' + c.toString(16).padStart(6, '0');
 function renderNames(){
   for (const v of order){
-    const emo = v.info.emoji || '📍', zs = v.name.replace('村', ''), local = LANG === 'ja' ? '' : shortName(v.name), c = chipMap.get(v.name);
+    const emo = v.info.emoji || '📍', zs = v.name.replace('村', ''), local = (LANG === 'ja' || LANG === 'zh') ? '' : shortName(v.name), c = chipMap.get(v.name);
     c.chip.textContent = `${emo} ${zs}${local ? ' ' + local : ''}`; c.d.textContent = `${emo} ${v.name}${local ? ' · ' + local : ''}`;
   }
 }
 function fillPanel(name){
   const v = byName[name], i = v.info, dd = DIST[i.dist], u = UI[LANG];
-  $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = LANG === 'ja' ? i.en : fullName(name);
-  const tag = $('pTag'); tag.textContent = dd ? `${dd.name} · ${u.dnames[i.dist - 1]}` : ''; tag.style.background = dd ? hex6(dd.c) : '#888'; tag.hidden = !dd;
-  $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta;
-  $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。<br>' + u.note;
+  $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = (LANG === 'ja' || LANG === 'zh') ? i.en : fullName(name);
+  const tag = $('pTag'); tag.textContent = dd ? (LANG === 'zh' ? dd.name : `${dd.name} · ${u.dnames[i.dist - 1]}`) : ''; tag.style.background = dd ? hex6(dd.c) : '#888'; tag.hidden = !dd;
+  $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pEnText').hidden = !vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta;
+  $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。' + (u.note ? '<br>' + u.note : '');
   $('pPage').textContent = u.page; $('pPage').href = `village/${SLUG[name]}.html`;
 }
 function select(name){
@@ -868,7 +873,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
 function setNightLabel(){ nightBtn.innerHTML = nightGoal ? `☀️ <span class="lbl">${tr('day')}</span>` : `🌙 <span class="lbl">${tr('night')}</span>`; }
 function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); setNightLabel(); }
 nightBtn.onclick = () => setNight(!nightGoal);
-function renderLegend(){ legend.innerHTML = Object.entries(DIST).map(([k, d]) => `<div><i style="background:${hex6(d.c)}"></i>${d.name} · ${tr('dnames')[k - 1]}</div>`).join(''); }
+function renderLegend(){ legend.innerHTML = Object.entries(DIST).map(([k, d]) => `<div><i style="background:${hex6(d.c)}"></i>${LANG === 'zh' ? d.name : d.name + ' · ' + tr('dnames')[k - 1]}</div>`).join(''); }
 function setDist(on){ showDist = on; distBtn.setAttribute('aria-pressed', String(on)); legend.classList.toggle('show', on); for (const v of villages){ const dd = DIST[v.info.dist]; v.topMat.color.set(on && dd ? dd.c : v.baseTop); } }
 distBtn.onclick = () => setDist(!showDist);
 function applyLang(){
