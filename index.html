@@ -3,8 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>花鄉田尾 Tianwei</title>
-<meta name="description" content="彰化縣田尾鄉多語介紹：中文＋英文（三級難度），並提供日文、泰文、印尼文、越南文、韓文。非官方、教學用途。">
+<title>田尾鄉｜花鄉田尾 Tianwei：20 村地圖、景點與英文小教室</title>
+<meta name="description" content="田尾鄉（Tianwei Township，彰化縣）多語介紹：20 村 3D 地圖、公路花園與菊花不夜城、花鄉的故事，附三級英文小教室，並提供日、泰、印尼、越南、韓、德文。非官方、教學用途。">
+<link rel="canonical" href="https://tianwei.efetl.com/">
+<meta property="og:type" content="website"><meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="花鄉田尾 Tianwei">
+<meta property="og:title" content="田尾鄉｜花鄉田尾 Tianwei：20 村地圖、景點與英文小教室">
+<meta property="og:description" content="田尾鄉多語介紹：20 村 3D 地圖、公路花園、菊花不夜城、花鄉的故事與英文小教室。">
+<meta property="og:url" content="https://tianwei.efetl.com/">
+<meta property="og:image" content="https://tianwei.efetl.com/images/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","name":"花鄉田尾 Tianwei","alternateName":["田尾鄉","Tianwei Township"],"url":"https://tianwei.efetl.com/","inLanguage":["zh-Hant","en","ja","th","id","vi","ko","de"]},{"@type":"AdministrativeArea","name":"田尾鄉","alternateName":"Tianwei Township","containedInPlace":{"@type":"AdministrativeArea","name":"彰化縣"},"url":"https://tianwei.efetl.com/"}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+Thai:wght@400;600&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -75,6 +84,10 @@ header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 9
 .hero h1{font-size:clamp(36px,7vw,64px);margin:12px 0 4px;line-height:1.15}
 .hero .en{font-size:clamp(20px,3vw,28px);margin:0 0 6px;opacity:.95}
 .hero .hero-l2{font-size:18px;opacity:.9;margin:0}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 0}
+.hero-cta .cta{display:inline-block;font-size:18px;font-weight:700;text-decoration:none;color:#2b1d05;background:var(--gold);border-radius:999px;padding:10px 24px}
+.hero-cta .cta.alt{background:rgba(255,255,255,.14);color:#fff;border:2px solid #fff}
+.hero-cta .cta:hover{filter:brightness(1.08)}
 .facts{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-48px;position:relative;z-index:2}
 .fact{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;text-align:center}
 .fact b{display:block;font-size:28px;color:var(--green)}
@@ -218,6 +231,8 @@ footer ul{margin:0;padding-left:18px}
       <a href="#spots" data-i="nav_spots">景點</a>
       <a href="#gallery" data-i="nav_gallery">相片</a>
       <a href="#learn" data-i="nav_learn">學英文</a>
+      <a href="township.html" data-i="nav_map">3D 地圖</a>
+      <a href="villages.html" data-i="nav_vil">20 村</a>
     </nav>
     <div class="lang" role="group" aria-label="Language">
       <button data-lang="en" aria-pressed="true">English</button>
@@ -239,6 +254,7 @@ footer ul{margin:0;padding-left:18px}
     <h1>花鄉田尾</h1>
     <p class="en">Tianwei — The Flower Town of Taiwan</p>
     <p class="hero-l2" data-l2="hero"></p>
+    <p class="hero-cta"><a class="cta" href="township.html" data-i="cta_map">🗺️ 探索 3D 花鄉地圖</a><a class="cta alt" href="villages.html" data-i="cta_vil">📋 田尾鄉 20 村</a></p>
   </div>
 </section>
 
@@ -585,7 +601,7 @@ const T = {
      m2t:"Local Temples", m2:"Guosheng Temple honors Koxinga; Peilin Temple is the center of Hakka faith in Haifenglun.",
      m3t:"Provincial Highway 1", m3:"Taiwan's main north–south road runs right through Tianwei.",
      c1:"Find Tianwei on Google Maps", c2:"Listen and learn the words", c3:"Take the quick quiz",
-     nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
+     nav_map:"3D Map", nav_vil:"20 Villages", cta_map:"🗺️ Explore the 3D flower-town map", cta_vil:"📋 All 20 villages", nav_about:"About", nav_spots:"Places", nav_gallery:"Photos", nav_learn:"English"},
  ja:{g1:"花のオブジェ", g2:"サボテン", g3:"胡蝶蘭", g4:"観葉植物", g5:"アフリカンデージー", g6:"ガザニア", g7:"花のクローズアップ", g8:"顔のあるサボテン", gal_sub:"田尾では一年中、花が咲いています", spots_sub:"各カードに英語コーナーがあります。下でレベルを選んでね", learn_sub:"単語をタップすると発音が聞けます", next_sub:"教室を出て、自分の目で見てみよう", story_cap:"今の田尾の苗圃には植物がずらり",
      quiz_t:"ミニクイズ", quiz_sub:"何問正解できたかな？", story_t:"花の町の物語", story_sub:"すべては一袋の種から始まった", nav_story:"物語",
      hero:"彰化県南部にある、台湾最大の花と植木の町。",
@@ -598,7 +614,7 @@ const T = {
      m2t:"地元の廟", m2:"国聖宮は鄭成功を祀り、沛霖宮は海豊崙の客家の信仰の中心です。",
      m3t:"台1線", m3:"台湾を南北に貫く幹線道路が田尾の真ん中を通っています。",
      c1:"Googleマップで田尾を探す", c2:"単語を聞いて覚えよう", c3:"クイズに挑戦",
-     nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
+     nav_map:"3Dマップ", nav_vil:"20の村", cta_map:"🗺️ 3Dで花の町を探検", cta_vil:"📋 20の村を見る", nav_about:"田尾とは", nav_spots:"スポット", nav_gallery:"写真", nav_learn:"英語"},
  th:{g1:"ประติมากรรมดอกไม้", g2:"กระบองเพชร", g3:"กล้วยไม้ฟาแลนนอปซิส", g4:"ไม้ประดับใบ", g5:"เดซี่แอฟริกา", g6:"ดอกกาซาเนีย", g7:"ดอกไม้ระยะใกล้", g8:"กระบองเพชรหน้ายิ้ม", gal_sub:"ที่เทียนเหว่ยมีดอกไม้บานตลอดทั้งปี", spots_sub:"ทุกการ์ดมีมุมภาษาอังกฤษ เลือกระดับได้ด้านล่าง", learn_sub:"แตะคำศัพท์เพื่อฟังเสียง", next_sub:"ออกจากห้องเรียนไปดูด้วยตัวเอง", story_cap:"แถวต้นไม้ในเรือนเพาะชำของเทียนเหว่ยในปัจจุบัน",
      quiz_t:"แบบทดสอบสั้น", quiz_sub:"ตอบถูกกี่ข้อ?", story_t:"เรื่องเล่าของเมืองดอกไม้", story_sub:"ทุกอย่างเริ่มจากเมล็ดพันธุ์หนึ่งถุง", nav_story:"เรื่องเล่า",
      hero:"เมืองดอกไม้และต้นไม้ที่ใหญ่ที่สุดในไต้หวัน ทางตอนใต้ของเขตจางฮว่า",
@@ -611,7 +627,7 @@ const T = {
      m2t:"ศาลเจ้าท้องถิ่น", m2:"ศาลเจ้ากั๋วเซิ่งบูชาเจิ้งเฉิงกง ศาลเจ้าเพ่ยหลินเป็นศูนย์รวมศรัทธาของชาวฮากกา",
      m3t:"ทางหลวงหมายเลข 1", m3:"ถนนสายหลักเหนือ–ใต้ของไต้หวันผ่านกลางเทียนเหว่ย",
      c1:"ดูเทียนเหว่ยบน Google Maps", c2:"ฟังและเรียนคำศัพท์", c3:"ทำแบบทดสอบ",
-     nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
+     nav_map:"แผนที่ 3 มิติ", nav_vil:"20 หมู่บ้าน", cta_map:"🗺️ สำรวจแผนที่ 3 มิติ", cta_vil:"📋 ดูทั้ง 20 หมู่บ้าน", nav_about:"รู้จัก", nav_spots:"สถานที่", nav_gallery:"ภาพ", nav_learn:"ภาษาอังกฤษ"},
  id:{g1:"Patung bunga", g2:"Kaktus", g3:"Anggrek bulan", g4:"Tanaman hias daun", g5:"Daisy Afrika", g6:"Gazania", g7:"Bunga dari dekat", g8:"Kaktus berwajah", gal_sub:"Di Tianwei, selalu ada bunga yang mekar sepanjang tahun", spots_sub:"Setiap kartu punya pojok bahasa Inggris — pilih tingkatnya di bawah", learn_sub:"Ketuk kata untuk mendengar pengucapannya", next_sub:"Keluar dari kelas dan lihat sendiri", story_cap:"Deretan tanaman di pembibitan Tianwei saat ini",
      quiz_t:"Kuis Singkat", quiz_sub:"Berapa yang benar?", story_t:"Kisah Kota Bunga", story_sub:"Semua berawal dari sekantong biji", nav_story:"Kisah",
      hero:"Kota bunga dan tanaman terbesar di Taiwan — di selatan Kabupaten Changhua.",
@@ -624,7 +640,7 @@ const T = {
      m2t:"Kuil Setempat", m2:"Kuil Guosheng memuliakan Koxinga; Kuil Peilin adalah pusat kepercayaan warga Hakka di Haifenglun.",
      m3t:"Jalan Provinsi 1", m3:"Jalan utama utara–selatan Taiwan melintas tepat di tengah Tianwei.",
      c1:"Cari Tianwei di Google Maps", c2:"Dengar dan pelajari kosakata", c3:"Ikuti kuis singkat",
-     nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"},
+     nav_map:"Peta 3D", nav_vil:"20 Desa", cta_map:"🗺️ Jelajahi peta 3D kota bunga", cta_vil:"📋 Lihat 20 desa", nav_about:"Tentang", nav_spots:"Tempat", nav_gallery:"Foto", nav_learn:"Bahasa Inggris"},
  vi:{g1:"Tiểu cảnh hoa", g2:"Xương rồng", g3:"Lan hồ điệp", g4:"Cây cảnh lá", g5:"Cúc châu Phi", g6:"Cúc huân chương", g7:"Cận cảnh hoa", g8:"Xương rồng có mặt", gal_sub:"Ở Tianwei, hoa nở quanh năm", spots_sub:"Mỗi thẻ đều có góc tiếng Anh — chọn cấp độ bên dưới", learn_sub:"Chạm vào từ để nghe phát âm", next_sub:"Hãy bước ra khỏi lớp học và tự mình khám phá", story_cap:"Những hàng cây trong vườn ươm ở Tianwei ngày nay",
      quiz_t:"Câu đố nhanh", quiz_sub:"Bạn trả lời đúng mấy câu?", story_t:"Câu chuyện thị trấn hoa", story_sub:"Tất cả bắt đầu từ một túi hạt giống", nav_story:"Câu chuyện",
      hero:"Thị trấn hoa và cây cảnh lớn nhất Đài Loan — ở phía nam huyện Chương Hóa.",
@@ -637,7 +653,7 @@ const T = {
      m2t:"Đền miếu địa phương", m2:"Miếu Guosheng thờ Trịnh Thành Công; miếu Peilin là trung tâm tín ngưỡng của người Khách Gia ở Haifenglun.",
      m3t:"Quốc lộ tỉnh số 1", m3:"Con đường chính bắc–nam của Đài Loan chạy ngay qua giữa Tianwei.",
      c1:"Tìm Tianwei trên Google Maps", c2:"Nghe và học từ vựng", c3:"Làm bài kiểm tra nhanh",
-     nav_about:"Giới thiệu", nav_spots:"Địa điểm", nav_gallery:"Ảnh", nav_learn:"Tiếng Anh"},
+     nav_map:"Bản đồ 3D", nav_vil:"20 làng", cta_map:"🗺️ Khám phá bản đồ 3D", cta_vil:"📋 Xem 20 làng", nav_about:"Giới thiệu", nav_spots:"Địa điểm", nav_gallery:"Ảnh", nav_learn:"Tiếng Anh"},
  ko:{g1:"꽃 조형물", g2:"선인장", g3:"호접란", g4:"관엽식물", g5:"아프리칸 데이지", g6:"가자니아", g7:"꽃 클로즈업", g8:"얼굴 있는 선인장", gal_sub:"톈웨이에서는 사계절 내내 꽃이 핍니다", spots_sub:"카드마다 영어 코너가 있어요. 아래에서 난이도를 고르세요", learn_sub:"단어를 누르면 발음을 들을 수 있어요", next_sub:"교실 밖으로 나가 직접 보러 가요", story_cap:"오늘날 톈웨이 묘포에 줄지어 선 식물들",
      quiz_t:"미니 퀴즈", quiz_sub:"몇 개 맞혔나요?", story_t:"꽃마을 이야기", story_sub:"모든 것은 씨앗 한 봉지에서 시작되었습니다", nav_story:"이야기",
      hero:"장화현 남부에 있는 대만 최대의 꽃과 식물의 마을.",
@@ -650,8 +666,8 @@ const T = {
      m2t:"지역 사원", m2:"궈성궁은 정성공을 모시고, 페이린궁은 하이펑룬 하카인 신앙의 중심입니다.",
      m3t:"성도 1호선", m3:"대만을 남북으로 잇는 간선도로가 톈웨이 한가운데를 지나갑니다.",
      c1:"구글 지도에서 톈웨이 찾기", c2:"단어 듣고 배우기", c3:"퀴즈 도전하기",
-     nav_about:"소개", nav_spots:"명소", nav_gallery:"사진", nav_learn:"영어"},
- de:{"g1": "Blumenskulptur", "g2": "Kaktus", "g3": "Schmetterlingsorchidee", "g4": "Blattpflanze", "g5": "Kapkörbchen", "g6": "Gazanie", "g7": "Blüte in Nahaufnahme", "g8": "Kaktus mit Gesicht", "gal_sub": "Hier blüht zu jeder Jahreszeit etwas", "spots_sub": "Jede Karte hat eine Englisch-Ecke – wähle unten dein Niveau", "learn_sub": "Tippe auf ein Wort, um es zu hören", "next_sub": "Raus aus dem Klassenzimmer – sieh es dir selbst an", "story_cap": "Reihen von Pflanzen in einer Gärtnerei in Tianwei heute", "quiz_t": "Kurzes Quiz", "quiz_sub": "Wie viele hast du richtig?", "story_t": "Die Geschichte der Blumenstadt", "story_sub": "Alles begann mit einer Tüte Samen", "nav_story": "Geschichte", "hero": "Taiwans größte Blumen- und Pflanzenstadt – im Süden des Landkreises Changhua.", "f1": "Hektar Gartenfläche", "f2": "Eröffnung des Gartens", "f3": "Chrysanthemen pro Jahr", "f4": "Dörfer", "about_t": "Über Tianwei", "about_1": "Tianwei liegt im Süden von Changhua, zwischen Yongjing und Beidou. Die ersten Siedler lebten am unteren Ende der Bewässerungskanäle – am „Schwanz“ (wěi) der Reisfelder (tián). Daher hat Tianwei seinen Namen.", "about_2": "Fruchtbarer Boden und viel Wasser machen Tianwei ideal für den Pflanzenanbau. Der Blumengarten an der Landstraße wurde 1973 eröffnet, und heute gilt Tianwei als „Heimat der Blumen“.", "spots_t": "Vier öffentliche Orte, die man sehen sollte", "gal_t": "Fotowand", "learn_t": "Wörter aus der Blumenstadt", "next_t": "Nächste Schritte", "m1t": "Spielplatz Yixin-Park", "m1": "Ein inklusiver Spielplatz am Eingang des Gartens, den ganzen Tag geöffnet.", "m2t": "Örtliche Tempel", "m2": "Der Guosheng-Tempel ehrt Koxinga; der Peilin-Tempel ist das Glaubenszentrum der Hakka in Haifenglun.", "m3t": "Provinzstraße 1", "m3": "Taiwans wichtigste Nord-Süd-Straße führt mitten durch Tianwei.", "c1": "Tianwei in Google Maps finden", "c2": "Wörter anhören und lernen", "c3": "Zum Quiz", "nav_about": "Über Tianwei", "nav_spots": "Orte", "nav_gallery": "Fotos", "nav_learn": "Englisch"}
+     nav_map:"3D 지도", nav_vil:"20개 마을", cta_map:"🗺️ 3D 꽃마을 지도 탐험", cta_vil:"📋 20개 마을 보기", nav_about:"소개", nav_spots:"명소", nav_gallery:"사진", nav_learn:"영어"},
+ de:{"g1": "Blumenskulptur", "g2": "Kaktus", "g3": "Schmetterlingsorchidee", "g4": "Blattpflanze", "g5": "Kapkörbchen", "g6": "Gazanie", "g7": "Blüte in Nahaufnahme", "g8": "Kaktus mit Gesicht", "gal_sub": "Hier blüht zu jeder Jahreszeit etwas", "spots_sub": "Jede Karte hat eine Englisch-Ecke – wähle unten dein Niveau", "learn_sub": "Tippe auf ein Wort, um es zu hören", "next_sub": "Raus aus dem Klassenzimmer – sieh es dir selbst an", "story_cap": "Reihen von Pflanzen in einer Gärtnerei in Tianwei heute", "quiz_t": "Kurzes Quiz", "quiz_sub": "Wie viele hast du richtig?", "story_t": "Die Geschichte der Blumenstadt", "story_sub": "Alles begann mit einer Tüte Samen", "nav_story": "Geschichte", "hero": "Taiwans größte Blumen- und Pflanzenstadt – im Süden des Landkreises Changhua.", "f1": "Hektar Gartenfläche", "f2": "Eröffnung des Gartens", "f3": "Chrysanthemen pro Jahr", "f4": "Dörfer", "about_t": "Über Tianwei", "about_1": "Tianwei liegt im Süden von Changhua, zwischen Yongjing und Beidou. Die ersten Siedler lebten am unteren Ende der Bewässerungskanäle – am „Schwanz“ (wěi) der Reisfelder (tián). Daher hat Tianwei seinen Namen.", "about_2": "Fruchtbarer Boden und viel Wasser machen Tianwei ideal für den Pflanzenanbau. Der Blumengarten an der Landstraße wurde 1973 eröffnet, und heute gilt Tianwei als „Heimat der Blumen“.", "spots_t": "Vier öffentliche Orte, die man sehen sollte", "gal_t": "Fotowand", "learn_t": "Wörter aus der Blumenstadt", "next_t": "Nächste Schritte", "m1t": "Spielplatz Yixin-Park", "m1": "Ein inklusiver Spielplatz am Eingang des Gartens, den ganzen Tag geöffnet.", "m2t": "Örtliche Tempel", "m2": "Der Guosheng-Tempel ehrt Koxinga; der Peilin-Tempel ist das Glaubenszentrum der Hakka in Haifenglun.", "m3t": "Provinzstraße 1", "m3": "Taiwans wichtigste Nord-Süd-Straße führt mitten durch Tianwei.", "c1": "Tianwei in Google Maps finden", "c2": "Wörter anhören und lernen", "c3": "Zum Quiz", "nav_map": "3D-Karte", "nav_vil": "20 Dörfer", "cta_map": "🗺️ 3D-Karte erkunden", "cta_vil": "📋 Alle 20 Dörfer", "nav_about": "Über Tianwei", "nav_spots": "Orte", "nav_gallery": "Fotos", "nav_learn": "Englisch"}
 };
 
 let lang = "en", level = 1;

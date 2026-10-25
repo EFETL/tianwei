@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>田尾鄉 20 村 3D 地圖｜Tianwei Township 3D Map</title>
+<meta name="description" content="田尾鄉 20 個村的 3D 互動地圖：旋轉、點選每個村，看位置、人口與特色；可切換白天與夜晚、四個選區的顏色。非官方、教學用途。">
+<link rel="canonical" href="https://tianwei.efetl.com/township.html">
+<meta property="og:type" content="website"><meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="花鄉田尾 Tianwei">
+<meta property="og:title" content="田尾鄉 20 村 3D 地圖｜Tianwei Township 3D Map">
+<meta property="og:description" content="旋轉、點選田尾鄉 20 個村的 3D 互動地圖，看各村的位置、人口與特色。">
+<meta property="og:url" content="https://tianwei.efetl.com/township.html">
+<meta property="og:image" content="https://tianwei.efetl.com/images/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"田尾鄉 20 村 3D 地圖","url":"https://tianwei.efetl.com/township.html","about":{"@type":"AdministrativeArea","name":"田尾鄉","alternateName":"Tianwei Township","containedInPlace":{"@type":"AdministrativeArea","name":"彰化縣"}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#2f6b4f; --green-dark:#1f4a36; --gold:#e3a33a; --pink:#d9668a;
+  --card:rgba(255,255,255,.92); --text:#24302a; --muted:#5f6d65; --line:#e3e8e2;
+  --shadow:0 8px 28px rgba(31,74,54,.18); --radius:18px;
+}
+body.night{ --card:rgba(24,34,48,.9); --text:#eef2f7; --muted:#aab6c6; --line:#32425a; --green-dark:#9fdcbc; --green:#7cc3a0; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#dfeee9;font-family:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;color:var(--text)}
+#stage{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#stage.hover canvas{cursor:pointer}
+.card{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:var(--radius);box-shadow:var(--shadow)}
+#title{position:fixed;top:max(14px,env(safe-area-inset-top));left:14px;padding:12px 18px;line-height:1.25;z-index:5}
+#title b{display:block;font-size:22px;color:var(--green-dark)}
+#title b span{color:var(--gold)}
+#title small{color:var(--muted);font-size:16px}
+#tools{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;display:flex;gap:8px;z-index:5}
+.btn{font:inherit;font-size:16px;border:0;border-radius:14px;padding:10px 14px;min-height:44px;cursor:pointer;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{outline:2px solid var(--gold)}
+.btn:focus-visible{outline:3px solid var(--pink)}
+.btn[aria-pressed="true"]{background:var(--gold);color:#2b2208}
+#chips{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.chip{position:absolute;left:0;top:0;pointer-events:auto;font:inherit;font-size:16px;font-weight:500;white-space:nowrap;cursor:pointer;
+  border:0;border-radius:999px;padding:4px 12px;background:var(--card);color:var(--text);box-shadow:0 4px 14px rgba(0,0,0,.16);will-change:transform}
+.chip:hover,.chip.on{background:var(--gold);color:#2b2208}
+.chip.hidden{display:none}
+#dock{position:fixed;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:8px;padding:0 14px;overflow-x:auto;z-index:5;scrollbar-width:none}
+#dock::-webkit-scrollbar{display:none}
+#dock .btn{flex:0 0 auto;padding:8px 12px;min-height:44px}
+#dock .btn.on{background:var(--gold);color:#2b2208}
+#legend{position:fixed;left:14px;bottom:78px;z-index:4;padding:10px 14px;font-size:16px;display:none;line-height:1.6}
+#legend.show{display:block}
+#legend i{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+#panel{position:fixed;z-index:6;right:14px;top:78px;width:min(410px,calc(100vw - 28px));max-height:calc(100vh - 170px);overflow:auto;padding:22px 22px 20px;
+  transform:translateX(120%);opacity:0;transition:transform .35s ease,opacity .35s ease;pointer-events:none}
+#panel.open{transform:none;opacity:1;pointer-events:auto}
+#panel .x{position:absolute;right:10px;top:10px;width:44px;height:44px;border-radius:50%;padding:0;justify-content:center;font-size:20px;background:transparent}
+#panel .emoji{font-size:40px;line-height:1}
+#panel h2{margin:6px 0 0;font-size:26px;color:var(--green-dark);line-height:1.3;padding-right:40px}
+#panel .en{color:var(--muted);margin:2px 0 8px}
+#panel .tag{display:inline-block;font-size:15px;border-radius:999px;padding:2px 12px;margin-bottom:10px;color:#fff;background:#888}
+#panel p{margin:0 0 10px;line-height:1.7}
+#panel .enp{color:var(--muted)}
+#panel .meta{font-size:16px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+#panel .src{font-size:14px;color:var(--muted)}
+#panel .src a{color:var(--green)}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#dfeee9;z-index:20;transition:opacity .6s;color:#1f4a36;text-align:center}
+#loading.done{opacity:0;pointer-events:none}
+#loading div{font-size:22px}
+#loading small{display:block;font-size:16px;opacity:.7;margin-top:6px}
+#nogl{display:none;position:fixed;inset:0;place-items:center;text-align:center;padding:24px;z-index:30;background:#fbfaf6}
+#nogl.show{display:grid}
+@media (max-width:760px){
+  #title{padding:10px 14px;max-width:calc(100vw - 190px)}
+  #title b{font-size:18px;white-space:nowrap}
+  #title small{display:none}
+  .chip{display:none}
+  #dock{z-index:7}
+  #legend{bottom:76px}
+  #panel{right:0;left:0;top:auto;bottom:0;width:auto;max-height:52vh;border-radius:22px 22px 0 0;transform:translateY(110%);padding-bottom:84px}
+  #panel.open{transform:none}
+  #tools .lbl{display:none}
+}
+@media (prefers-reduced-motion:reduce){ #panel{transition:none} }
+</style>
+</head>
+<body>
+<div id="stage" aria-label="田尾鄉 20 村 3D 互動地圖：拖曳旋轉，點選村莊"></div>
+<div id="chips"></div>
+<div id="title" class="card"><b>🌼 田尾鄉 <span>20 村</span></b><small>3D 地圖 · 拖曳旋轉，點村莊看特色</small></div>
+<div id="tools">
+  <button class="btn card" id="distBtn" aria-pressed="false" title="顯示四個選區的顏色">🗳️ <span class="lbl">選區</span></button>
+  <button class="btn card" id="nightBtn" aria-pressed="false" title="切換白天／夜晚">🌙 <span class="lbl">夜晚</span></button>
+  <button class="btn card" id="resetBtn" title="回到初始視角">↺ <span class="lbl">重置</span></button>
+  <a class="btn card" href="index.html" title="回到完整網站">🏠 <span class="lbl">主網站</span></a>
+</div>
+<div id="legend" class="card"></div>
+<aside id="panel" class="card" aria-live="polite">
+  <button class="btn x" id="closeBtn" aria-label="關閉">✕</button>
+  <div class="emoji" id="pEmoji"></div>
+  <h2 id="pZh"></h2>
+  <div class="en" id="pEn"></div>
+  <span class="tag" id="pTag"></span>
+  <p id="pText"></p>
+  <p class="enp" id="pEnText"></p>
+  <p class="meta" id="pMeta"></p>
+  <p class="src" id="pSrc"></p>
+  <p><a id="pPage" href="villages.html" style="font-weight:700;color:var(--green);text-decoration:none">📄 看這個村的文字介紹頁 →</a></p>
+</aside>
+<nav id="dock" aria-label="村莊列表"></nav>
+<div id="loading"><div>🌷 正在種花…<small>Loading Tianwei Township</small></div></div>
+<div id="nogl"><div><h2>這個瀏覽器不支援 3D</h2><p>請改用最新版的 Chrome、Safari 或 Edge，或看<a href="villages.html">田尾鄉 20 村文字總覽</a>、回到<a href="index.html">完整網站</a>。</p></div></div>
+<noscript><div style="position:fixed;inset:0;z-index:40;background:#fbfaf6;color:#24302a;padding:24px;font-size:18px"><h2>田尾鄉 20 村 3D 地圖</h2><p>這個頁面需要 JavaScript 才能顯示 3D 地圖。請看<a href="villages.html">田尾鄉 20 村文字總覽</a>。</p></div></noscript>
+
+<script>if(/[?&]timer/.test(location.search)){window.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),33)}  /* 測試用：背景分頁 rAF 不跑時改用計時器 */
+window.__errs=[];addEventListener('error',e=>window.__errs.push(e.message+' @'+e.lineno+':'+e.colno));addEventListener('unhandledrejection',e=>window.__errs.push('rej '+(e.reason&&e.reason.message||e.reason)));</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ================= 村界資料：由「田尾鄉選舉區域圖」用影像分割描出（單位：原圖像素） ================= */
+const POLY = {"海豐村":{"pts":[[76,83],[74,90],[81,106],[78,128],[79,184],[93,198],[103,219],[122,245],[130,253],[158,268],[208,300],[225,303],[239,310],[254,322],[272,329],[286,339],[305,339],[306,336],[289,301],[287,291],[265,239],[264,222],[274,213],[303,203],[316,202],[345,194],[361,183],[365,176],[364,162],[356,154],[353,147],[355,140],[362,133],[362,104],[365,101],[365,95],[386,74],[382,65],[363,59],[324,35],[304,34],[301,39],[300,53],[293,61],[284,64],[267,62],[260,68],[248,105],[240,114],[229,118],[217,117],[202,123],[185,122],[118,107],[98,98],[83,85]],"pole":[191,198],"r":77.5906982421875,"area":48897},"陸豐村":{"pts":[[368,95],[368,101],[365,104],[365,133],[358,140],[356,147],[359,154],[368,163],[368,176],[400,178],[420,190],[434,182],[446,184],[459,190],[462,189],[465,184],[467,140],[460,134],[456,123],[423,107],[415,99],[403,93],[388,76]],"pole":[402,140],"r":40.3782958984375,"area":8642},"柳鳳村":{"pts":[[471,142],[468,149],[468,184],[463,192],[457,192],[456,194],[495,233],[502,234],[506,232],[515,237],[529,237],[554,260],[565,255],[573,247],[576,228],[592,211],[589,188],[592,172],[592,150],[586,148],[571,158],[560,160],[499,161],[490,158]],"pole":[546,200],"r":42.3472900390625,"area":10455},"仁里村":{"pts":[[436,201],[400,181],[366,179],[357,190],[345,197],[316,205],[303,206],[272,217],[267,222],[266,232],[283,277],[286,280],[300,281],[320,298],[326,299],[354,285],[382,255],[407,251],[433,226],[436,220]],"pole":[328,246],"r":45.36279296875,"area":12760},"豐田村":{"pts":[[427,189],[426,193],[435,197],[440,204],[438,209],[439,220],[436,223],[435,231],[437,248],[432,252],[432,255],[437,262],[435,270],[442,277],[440,294],[443,299],[435,309],[469,312],[472,315],[468,321],[469,330],[475,334],[494,339],[526,342],[545,341],[561,337],[567,300],[579,277],[581,256],[574,251],[561,261],[554,263],[529,240],[514,240],[506,236],[495,236],[453,194],[452,190],[435,185]],"pole":[515,293],"r":48.999786376953125,"area":14452},"新厝村":{"pts":[[432,232],[429,232],[407,254],[382,258],[354,288],[326,302],[324,301],[323,321],[331,316],[331,310],[336,306],[354,309],[368,318],[379,317],[398,305],[406,312],[419,309],[430,310],[440,299],[437,294],[439,277],[432,270],[434,262],[429,255],[429,251],[434,247]],"pole":[408,281],"r":27.968994140625,"area":5404},"溪頂村":{"pts":[[287,284],[292,301],[301,317],[309,339],[343,350],[354,361],[357,372],[426,380],[466,388],[466,360],[483,343],[482,339],[466,331],[465,321],[470,316],[469,314],[419,312],[406,315],[398,308],[379,320],[368,321],[354,312],[335,309],[334,316],[325,324],[320,320],[320,301],[300,284],[293,282]],"pole":[432,347],"r":36.0,"area":10550},"打簾村":{"pts":[[596,151],[594,159],[595,172],[592,180],[595,211],[579,228],[576,248],[583,254],[597,257],[603,262],[608,260],[634,273],[651,291],[656,303],[659,322],[663,328],[675,336],[686,339],[700,316],[703,305],[693,267],[697,234],[706,226],[701,212],[682,189],[662,174],[644,164],[625,160],[612,151]],"pole":[642,221],"r":49.79669189453125,"area":14331},"溪畔村":{"pts":[[709,229],[700,234],[696,254],[697,273],[705,298],[720,282],[729,281],[728,271],[732,264],[721,250],[721,236]],"pole":[713,267],"r":17.5751953125,"area":1796},"田尾村":{"pts":[[585,257],[582,266],[582,277],[570,300],[565,326],[565,337],[576,350],[596,354],[608,360],[614,359],[621,364],[636,362],[651,364],[652,359],[658,353],[671,351],[677,345],[677,341],[658,325],[651,297],[641,282],[630,273],[614,265],[604,265],[597,260]],"pole":[611,315],"r":43.7410888671875,"area":8161},"北曾村":{"pts":[[689,343],[690,351],[702,366],[727,366],[737,363],[788,367],[803,366],[824,355],[822,291],[818,286],[808,289],[788,286],[761,292],[755,290],[745,291],[732,285],[725,286],[722,284],[706,301],[703,316],[690,336]],"pole":[782,327],"r":41.0,"area":10024},"南曾村":{"pts":[[719,369],[719,378],[713,384],[719,397],[738,418],[771,442],[785,450],[822,452],[834,447],[850,446],[847,438],[840,434],[828,432],[812,414],[814,390],[803,376],[801,369],[788,370],[738,366],[730,369]],"pole":[778,404],"r":36.550384521484375,"area":7283},"饒平村":{"pts":[[768,442],[749,430],[725,408],[710,386],[716,378],[717,372],[713,369],[700,368],[687,351],[686,342],[684,341],[671,354],[659,355],[649,367],[643,365],[621,367],[614,362],[608,363],[596,357],[583,355],[584,371],[563,388],[529,408],[536,439],[547,458],[556,465],[583,472],[609,473],[644,464],[664,462],[695,464],[752,455],[760,456],[764,454]],"pole":[612,418],"r":54.331787109375,"area":20242},"正義村":{"pts":[[469,391],[487,400],[497,401],[508,397],[513,398],[526,406],[572,379],[581,371],[581,360],[579,355],[564,340],[526,345],[488,340],[469,360]],"pole":[499,371],"r":29.7720947265625,"area":5929},"北鎮村":{"pts":[[835,203],[826,215],[827,262],[825,275],[821,282],[826,297],[827,346],[842,355],[904,354],[943,358],[944,350],[941,339],[944,335],[936,328],[931,314],[925,286],[917,217],[907,208]],"pole":[877,302],"r":53.0,"area":15728},"新興村":{"pts":[[1055,268],[1051,266],[1015,284],[994,289],[986,288],[977,296],[966,328],[960,334],[948,336],[944,339],[947,358],[952,362],[957,379],[963,380],[971,387],[976,386],[982,382],[993,368],[1023,362],[1063,336],[1066,320]],"pole":[1009,324],"r":39.9534912109375,"area":8894},"福田村":{"pts":[[965,394],[966,404],[970,410],[1008,427],[1032,449],[1038,447],[1102,449],[1089,433],[1087,409],[1078,394],[1068,351],[1062,340],[1023,365],[993,371],[980,387]],"pole":[1039,401],"r":40.556549072265625,"area":8723},"新生村":{"pts":[[805,368],[806,376],[817,390],[815,414],[828,429],[840,431],[847,435],[854,445],[910,445],[922,442],[927,438],[926,372],[928,361],[926,359],[904,357],[842,358],[828,350],[827,355],[821,361]],"pole":[875,401],"r":45.5750732421875,"area":9841},"南鎮村":{"pts":[[932,360],[929,372],[930,468],[941,479],[951,480],[956,484],[956,499],[983,526],[987,527],[999,520],[1012,518],[1014,516],[1011,501],[1012,479],[1017,466],[1028,451],[1027,447],[1008,430],[970,413],[962,401],[962,393],[967,387],[953,377],[948,362]],"pole":[980,457],"r":37.196746826171875,"area":9632},"睦宜村":{"pts":[[926,443],[911,448],[834,450],[822,455],[785,453],[772,445],[767,451],[767,456],[778,461],[794,477],[810,511],[825,578],[831,625],[833,669],[840,674],[871,672],[914,683],[914,677],[894,669],[885,657],[881,633],[881,601],[888,593],[897,590],[920,597],[953,594],[959,584],[966,554],[972,542],[983,531],[953,499],[952,483],[941,483],[935,487],[927,480]],"pole":[881,528],"r":67.150390625,"area":26921},"_bbox":[74,34,1102,683]};
+
+/* ================= 20 個村的資料（事實來自田尾鄉公所「村里導覽」，文字為改寫） ================= */
+const INFO = {
+ '田尾村': { dist:1, emoji:'⛩️', top:0xa7d18a, hero:'temple', fill:[['houses',{houses:7}],'flowers'], en:'Tianwei Village',
+   text:'「田尾」這個名字，來自八堡圳灌溉系統的下游——上游的人把下游叫做田尾。村裡有順安宮。',
+   enText:'"Tianwei" comes from the irrigation system of the Bazhen Canal: people upstream called the downstream end "Tianwei". Shun-an Temple is in the village.',
+   meta:'👥 1,427 人（115 年 9 月）' },
+ '打簾村': { dist:1, emoji:'🌱', top:0xa7d18a, hero:'walkseed', fill:['flowers', ['houses',{houses:3}]], en:'Dalian Village',
+   text:'公路花園的遊客服務中心就在打簾村。相傳一百多年前，打簾人巫修齊從漳州帶回花木種子和枝條，與兄長巫規矩試種，田尾的花卉事業由此發展。',
+   enText:"The Highway Garden visitor center is in Dalian. The story goes that over 100 years ago a local, Wu Xiu-qi, brought seeds and cuttings home from Zhangzhou and planted them with his brother — the start of Tianwei's flower business.",
+   meta:'👥 1,779 人（115 年 9 月）' },
+ '溪畔村': { dist:1, emoji:'⛩️', top:0xa7d18a, hero:'garden', fill:[], en:'Xipan Village',
+   text:'村裡的朝天宮主祀天上聖母。',
+   enText:'Chaotian Temple in the village honors Mazu, the Heavenly Mother.',
+   meta:'👥 1,381 人（115 年 9 月）' },
+ '北曾村': { dist:1, emoji:'🏡', top:0xa7d18a, hero:null, fill:[['houses',{houses:6}],'flowers'], en:'Beizeng Village',
+   text:'北曾和南曾一帶，日治時期屬於「曾厝崙」（八大字之一），戰後才分成兩個村。',
+   enText:'Beizeng and Nanzeng were once part of "Zengcuolun" (one of the township\'s eight old districts) and became two villages after the war.',
+   meta:'👥 1,711 人（115 年 9 月）' },
+ '南曾村': { dist:1, emoji:'⛩️', top:0xb6d98f, hero:'temple', fill:['flowers',['houses',{houses:4}]], en:'Nanzeng Village',
+   text:'南曾和北曾一帶，日治時期屬於「曾厝崙」，戰後才分成兩個村。村裡有廣霖宮。',
+   enText:'Nanzeng and Beizeng were once part of "Zengcuolun" and became two villages after the war. Guanglin Temple is in the village.',
+   meta:'👥 1,430 人（115 年 9 月）' },
+ '饒平村': { dist:1, emoji:'🏫', top:0xa7d18a, hero:'school', fill:[['houses',{houses:10}],'flowers'], en:'Raoping Village',
+   text:'全鄉人口最多的村。田尾國小和田尾國中都在這裡；天乙宮主祀蘇府王爺。',
+   enText:'The most populous village in the township. Tianwei Elementary and Junior High School are both here; Tianyi Temple honors Lord Su.',
+   meta:'👥 2,909 人（115 年 9 月）' },
+ '正義村': { dist:1, emoji:'🏠', top:0xa7d18a, hero:null, fill:[['houses',{houses:5}],'veg'], en:'Zhengyi Village',
+   text:'位在鄉的西南部，南邊與北斗鎮相鄰。',
+   enText:'In the southwest of the township, bordering Beidou Town to the south.',
+   meta:'👥 1,026 人（115 年 9 月）' },
+ '豐田村': { dist:2, emoji:'🌸', top:0xa7d18a, hero:'carnation', fill:['flowers'], en:'Fengtian Village',
+   text:'縣府旅遊網把豐田列為公路花園一帶的村之一，以花卉聞名。田尾鄉是全國最大的康乃馨產區。',
+   enText:'The county tourism site lists Fengtian among the villages of the Highway Garden area, known for flowers. Tianwei is the largest carnation-growing area in Taiwan.',
+   meta:'👥 838 人（115 年 9 月）' },
+ '溪頂村': { dist:2, emoji:'⛰️', top:0xa7d18a, hero:'mounds', fill:['veg'], en:'Xiding Village',
+   text:'因為在清水溪之上，所以叫「溪頂」，又叫「塗墩頭」——村裡有很多土堆。舊屬三十張犁，和仁里、新厝同屬北玄宮的信仰圈。',
+   enText:'"Xiding" means "above the stream". It is nicknamed "Tudunton" (Mound Head) for its many earth mounds. It was part of the old Sanshizhangli area and belongs to the Beixuan Temple worship circle with Renli and Xincuo.',
+   meta:'👥 662 人（115 年 9 月）' },
+ '新厝村': { dist:2, emoji:'🏫', top:0xa7d18a, hero:'school', fill:[['houses',{houses:3}]], en:'Xincuo Village',
+   text:'人口是彰化縣最少的村之一，只有兩百多人；仁豐國小就在這裡。',
+   enText:'One of the least populated villages in Changhua County, with only a little over 200 residents. Renfeng Elementary School is here.',
+   meta:'👥 261 人（115 年 9 月）' },
+ '仁里村': { dist:2, emoji:'⛩️', top:0xb6d98f, hero:'temple', fill:[['houses',{houses:5}],'flowers'], en:'Renli Village',
+   text:'北玄宮主祀玄天上帝，宮內另供奉三將爺，媒體稱它是「廟中廟」。',
+   enText:'Beixuan Temple honors Xuantian Shangdi and also enshrines the three generals — a "temple within a temple", as the press calls it.',
+   meta:'👥 1,680 人（115 年 9 月）' },
+ '柳鳳村': { dist:3, emoji:'🏡', top:0xa7d18a, hero:null, fill:['flowers',['houses',{houses:5}]], en:'Liufeng Village',
+   text:'鄉公所官網的美食頁列出位在柳鳳路上的庭園餐廳「阿嬤私房菜」。',
+   enText:'The township office\'s food page lists a garden restaurant, "Grandma\'s Kitchen", on Liufeng Road.',
+   meta:'👥 1,033 人（115 年 9 月）' },
+ '陸豐村': { dist:3, emoji:'⛩️', top:0xa7d18a, hero:'temple', fill:['veg','flowers'], en:'Lufeng Village',
+   text:'陸豐和海豐原本合稱「海豐崙」，先民來自廣東惠州府的海豐縣。村民以花卉、蔬菜、水稻等農業為主；2011 年協議以天壽宮為陸豐的庄廟。',
+   enText:'Lufeng and Haifeng were once together called "Haifenglun", settled by people from Haifeng County in Guangdong. Villagers farm flowers, vegetables and rice; in 2011 Tianshou Temple was agreed to be Lufeng\'s village temple.',
+   meta:'👥 924 人（115 年 9 月）' },
+ '海豐村': { dist:3, emoji:'🎨', top:0xe4d8b4, hero:'mural', fill:['rice',['houses',{houses:4}]], en:'Haifeng Village',
+   text:'面積是全鄉最大的村。沛霖宮祭祀三山國王，1889 年建宮。海豐崙一帶的巷弄畫滿彩繪，被稱為「海豐崙彩繪村」。',
+   enText:'The largest village in the township by area. Peilin Temple honors the Three Mountain Kings (built 1889). The lanes of the Haifenglun area are covered in murals, known as the "Haifenglun Painted Village".',
+   meta:'👥 1,432 人（115 年 9 月）' },
+ '北鎮村': { dist:4, emoji:'⛩️', top:0xb6d98f, hero:'temple', fill:['rice',['houses',{houses:4}]], en:'Beizhen Village',
+   text:'北鎮和南鎮一帶，日治時期屬於「鎮平」（八大字之一）。村裡有鎮平鎮安宮。',
+   enText:'Beizhen and Nanzhen were part of "Zhenping" (one of the township\'s eight old districts) in the Japanese era. Zhenping Zhen-an Temple is in the village.',
+   meta:'👥 1,319 人（115 年 9 月）' },
+ '新興村': { dist:4, emoji:'🌿', top:0xa7d18a, hero:null, fill:['veg',['houses',{houses:3}]], en:'Xinxing Village',
+   text:'村裡有福德爺廟，祭祀土地公。',
+   enText:'The village has the Fude Ye Temple, dedicated to the Earth God.',
+   meta:'👥 1,098 人（115 年 9 月）' },
+ '福田村': { dist:4, emoji:'🌾', top:0xb6d98f, hero:'rice', fill:['rice','veg'], en:'Futian Village',
+   text:'位在鄉的最東邊，鄰接社頭和田中。居民種水稻和蔬菜。舊名「小紅毛社」，是日治時期的八大字之一。',
+   enText:'At the eastern edge of the township, next to Shetou and Tianzhong. Residents grow rice and vegetables. The old name was "Xiaohongmaoshe", one of the eight old districts in the Japanese era.',
+   meta:'👥 791 人（115 年 9 月）' },
+ '新生村': { dist:4, emoji:'⛩️', top:0xa7d18a, hero:'temple', fill:['veg',['houses',{houses:4}]], en:'Xinsheng Village',
+   text:'國聖宮位在新生村，供奉國姓爺（鄭成功）。',
+   enText:'Guosheng Temple is in Xinsheng Village and honors Koxinga (Zheng Chenggong).',
+   meta:'👥 1,485 人（115 年 9 月）' },
+ '南鎮村': { dist:4, emoji:'🏫', top:0xb6d98f, hero:'school', fill:['rice',['houses',{houses:3}]], en:'Nanzhen Village',
+   text:'北鎮和南鎮一帶，日治時期屬於「鎮平」。南鎮國小在這裡，居民以務農為主。',
+   enText:'Nanzhen and Beizhen were part of "Zhenping" in the Japanese era. Nanzhen Elementary School is here, and most residents farm.',
+   meta:'👥 620 人（115 年 9 月）' },
+ '睦宜村': { dist:4, emoji:'🌾', top:0xb6d98f, hero:'temple', fill:['rice',['houses',{houses:4}]], en:'Muyi Village',
+   text:'居民種稻。聖德宮主祀天上聖母，每年舉辦廟會慶典。',
+   enText:'Residents grow rice. Shengde Temple honors Mazu and holds a temple fair every year.',
+   meta:'👥 1,114 人（115 年 9 月）' },
+};
+
+
+/* ================= 工具 ================= */
+const S = .026;                                   // 像素 → 世界單位
+const CX = (POLY._bbox[0] + POLY._bbox[2]) / 2, CY = (POLY._bbox[1] + POLY._bbox[3]) / 2;
+const toW = ([x, y]) => [(x - CX) * S, (y - CY) * S];
+const SLUG = { '田尾村':'tianwei','打簾村':'dalian','溪畔村':'xipan','北曾村':'beizeng','南曾村':'nanzeng','饒平村':'raoping','正義村':'zhengyi','豐田村':'fengtian','溪頂村':'xiding','新厝村':'xincuo','仁里村':'renli','柳鳳村':'liufeng','陸豐村':'lufeng','海豐村':'haifeng','北鎮村':'beizhen','新興村':'xinxing','福田村':'futian','新生村':'xinsheng','南鎮村':'nanzhen','睦宜村':'muyi' };
+const START_HASH = decodeURIComponent(location.hash.slice(1));
+const SLUG_REV = Object.fromEntries(Object.entries(SLUG).map(([k, v]) => [v, k]));
+const DIST = { 1: { name: '第一選區', c: 0x3fa58a }, 2: { name: '第二選區', c: 0xe3b53a }, 3: { name: '第三選區', c: 0x4a9bd6 }, 4: { name: '第四選區', c: 0xe0742f } };
+function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const hashStr = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+const lerp = (a, b, t) => a + (b - a) * t;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+const matCache = new Map();
+function M(c, o = {}){
+  const k = c + JSON.stringify(o);
+  if (!matCache.has(k)) matCache.set(k, new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: .9, metalness: 0, ...o }));
+  return matCache.get(k);
+}
+const uTime = { value: 0 };
+const windCache = new Map();
+function W(c = 0xffffff, sway = .03){           // 會隨風搖的材質（給實例化的植物用）
+  const k = c + '|' + sway;
+  if (!windCache.has(k)){
+    const m = new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: .9 });
+    m.onBeforeCompile = (sh) => {
+      sh.uniforms.uTime = uTime;
+      sh.vertexShader = 'uniform float uTime;\n' + sh.vertexShader.replace('#include <begin_vertex>',
+        `#include <begin_vertex>
+         #ifdef USE_INSTANCING
+         float sw = sin(uTime*1.7 + instanceMatrix[3].x*3.1 + instanceMatrix[3].z*2.3);
+         transformed.x += sw*${sway.toFixed(3)}*max(position.y + 0.5, 0.0);
+         transformed.z += sw*${(sway * .5).toFixed(3)}*max(position.y + 0.5, 0.0);
+         #endif`);
+    };
+    windCache.set(k, m);
+  }
+  return windCache.get(k);
+}
+function shade(m){ m.castShadow = true; m.receiveShadow = true; return m; }
+function box(w, h, d, c, x = 0, y = 0, z = 0, o){ const m = shade(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function cyl(rt, rb, h, c, x = 0, y = 0, z = 0, seg = 8, o){ const m = shade(new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function cone(r, h, c, x = 0, y = 0, z = 0, seg = 6, o){ const m = shade(new THREE.Mesh(new THREE.ConeGeometry(r, h, seg), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function sph(r, c, x = 0, y = 0, z = 0, o, detail = 1){ const m = shade(new THREE.Mesh(new THREE.IcosahedronGeometry(r, detail), M(c, o))); m.position.set(x, y, z); return m; }
+function inst(geo, mat, items){
+  const im = new THREE.InstancedMesh(geo, mat, items.length);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), p = new THREE.Vector3(), s = new THREE.Vector3(), col = new THREE.Color();
+  items.forEach((it, i) => {
+    p.set(...it.p);
+    const sc = typeof it.s === 'number' ? [it.s, it.s, it.s] : (it.s || [1, 1, 1]);
+    s.set(...sc); q.setFromEuler(e.set(0, it.ry || 0, it.rz || 0, 'YXZ')); m.compose(p, q, s); im.setMatrixAt(i, m);
+    if (it.c !== undefined) im.setColorAt(i, col.set(it.c));
+  });
+  im.castShadow = true; im.receiveShadow = true; im.frustumCulled = false;
+  return im;
+}
+
+/* ================= 場景與燈光 ================= */
+const stage = document.getElementById('stage');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
+catch (e) { document.getElementById('nogl').classList.add('show'); document.getElementById('loading').remove(); throw e; }
+const coarse = matchMedia('(pointer:coarse)').matches;
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+renderer.setPixelRatio(Math.min(devicePixelRatio, coarse ? 1.75 : 2));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement); renderer.domElement.tabIndex = 0;
+
+const scene = new THREE.Scene();
+const DAY = { bg: new THREE.Color(0xdfeee9), ground: new THREE.Color(0xe9efe3), sun: new THREE.Color(0xfff1d6), hemiSky: new THREE.Color(0xffffff), hemiGround: new THREE.Color(0xcfe3d4) };
+const NIGHT = { bg: new THREE.Color(0x0f1b2d), ground: new THREE.Color(0x172233), sun: new THREE.Color(0x7d8fc4), hemiSky: new THREE.Color(0x6f86c8), hemiGround: new THREE.Color(0x1d2b3c) };
+scene.background = DAY.bg.clone();
+scene.fog = new THREE.Fog(DAY.bg.clone(), 70, 150);
+const camera = new THREE.PerspectiveCamera(35, 1, .5, 300);
+const hemi = new THREE.HemisphereLight(0xffffff, 0xcfe3d4, .95); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff1d6, 2.2);
+sun.position.set(14, 24, 12); sun.castShadow = true;
+sun.shadow.mapSize.set(coarse ? 2048 : 4096, coarse ? 2048 : 4096);
+Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 13, bottom: -13, near: 1, far: 70 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = .04;
+scene.add(sun);
+
+let nightV = 0, nightGoal = 0;
+const bulbMat = new THREE.MeshStandardMaterial({ color: 0xfff1b8, emissive: 0xffd36b, emissiveIntensity: 0, flatShading: true });
+const winMat = new THREE.MeshStandardMaterial({ color: 0xfff1d0, emissive: 0xffd9a0, emissiveIntensity: .05, flatShading: true, side: THREE.DoubleSide });
+const lanternMat = new THREE.MeshStandardMaterial({ color: 0xd9382a, emissive: 0xff5a2a, emissiveIntensity: .2, flatShading: true });
+const chrysMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xe3a33a, emissiveIntensity: 0, flatShading: true, roughness: .8 });
+const lampCones = [], nightLights = [], swayers = [], anim = [];
+let lightBudget = 4;
+
+/* ================= 幾何：點在多邊形內、距邊界、撒點 ================= */
+function pip(poly, x, z){ let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const [xi, zi] = poly[i], [xj, zj] = poly[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) c = !c; } return c; }
+function edgeDist(poly, x, z){
+  let best = 1e9;
+  for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){
+    const [ax, az] = poly[j], [bx, bz] = poly[i], dx = bx - ax, dz = bz - az, l2 = dx * dx + dz * dz || 1;
+    const t = clamp(((x - ax) * dx + (z - az) * dz) / l2, 0, 1), px = ax + t * dx, pz = az + t * dz;
+    best = Math.min(best, Math.hypot(x - px, z - pz));
+  }
+  return best;
+}
+function bounds(poly){ let a = 1e9, b = 1e9, c = -1e9, d = -1e9; for (const [x, z] of poly){ a = Math.min(a, x); b = Math.min(b, z); c = Math.max(c, x); d = Math.max(d, z); } return [a, b, c, d]; }
+function polyArea(p){ let a = 0; for (let i = 0, j = p.length - 1; i < p.length; j = i++) a += (p[j][0] + p[i][0]) * (p[j][1] - p[i][1]); return Math.abs(a / 2); }
+const free = (x, z, occ, pad = 0) => occ.every(o => Math.hypot(x - o[0], z - o[1]) > o[2] + pad);
+function lattice(poly, step, rnd, occ, margin = .12, jitter = .3){
+  const [x0, z0, x1, z1] = bounds(poly), out = [];
+  for (let z = z0 + step / 2; z < z1; z += step) for (let x = x0 + step / 2; x < x1; x += step){
+    const px = x + (rnd() - .5) * step * jitter, pz = z + (rnd() - .5) * step * jitter;
+    if (pip(poly, px, pz) && edgeDist(poly, px, pz) > margin && free(px, pz, occ)) out.push([px, pz]);
+  }
+  return out;
+}
+function scatter(poly, n, minD, rnd, occ, margin = .2){
+  const [x0, z0, x1, z1] = bounds(poly), out = [];
+  for (let t = 0; t < n * 40 && out.length < n; t++){
+    const x = lerp(x0, x1, rnd()), z = lerp(z0, z1, rnd());
+    if (!pip(poly, x, z) || edgeDist(poly, x, z) < margin || !free(x, z, occ)) continue;
+    if (out.every(q => Math.hypot(q[0] - x, q[1] - z) > minD)) out.push([x, z]);
+  }
+  return out;
+}
+
+/* ================= 英雄場景：每個村最有代表性的 3D 小景（單位約半徑 0.9，會依村大小縮放） ================= */
+const stemGeo = new THREE.CylinderGeometry(.011, .011, 1, 5);
+const headGeo = new THREE.IcosahedronGeometry(1, 0);
+function flowerRow(len, n, colors, rnd, { stemH = .22, head = .055, flat = 1, mat = null, soil = false } = {}){
+  const g = new THREE.Group(), stems = [], heads = [];
+  for (let i = 0; i < n; i++){
+    const x = -len / 2 + len * (i + .5) / n, h = stemH * (.8 + rnd() * .4), hr = head * (.85 + rnd() * .3);
+    stems.push({ p: [x, h / 2, 0], s: [1, h, 1] });
+    heads.push({ p: [x, h + hr * .3, 0], s: [hr, hr * flat, hr], c: colors[Math.floor(rnd() * colors.length)] });
+  }
+  if (soil) g.add(box(len + .06, .04, .15, 0x5b4331));
+  g.add(inst(stemGeo, M(0x4f8f5a), stems), inst(headGeo, mat || M(0xffffff), heads));
+  g.userData = { phase: rnd() * 6.28, amp: .07 }; swayers.push(g);
+  return g;
+}
+function makeWalker(shirt = 0x6b8e5a, hat = 0xe3a33a){
+  const w = new THREE.Group(), L = new THREE.Group(), Rg = new THREE.Group();
+  [L, Rg].forEach((l, i) => { l.position.set(i ? .015 : -.015, .05, 0); l.add(box(.014, .05, .014, 0x4b5a6a, 0, -.05, 0)); w.add(l); });
+  w.add(cyl(.026, .03, .07, shirt, 0, .05, 0, 6), sph(.03, 0xf2c9a0, 0, .15, 0), cone(.055, .03, hat, 0, .16, 0, 10), sph(.036, 0xd8c07a, 0, .1, -.035));
+  w.userData = { L, R: Rg }; w.scale.setScalar(1.45); return w;
+}
+function stepWalker(w, t){ w.userData.L.rotation.x = Math.sin(t * 9) * .6; w.userData.R.rotation.x = -Math.sin(t * 9) * .6; }
+
+const HERO = {};
+HERO.garden = (g, rnd) => {
+  for (const [z, cols] of [[-.48, [0xd9668a, 0xf08fb0]], [-.28, [0xe3a33a, 0xf3c04a]], [.28, [0xffffff, 0xd9c8f2]], [.48, [0xf07a3a, 0xf4a76a]]]){ const r = flowerRow(.9, 10, cols, rnd, { stemH: .2 }); r.position.set(0, 0, z); g.add(r); }
+  g.add(box(1.5, .015, .13, 0xe9e2d0));
+  const sc = new THREE.Group(); sc.add(cyl(.02, .025, .5, 0x3f7f4f, 0, 0, 0, 6));
+  const fl = new THREE.Group(); fl.position.y = .54; fl.rotation.x = Math.PI / 2 - .35;
+  for (let i = 0; i < 10; i++){ const a = i / 10 * Math.PI * 2, p = sph(.06, i % 2 ? 0xd9668a : 0xf08fb0, Math.cos(a) * .14, 0, Math.sin(a) * .14); p.scale.set(1, .5, 1.5); p.rotation.y = -a; fl.add(p); }
+  fl.add(sph(.07, 0xe3a33a)); sc.add(fl); g.add(sc);
+  anim.push((t) => { fl.rotation.y = t * .8; });
+  const gh = new THREE.Group(); gh.position.set(.68, 0, -.08);
+  const gl = { color: 0xdff5f0, transparent: true, opacity: .38, roughness: .2 };
+  gh.add(box(.3, .2, .42, 0xdff5f0, 0, 0, 0, gl)); const rf = box(.21, .21, .42, 0xdff5f0, 0, 0, 0, gl); rf.rotation.z = Math.PI / 4; rf.position.y = .2; gh.add(rf); g.add(gh);
+  for (const z of [-.25, .22]){ const c = new THREE.Group(); c.position.set(-.7, 0, z); c.add(cyl(.05, .04, .05, 0xc9714b), cyl(.035, .04, .16, 0x5aa56a, 0, .05, 0, 6), cyl(.015, .015, .06, 0x5aa56a, .055, .1, 0, 5)); g.add(c); }
+};
+HERO.chrys = (g, rnd) => {
+  const cols = [0xf3c04a, 0xffffff, 0xf4a6c0, 0xf8e27a];
+  for (const z of [-.5, -.25, 0, .25, .5]){ const r = flowerRow(1.15, 14, cols, rnd, { stemH: .2, head: .06, flat: .6, mat: chrysMat, soil: true }); r.position.z = z; r.userData.amp = .05; g.add(r); }
+  for (const z of [-.375, -.125, .125, .375]) for (const x of [-.4, .4]){
+    g.add(cyl(.011, .011, .42, 0x555d66, x, 0, z, 5));
+    const b = new THREE.Mesh(new THREE.IcosahedronGeometry(.04, 1), bulbMat); b.position.set(x, .44, z); g.add(b);
+    const c = new THREE.Mesh(new THREE.ConeGeometry(.17, .42, 14, 1, true), new THREE.MeshBasicMaterial({ color: 0xffe08a, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide }));
+    c.position.set(x, .22, z); g.add(c); lampCones.push(c);
+  }
+  if (lightBudget-- > 0){ const pl = new THREE.PointLight(0xffc860, 0, 4.5, 1.6); pl.position.set(0, 1, 0); g.add(pl); nightLights.push({ light: pl, k: 5 }); }
+};
+let muralTexture;
+function muralTex(){
+  if (muralTexture) return muralTexture;
+  const c = document.createElement('canvas'); c.width = 256; c.height = 128; const x = c.getContext('2d');
+  x.fillStyle = '#9fd8e6'; x.fillRect(0, 0, 256, 128); x.fillStyle = '#ffd35a'; x.beginPath(); x.arc(206, 32, 20, 0, 7); x.fill();
+  x.fillStyle = '#8cc17a'; x.beginPath(); x.moveTo(0, 128); x.quadraticCurveTo(70, 46, 150, 128); x.fill();
+  x.fillStyle = '#5fa36a'; x.beginPath(); x.moveTo(80, 128); x.quadraticCurveTo(170, 66, 256, 128); x.fill();
+  [[44, 92, '#d9668a'], [118, 104, '#e3a33a'], [196, 96, '#ffffff']].forEach(([a, b, col]) => { x.fillStyle = col; for (let k = 0; k < 6; k++){ x.beginPath(); x.arc(a + Math.cos(k * 1.047) * 10, b + Math.sin(k * 1.047) * 10, 7, 0, 7); x.fill(); } x.fillStyle = '#fff2a8'; x.beginPath(); x.arc(a, b, 6, 0, 7); x.fill(); });
+  muralTexture = new THREE.CanvasTexture(c); muralTexture.colorSpace = THREE.SRGBColorSpace; muralTexture.anisotropy = 4; return muralTexture;
+}
+function windows(g, w, d, h, n = 2){ for (let i = 0; i < n; i++){ const x = n === 1 ? 0 : (i - (n - 1) / 2) * w * .5; const win = new THREE.Mesh(new THREE.PlaneGeometry(.055, .06), winMat); win.position.set(x, h * .55, d / 2 + .003); g.add(win); } }
+function house(g, x, z, w, d, h, wall, roofC, ry = 0){
+  const hg = new THREE.Group(); hg.position.set(x, 0, z); hg.rotation.y = ry; hg.add(box(w, h, d, wall));
+  const roof = box(w * .72, w * .72, d + .04, roofC); roof.rotation.z = Math.PI / 4; roof.position.y = h + w * .04; hg.add(roof); windows(hg, w, d, h); g.add(hg); return hg;
+}
+HERO.mural = (g) => {
+  house(g, -.45, -.35, .3, .25, .2, 0xf4a6c0, 0xb4553f); house(g, .02, -.46, .28, .24, .22, 0xf3c04a, 0x4a7fa8); house(g, .5, -.2, .26, .26, .18, 0x7ec8c0, 0xb4553f); house(g, -.52, .13, .28, .26, .2, 0xe08a6a, 0x5a6f8a);
+  const h5 = house(g, 0, .2, .3, .26, .22, 0xa9d28b, 0xb4553f);
+  const pin = new THREE.Group(); pin.position.set(0, .4, .13);
+  for (let i = 0; i < 4; i++){ const b = box(.1, .004, .035, [0xd9668a, 0xe3a33a, 0x4a7fa8, 0x5aa56a][i], .05, 0, 0), arm = new THREE.Group(); arm.rotation.z = i * Math.PI / 2; arm.add(b); pin.add(arm); }
+  h5.add(pin); anim.push((t) => { pin.rotation.z = -t * 3; });
+  g.add(box(.56, .24, .04, 0xf1ece0, -.12, 0, .62));
+  const art = new THREE.Mesh(new THREE.PlaneGeometry(.52, .2), new THREE.MeshStandardMaterial({ map: muralTex(), roughness: .8 })); art.position.set(-.12, .12, .643); g.add(art);
+  const ch = new THREE.Group(); ch.position.set(.52, 0, .38); ch.add(box(.22, .18, .3, 0xf7f3ea));
+  const cr = cone(.2, .12, 0x4a7fa8, 0, .18, 0, 4); cr.rotation.y = Math.PI / 4; cr.scale.set(1, 1, 1.3); ch.add(cr);
+  ch.add(box(.1, .34, .1, 0xf7f3ea, 0, 0, .2)); const tr = cone(.075, .1, 0x4a7fa8, 0, .34, .2, 4); tr.rotation.y = Math.PI / 4; ch.add(tr);
+  ch.add(box(.012, .08, .012, 0xe3a33a, 0, .44, .2), box(.05, .012, .012, 0xe3a33a, 0, .49, .2)); windows(ch, .22, .6, .18, 1); g.add(ch);
+};
+HERO.bike = (g, rnd) => {
+  const ring = new THREE.Mesh(new THREE.RingGeometry(.5, .74, 48), M(0x8d97a0, { side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = .012; ring.receiveShadow = true; g.add(ring);
+  const dash = new THREE.Mesh(new THREE.RingGeometry(.615, .625, 48), new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: .8 })); dash.rotation.x = -Math.PI / 2; dash.position.y = .016; g.add(dash);
+  for (let i = 0; i < 5; i++){
+    const a = i / 5 * Math.PI * 2 + .3, r = .27, b = new THREE.Group(); b.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); b.rotation.y = -a + Math.PI / 2;
+    b.add(cyl(.05, .06, .05, 0xc9b79a, 0, 0, 0, 6)); const body = sph(.07, 0x3f8f55, 0, .13, 0); body.scale.set(1, .85, 1.35);
+    const head = sph(.045, 0x4aa05e, 0, .21, .09), beak = cone(.016, .05, 0xf39a3a, 0, .2, .15, 4); beak.rotation.x = Math.PI / 2;
+    const tail = cone(.03, .09, 0x3f8f55, 0, .15, -.12, 4); tail.rotation.x = -Math.PI / 2 - .3; b.add(body, head, beak, tail); g.add(b);
+    anim.push((t) => { b.rotation.z = Math.sin(t * 1.4 + i) * .04; });
+  }
+  const bike = new THREE.Group(), wheels = [];
+  for (const z of [-.09, .09]){ const w = new THREE.Group(); w.position.set(0, .06, z); const t = new THREE.Mesh(new THREE.TorusGeometry(.055, .011, 5, 14), M(0x2b2f36)); t.rotation.y = Math.PI / 2;
+    w.add(t, box(.008, .11, .008, 0xcfd6dd, 0, -.055, 0), box(.008, .008, .11, 0xcfd6dd, 0, -.004, -.055)); bike.add(w); wheels.push(w); }
+  bike.add(box(.014, .014, .2, 0xe3a33a, 0, .1, 0)); const body = cyl(.026, .03, .09, 0xd9668a, 0, .12, .01, 6); body.rotation.x = .25; bike.add(body, sph(.03, 0xf2c9a0, 0, .23, .04));
+  const hel = new THREE.Mesh(new THREE.SphereGeometry(.036, 8, 6, 0, Math.PI * 2, 0, Math.PI / 2), M(0xe3a33a)); hel.position.set(0, .235, .04); shade(hel); bike.add(hel); g.add(bike);
+  anim.push((t, dt) => { const a = t * .55, rr = .63; bike.position.set(Math.cos(a) * rr, Math.abs(Math.sin(t * 9)) * .004, Math.sin(a) * rr); bike.rotation.y = -a; wheels.forEach(w => w.rotation.x -= dt * 9); });
+};
+HERO.play = (g) => {
+  const yel = 0xe3a33a, red = 0xd9534f, blu = 0x4a7fa8, sl = new THREE.Group(); sl.position.set(-.3, 0, -.05);
+  for (const [x, z] of [[-.08, -.08], [.08, -.08], [-.08, .08], [.08, .08]]) sl.add(cyl(.01, .01, .22, 0xcfd6dd, x, 0, z, 5));
+  sl.add(box(.2, .02, .2, red, 0, .22, 0)); const ramp = box(.15, .016, .42, yel); ramp.position.set(0, .12, .27); ramp.rotation.x = .5; sl.add(ramp);
+  for (let i = 0; i < 4; i++) sl.add(box(.12, .008, .01, 0xcfd6dd, 0, .04 + i * .045, -.115 - i * .008)); g.add(sl);
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(.21, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: blu, wireframe: true })); dome.position.set(.34, 0, .2); g.add(dome);
+  const sw = new THREE.Group(); sw.position.set(.28, 0, -.38); for (const x of [-.15, .15]) sw.add(cyl(.012, .012, .34, 0xcfd6dd, x, 0, 0, 5)); sw.add(box(.34, .02, .02, 0xcfd6dd, 0, .33, 0));
+  const pend = new THREE.Group(); pend.position.set(0, .34, 0);
+  pend.add(box(.12, .015, .06, red, 0, -.28, 0), box(.006, .27, .006, 0x555555, -.05, -.27, 0), box(.006, .27, .006, 0x555555, .05, -.27, 0), cyl(.02, .025, .06, 0x4a7fa8, 0, -.26, 0, 6), sph(.026, 0xf2c9a0, 0, -.185, 0)); sw.add(pend); g.add(sw);
+  anim.push((t) => { pend.rotation.x = Math.sin(t * 2.1) * .55; });
+  g.add(box(.34, .035, .3, 0xb98c5e, -.12, 0, .5), box(.3, .04, .26, 0xf0dca0, -.12, 0, .5));
+};
+HERO.temple = (g) => {
+  g.add(box(.78, .05, .66, 0xc9c3b4), box(.68, .05, .58, 0xd9d3c4, 0, .05, 0), box(.42, .22, .3, 0xc23b2a, 0, .1, -.04));
+  for (const x of [-.18, .18]) g.add(cyl(.02, .02, .22, 0xe3a33a, x, .1, .13)); g.add(box(.1, .14, .01, 0x5a2a1a, 0, .1, .113));
+  const r1 = cone(.36, .13, 0xe08a2e, 0, .32, -.04, 4); r1.rotation.y = Math.PI / 4; r1.scale.set(1.15, 1, .8); g.add(r1, box(.28, .1, .2, 0xc23b2a, 0, .43, -.04));
+  const r2 = cone(.24, .11, 0xe08a2e, 0, .53, -.04, 4); r2.rotation.y = Math.PI / 4; r2.scale.set(1.15, 1, .8); g.add(r2, sph(.025, 0xe3a33a, 0, .67, -.04, undefined, 0));
+  for (const x of [-.26, .26]){ const l = new THREE.Group(); l.position.set(x, .3, .2); l.add(box(.004, .08, .004, 0x555555, 0, -.08, 0)); const lamp = new THREE.Mesh(new THREE.IcosahedronGeometry(.045, 1), lanternMat); lamp.scale.y = 1.25; lamp.position.y = -.13; l.add(lamp); g.add(l); anim.push((t) => { l.rotation.z = Math.sin(t * 1.3 + x * 5) * .12; }); }
+  if (lightBudget-- > 0){ const pl = new THREE.PointLight(0xff6a30, 0, 2.2, 1.8); pl.position.set(0, .3, .35); g.add(pl); nightLights.push({ light: pl, k: .6 }); }
+  g.add(cyl(.05, .04, .06, 0xb58b3a, 0, .1, .3));
+  const puffs = []; for (let i = 0; i < 6; i++){ const m = new THREE.Mesh(new THREE.IcosahedronGeometry(.035, 0), new THREE.MeshBasicMaterial({ color: 0xdfe3e6, transparent: true, opacity: 0, depthWrite: false })); g.add(m); puffs.push(m); }
+  anim.push((t) => puffs.forEach((m, i) => { const f = (t * .22 + i / 6) % 1; m.position.set(Math.sin(f * 6 + i) * .04 * f, .2 + f * .5, .3); m.scale.setScalar(.6 + f * 1.6); m.material.opacity = (1 - f) * .45; }));
+};
+let signTex;
+function signTexture(){
+  if (signTex) return signTex;
+  const c = document.createElement('canvas'); c.width = 256; c.height = 128; const x = c.getContext('2d');
+  x.fillStyle = '#1f6b46'; x.fillRect(0, 0, 256, 128); x.strokeStyle = '#fff'; x.lineWidth = 6; x.strokeRect(6, 6, 244, 116);
+  x.fillStyle = '#fff'; x.font = 'bold 70px "Noto Sans TC",sans-serif'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText('台1線', 128, 56); x.font = 'bold 22px sans-serif'; x.fillText('Hwy 1 · Tianwei', 128, 104);
+  signTex = new THREE.CanvasTexture(c); signTex.colorSpace = THREE.SRGBColorSpace; signTex.anisotropy = 4; return signTex;
+}
+function car(color){ const c = new THREE.Group(); c.add(box(.075, .045, .15, color, 0, .018, 0), box(.065, .04, .08, 0xcfe9f3, 0, .06, -.005));
+  for (const [x, z] of [[-.04, -.05], [.04, -.05], [-.04, .05], [.04, .05]]){ const w = cyl(.02, .02, .015, 0x222222, x, 0, z, 8); w.rotation.z = Math.PI / 2; w.position.y = .02; c.add(w); } return c; }
+HERO.road = (g) => {
+  const ring = new THREE.Mesh(new THREE.RingGeometry(.32, .62, 40), M(0x6c7480, { side: THREE.DoubleSide })); ring.rotation.x = -Math.PI / 2; ring.position.y = .012; ring.receiveShadow = true; g.add(ring);
+  const lane = new THREE.Mesh(new THREE.RingGeometry(.465, .475, 48), new THREE.MeshBasicMaterial({ color: 0xffd35a, side: THREE.DoubleSide })); lane.rotation.x = -Math.PI / 2; lane.position.y = .016; g.add(lane);
+  for (const s of [-1, 1]) g.add(box(.36, .012, .22, 0x6c7480, s * .66, 0, 0), box(.2, .014, .018, 0xffffff, s * .68, 0, 0));
+  g.add(cyl(.3, .32, .06, 0x6fae6a, 0, 0, 0, 14)); for (let i = 0; i < 3; i++){ const a = i * 2.1; g.add(cone(.06, .16, 0x3f8f55, Math.cos(a) * .16, .06, Math.sin(a) * .16 - .03)); }
+  g.add(cyl(.01, .01, .3, 0x666b73, 0, .06, .05, 5)); const sign = new THREE.Mesh(new THREE.PlaneGeometry(.26, .13), new THREE.MeshStandardMaterial({ map: signTexture(), roughness: .6 })); sign.position.set(0, .4, .06); g.add(sign);
+  anim.push((t) => { sign.rotation.y = Math.sin(t * .6) * .25; });
+  const cars = [car(0xd9534f), car(0x3fa7a0), car(0xe3a33a)]; cars.forEach(c => g.add(c));
+  anim.push((t) => cars.forEach((c, i) => { const a = -t * .9 + i * 2.1, rr = .545; c.position.set(Math.cos(a) * rr, 0, Math.sin(a) * rr); c.rotation.y = -a + Math.PI; }));
+};
+HERO.rice = (g, rnd) => {   // 稻田：金黃稻浪、拖拉機、稻草人、風車
+  const rows = 5, stripeG = [0x9ccf5a, 0xd8c24a, 0x8cc65a, 0xe3c95a, 0x9ccf5a];
+  for (let i = 0; i < rows; i++){
+    const z = -.56 + i * .28, tufts = [];
+    for (let k = 0; k < 20; k++) tufts.push({ p: [-.7 + k * .074, .06, 0], s: [.05, .12, .05], c: stripeG[i] });
+    const row = inst(new THREE.ConeGeometry(1, 1, 5), W(0xffffff, .05), tufts); row.position.z = z; g.add(row);
+    g.add(box(1.5, .02, .2, 0x7a5a38, 0, 0, z));
+  }
+  const tr = new THREE.Group(); tr.add(box(.14, .09, .22, 0xd9382a, 0, .05, 0), box(.1, .09, .1, 0xcfe9f3, 0, .14, -.04));
+  for (const [x, z, r] of [[-.075, -.06, .06], [.075, -.06, .06], [-.06, .08, .035], [.06, .08, .035]]){ const w = cyl(r, r, .04, 0x222222, x, 0, z, 8); w.rotation.z = Math.PI / 2; w.position.y = r; tr.add(w); }
+  g.add(tr); anim.push((t, dt) => { const u = t * .35, row = Math.floor((u + Math.PI / 2) / Math.PI) % 5, zt = -.56 + row * .28; tr.position.x = Math.sin(u) * .6; tr.position.z += (zt - tr.position.z) * Math.min(1, dt * 3); tr.rotation.y = Math.cos(u) > 0 ? Math.PI / 2 : -Math.PI / 2; });
+  const sc = new THREE.Group(); sc.position.set(.65, 0, .62); sc.add(cyl(.01, .01, .3, 0x8a5a36, 0, 0, 0, 5), box(.22, .012, .012, 0x8a5a36, 0, .22, 0), cone(.06, .05, 0xe3a33a, 0, .3, 0, 8), sph(.035, 0xf2c9a0, 0, .28, 0)); g.add(sc);
+  anim.push((t) => { sc.rotation.z = Math.sin(t * 1.5) * .06; });
+};
+HERO.bonsai = (g, rnd) => {  // 盆栽與造型樹
+  for (const z of [-.5, -.1, .3]) for (let i = 0; i < 4; i++){
+    const x = -.5 + i * .34, p = new THREE.Group(); p.position.set(x, 0, z);
+    p.add(cyl(.07, .055, .07, 0xc9714b, 0, 0, 0, 8), cyl(.012, .016, .12, 0x6b4a2e, 0, .07, 0, 5));
+    const crown = [0x3f8f55, 0x4aa05e, 0x2f7a49][(i + Math.round(z * 3)) % 3] ;
+    if (i % 2) { p.add(sph(.1, crown, 0, .25, 0)); } else { const a = sph(.1, crown, 0, .22, 0); a.scale.set(1.3, .55, 1.3); p.add(a, sph(.06, crown, .02, .31, 0)); }
+    g.add(p); anim.push((t) => { p.rotation.z = Math.sin(t * 1.4 + x * 4 + z * 3) * .03; });
+  }
+  const gd = makeWalker(0x4a7fa8, 0xd9668a); g.add(gd); anim.push((t) => { gd.position.set(Math.sin(t * .4) * .62, 0, .09); gd.rotation.y = Math.cos(t * .4) > 0 ? Math.PI / 2 : -Math.PI / 2; stepWalker(gd, t); });
+};
+HERO.walkseed = (g, rnd) => {  // 巫修齊帶回種子：花圃＋繞圈走的少年
+  for (const [z, cols] of [[-.5, [0xd9668a, 0xf08fb0]], [.5, [0xf3c04a, 0xffffff]]]){ const r = flowerRow(.9, 10, cols, rnd, { stemH: .2 }); r.position.z = z; g.add(r); }
+  g.add(cyl(.5, .52, .03, 0xe9e2d0, 0, 0, 0, 24)); g.add(cyl(.38, .4, .035, 0x7fbf7a, 0, 0, 0, 24));
+  const seed = new THREE.Group(); seed.add(sph(.05, 0xd8c07a, 0, .07, 0), cone(.015, .06, 0x5aa56a, 0, .11, 0, 5)); g.add(seed); anim.push((t) => { seed.rotation.y = t; seed.position.y = Math.sin(t * 2) * .01; });
+  const w = makeWalker(); g.add(w);
+  anim.push((t) => { const a = t * .5, r = .62; w.position.set(Math.cos(a) * r, Math.abs(Math.sin(t * 9)) * .008, Math.sin(a) * r); w.rotation.y = -a; stepWalker(w, t); });
+};
+
+
+HERO.school = (g, rnd) => {   // 學校：校舍、國旗、跑道與跑步的小朋友
+  g.add(box(.9, .2, .22, 0xf3e7c4, 0, 0, -.55), box(.94, .03, .26, 0xc2553f, 0, .2, -.55));
+  for (let i = 0; i < 5; i++){ const w = new THREE.Mesh(new THREE.PlaneGeometry(.07, .08), winMat); w.position.set(-.36 + i * .18, .12, -.435); g.add(w); }
+  g.add(cyl(.012, .012, .6, 0xcfd6dd, .55, 0, -.2, 5));
+  const flag = box(.14, .09, .004, 0xd9382a, .63, .5, -.2); g.add(flag); anim.push((t) => { flag.scale.x = 1 + Math.sin(t * 5) * .08; flag.rotation.y = Math.sin(t * 3) * .15; });
+  const track = new THREE.Mesh(new THREE.RingGeometry(.3, .44, 36), M(0xc9533a, { side: THREE.DoubleSide })); track.rotation.x = -Math.PI / 2; track.position.set(0, .012, .25); track.receiveShadow = true; g.add(track);
+  g.add(cyl(.3, .3, .02, 0x7fbf7a, 0, 0, .25, 24));
+  const kids = [0, 1, 2].map(i => { const k = makeWalker([0x4a7fa8, 0xd9668a, 0xe3a33a][i], [0xffffff, 0xf3c04a, 0x4a7fa8][i]); k.scale.setScalar(1.1); g.add(k); return k; });
+  anim.push((t) => kids.forEach((k, i) => { const a = t * (.9 + i * .12) + i * 2.1, r = .37; k.position.set(Math.cos(a) * r, 0, .25 + Math.sin(a) * r); k.rotation.y = -a; stepWalker(k, t * 1.6 + i); }));
+};
+HERO.carnation = (g, rnd) => {   // 康乃馨花田＋土地公廟＋蝴蝶
+  [[-.5, 0xe8567a], [-.25, 0xff9ab8], [0, 0xffffff], [.25, 0xd9384f], [.5, 0xff7a9c]].forEach(([z, c]) => { const r = flowerRow(1.0, 12, [c, c, 0xffd1dc], rnd, { stemH: .26, head: .05, flat: .8 }); r.position.z = z; g.add(r); });
+  const sh = new THREE.Group(); sh.position.set(.72, 0, -.5); sh.add(box(.16, .12, .12, 0xc23b2a)); const rf = cone(.14, .08, 0xe08a2e, 0, .12, 0, 4); rf.rotation.y = Math.PI / 4; sh.add(rf); g.add(sh);
+  g.add(cyl(.2, .2, .02, 0x78c3d6, -.62, 0, .58, 14, { roughness: .3 }));
+  const bf = [0, 1, 2].map(i => { const b = new THREE.Group(), a = new THREE.Mesh(new THREE.PlaneGeometry(.07, .05), new THREE.MeshBasicMaterial({ color: [0xffd35a, 0xffffff, 0xf08fb0][i], side: THREE.DoubleSide })), c = a.clone(); a.position.x = -.035; c.position.x = .035; const L = new THREE.Group(), R = new THREE.Group(); L.add(a); R.add(c); b.add(L, R); g.add(b); return { b, L, R }; });
+  anim.push((t) => bf.forEach((o, i) => { const a = t * (.5 + i * .13) + i * 2; o.b.position.set(Math.cos(a) * (.5 + i * .12), .32 + Math.sin(t * 1.7 + i) * .08, Math.sin(a * 1.3) * .5); o.b.rotation.y = -a; const f = Math.sin(t * 18 + i) * .9; o.L.rotation.z = f; o.R.rotation.z = -f; }));
+};
+HERO.mounds = (g, rnd) => {   // 塗墩頭：村裡的許多土堆
+  const spec = [[0, 0, .42, .3], [-.5, -.3, .26, .2], [.5, -.25, .3, .22], [-.45, .38, .28, .18], [.42, .42, .24, .16], [.05, .6, .2, .12]];
+  spec.forEach(([x, z, r, h], i) => { const m = sph(r, i % 2 ? 0x9a8a5a : 0x8aa05a, x, 0, z, undefined, 1); m.scale.y = h / r; g.add(m);
+    const t = new THREE.Group(); t.position.set(x + r * .2, h * .9, z); t.add(cyl(.015, .02, .08, 0x7a5236), cone(.08, .13, 0x3f8f55, 0, .07, 0, 6)); t.scale.setScalar(.8 + r); g.add(t); anim.push((tt) => { t.rotation.z = Math.sin(tt * 1.2 + i) * .05; }); });
+  const sh = new THREE.Group(); sh.position.set(0, .3, 0); sh.add(box(.14, .1, .1, 0xc23b2a)); const rf = cone(.12, .07, 0xe08a2e, 0, .1, 0, 4); rf.rotation.y = Math.PI / 4; sh.add(rf); g.add(sh);
+};
+
+/* ================= 填充：每個村的田野／房屋／樹木（用 InstancedMesh 一次畫很多） ================= */
+const FILL = {};
+FILL.flowers = (g, poly, rnd, occ) => {
+  const pts = lattice(poly, .2, rnd, occ, .1), pots = [], stems = [], heads = [], pal = [0xd9668a, 0xf3c04a, 0xffffff, 0x9c7ad9, 0xf07a3a, 0xf08fb0];
+  pts.forEach(([x, z], i) => { const rowC = pal[Math.floor((z + 50) * 2.5) % pal.length]; pots.push({ p: [x, .035, z], s: 1, c: 0xc9714b }); const h = .1 + rnd() * .06; stems.push({ p: [x, .07 + h / 2, z], s: [1, h, 1] }); heads.push({ p: [x, .075 + h, z], s: [.05, .04, .05], c: rowC }); });
+  g.add(inst(new THREE.CylinderGeometry(.04, .03, .07, 6), M(0xffffff), pots), inst(stemGeo, W(0x4f8f5a, .03), stems), inst(headGeo, W(0xffffff, .05), heads));
+};
+FILL.rice = (g, poly, rnd, occ, v) => {
+  const pts = lattice(poly, .12, rnd, occ, .08, .5), t = [], cols = v && v.ripe ? [0xe3c95a, 0xd8b94a, 0xeccf6a] : [0x8cc65a, 0x9ccf5a, 0x7fbb52];
+  pts.forEach(([x, z]) => t.push({ p: [x, .08, z], s: [.05, .16, .05], c: cols[Math.floor(rnd() * 3)] }));
+  g.add(inst(new THREE.ConeGeometry(1, 1, 5), W(0xffffff, .06), t));
+};
+FILL.veg = (g, poly, rnd, occ) => {
+  const pts = lattice(poly, .16, rnd, occ, .1), items = [], pal = [0x6fbf5a, 0x8ccf6a, 0x4fa05a, 0xb8d96a, 0x9a6fc0];
+  pts.forEach(([x, z]) => items.push({ p: [x, .05, z], s: [.06, .05, .06], c: pal[Math.floor((z + 60) * 3) % pal.length] }));
+  g.add(inst(headGeo, M(0xffffff), items));
+};
+FILL.orchard = (g, poly, rnd, occ, v) => {
+  const pts = scatter(poly, clamp(Math.round(polyArea(poly) * 1.1), 6, 150), .34, rnd, occ, .22), tr = [], c1 = [], c2 = [], fr = [];
+  pts.forEach(([x, z]) => { const s = .75 + rnd() * .5; tr.push({ p: [x, .07 * s, z], s: [s, s, s] }); c1.push({ p: [x, .2 * s, z], s: [.14 * s, .2 * s, .14 * s], c: [0x3f8f55, 0x4aa05e, 0x2f7a49][Math.floor(rnd() * 3)] }); c2.push({ p: [x, .34 * s, z], s: [.1 * s, .16 * s, .1 * s], c: 0x4aa05e }); if (v && v.fruit) fr.push({ p: [x + .05 * s, .22 * s, z + .04 * s], s: .025, c: v.fruit }); });
+  g.add(inst(new THREE.CylinderGeometry(.025, .035, .14, 5), M(0x8a5a36), tr), inst(new THREE.ConeGeometry(1, 1, 6), W(0xffffff, .02), c1), inst(new THREE.ConeGeometry(1, 1, 6), W(0xffffff, .02), c2));
+  if (fr.length) g.add(inst(headGeo, M(0xffffff), fr));
+};
+FILL.houses = (g, poly, rnd, occ, v) => {
+  const n = v && v.houses ? v.houses : 6, pts = scatter(poly, n, .5, rnd, occ, .25), walls = [], roofs = [], pal = [0xf4a6c0, 0xf3c04a, 0x7ec8c0, 0xe08a6a, 0xa9d28b, 0xf1ece0], rp = [0xb4553f, 0x4a7fa8, 0x5a6f8a];
+  pts.forEach(([x, z]) => { const w = .2 + rnd() * .1, d = .18 + rnd() * .08, h = .13 + rnd() * .08, ry = Math.floor(rnd() * 4) * Math.PI / 2 + (rnd() - .5) * .3;
+    walls.push({ p: [x, h / 2, z], s: [w, h, d], ry, c: pal[Math.floor(rnd() * pal.length)] }); roofs.push({ p: [x, h + w * .12, z], s: [w * .74, w * .74, d + .03], ry, rz: Math.PI / 4, c: rp[Math.floor(rnd() * 3)] }); occ.push([x, z, .24]);
+    const win = new THREE.Mesh(new THREE.PlaneGeometry(.05, .05), winMat); win.position.set(x + Math.sin(ry) * (d / 2 + .003), h * .55, z + Math.cos(ry) * (d / 2 + .003)); win.rotation.y = ry; g.add(win); });
+  const rf = inst(new THREE.BoxGeometry(1, 1, 1), M(0xffffff), roofs);
+  g.add(inst(new THREE.BoxGeometry(1, 1, 1), M(0xffffff), walls), rf);
+};
+FILL.trees = (g, poly, rnd, occ) => FILL.orchard(g, poly, rnd, occ, {});
+
+/* ================= 組裝 20 個村 ================= */
+const world = new THREE.Group(); scene.add(world);
+const villages = [];
+const SKIRT = .7;
+function buildVillage(name){
+  const P = POLY[name], info = INFO[name] || {};
+  const pole = toW(P.pole), rpx = P.r * S;
+  const poly = P.pts.map(p => { const w = toW(p); return [w[0] - pole[0], w[1] - pole[1]]; });
+  const shape = new THREE.Shape(poly.map(([x, z]) => new THREE.Vector2(x, -z)));
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: SKIRT, bevelEnabled: false }); geo.rotateX(-Math.PI / 2); geo.translate(0, -SKIRT, 0);
+  const topMat = new THREE.MeshStandardMaterial({ color: info.top || 0xa7d18a, flatShading: true, roughness: .95 });
+  const mesh = shade(new THREE.Mesh(geo, [topMat, M(0xb98c5e)]));
+  const g = new THREE.Group(); g.position.set(pole[0], 0, pole[1]); g.add(mesh);
+  const rnd = mulberry32(hashStr(name));
+  const content = new THREE.Group(); g.add(content);
+  // 英雄場景
+  const occ = [], sc = clamp(rpx * .95 / .9, .5, 1.45);
+  if (info.hero && HERO[info.hero]){
+    const h = new THREE.Group(); h.scale.setScalar(sc); HERO[info.hero](h, rnd); content.add(h);
+    occ.push([0, 0, .95 * sc]);
+  }
+  // 田野／房屋
+  for (const f of (info.fill || [])){ const [kind, opt] = Array.isArray(f) ? f : [f, null]; if (FILL[kind]) FILL[kind](content, poly, rnd, occ, { ...info, ...(opt || {}) }); }
+  world.add(g);
+  const v = { name, info, group: g, mesh, topMat, poly, pole, pos: new THREE.Vector3(pole[0], 0, pole[1]), y: 0, r: rpx, baseTop: new THREE.Color(info.top || 0xa7d18a) };
+  mesh.userData.village = name;
+  villages.push(v);
+  return v;
+}
+for (const name of Object.keys(POLY)) if (!name.startsWith('_')) buildVillage(name);
+const byName = Object.fromEntries(villages.map(v => [v.name, v]));
+
+/* ================= 底座、雲、鳥、星空 ================= */
+const ground = new THREE.Mesh(new THREE.CircleGeometry(40, 64), new THREE.MeshStandardMaterial({ color: DAY.ground, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.position.y = -SKIRT - .02; ground.receiveShadow = true; scene.add(ground);
+const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, transparent: true, opacity: .9, roughness: 1 });
+const clouds = [], crnd = mulberry32(99);
+for (let i = 0; i < 7; i++){ const c = new THREE.Group(); for (let k = 0; k < 4; k++){ const b = new THREE.Mesh(new THREE.IcosahedronGeometry(.9 + crnd() * .6, 1), cloudMat); b.position.set(k * 1.1 - 1.6, crnd() * .4, crnd() * .7); b.scale.y = .55; c.add(b); }
+  c.position.set(-30 + i * 9, 13 + crnd() * 4, -22 + crnd() * 44); c.scale.setScalar(.6); c.userData.v = .3 + crnd() * .3; scene.add(c); clouds.push(c); }
+const birds = [];
+for (let i = 0; i < 7; i++){
+  const b = new THREE.Group(), wl = new THREE.Mesh(new THREE.PlaneGeometry(.5, .22), new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide })), wr = wl.clone();
+  wl.position.x = -.25; wr.position.x = .25; const L = new THREE.Group(), Rr = new THREE.Group(); L.add(wl); Rr.add(wr); b.add(L, Rr); scene.add(b); birds.push({ b, L, Rr, ph: i * 1.3, rad: 6 + i * 1.6, sp: .18 + i * .015, h: 4.2 + (i % 3) * .7 });
+}
+const starGeo = new THREE.BufferGeometry(), sp = [], srnd = mulberry32(5);
+for (let i = 0; i < 420; i++){ const a = srnd() * 6.28, e = srnd() * 1.1 + .15, r = 120; sp.push(Math.cos(a) * Math.cos(e) * r, Math.sin(e) * r, Math.sin(a) * Math.cos(e) * r); }
+starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
+const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: .8, transparent: true, opacity: 0, depthWrite: false, fog: false }); scene.add(new THREE.Points(starGeo, starMat));
+const moon = new THREE.Mesh(new THREE.SphereGeometry(5, 20, 14), new THREE.MeshBasicMaterial({ color: 0xfff6d8, transparent: true, opacity: 0, fog: false })); moon.position.set(-70, 60, -90); scene.add(moon);
+
+/* ================= 相機 ================= */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .08; controls.enablePan = false;
+controls.minPolarAngle = .3; controls.maxPolarAngle = 1.3; controls.minDistance = 5; controls.maxDistance = 90;
+controls.autoRotate = !calm; controls.autoRotateSpeed = .35;
+const startDir = new THREE.Vector3(.15, .95, 1).normalize();
+const goalTarget = new THREE.Vector3(), tmp = new THREE.Vector3();
+let goalDist = 30, tweening = true;
+const defaultDist = () => clamp(29 / (.63 * innerWidth / innerHeight), 21, 80);
+camera.position.copy(startDir).multiplyScalar(defaultDist() * 1.9);
+controls.addEventListener('start', () => { tweening = false; controls.autoRotate = false; });
+function resetView(){ goalTarget.set(0, 0, 0); goalDist = defaultDist(); tweening = true; controls.autoRotate = !calm; select(null); }
+function resize(){ renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); if (tweening && !selected) goalDist = defaultDist(); }
+addEventListener('resize', resize);
+
+/* ================= 介面 ================= */
+const chipsEl = document.getElementById('chips'), dockEl = document.getElementById('dock'), panel = document.getElementById('panel');
+const $ = id => document.getElementById(id);
+const chipMap = new Map();
+const order = villages.slice().sort((a, b) => (INFO[a.name]?.dist || 9) - (INFO[b.name]?.dist || 9));
+for (const v of order){
+  const emo = v.info.emoji || '📍';
+  const chip = document.createElement('button'); chip.className = 'chip'; chip.textContent = `${emo} ${v.name.replace('村', '')}`; chip.onclick = () => select(v.name); chipsEl.appendChild(chip);
+  const d = document.createElement('button'); d.className = 'btn card'; d.textContent = `${emo} ${v.name}`; d.onclick = () => select(v.name); dockEl.appendChild(d);
+  chipMap.set(v.name, { chip, d });
+}
+let selected = null, hoverName = null, showDist = false;
+function select(name){
+  selected = name;
+  for (const [k, c] of chipMap){ c.chip.classList.toggle('on', k === name); c.d.classList.toggle('on', k === name); }
+  if (!name){ panel.classList.remove('open'); try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} return; }
+  const v = byName[name], i = v.info, dd = DIST[i.dist];
+  $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = i.en || '';
+  const tag = $('pTag'); tag.textContent = dd ? dd.name : ''; tag.style.background = dd ? '#' + dd.c.toString(16).padStart(6, '0') : '#888'; tag.hidden = !dd;
+  $('pText').textContent = i.text || ''; $('pEnText').textContent = i.enText || ''; $('pMeta').textContent = i.meta || ''; $('pMeta').hidden = !i.meta;
+  $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。';
+  $('pPage').href = `village/${SLUG[name]}.html`; try { history.replaceState(null, '', '#' + SLUG[name]); } catch (e) {}
+  panel.classList.add('open');
+  goalTarget.copy(v.pos); goalDist = clamp(v.r * 7 + 9, 11, defaultDist() * .55); tweening = true; controls.autoRotate = false;
+}
+$('closeBtn').onclick = () => select(null);
+$('resetBtn').onclick = resetView;
+addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
+const nightBtn = $('nightBtn');
+function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); nightBtn.innerHTML = on ? '☀️ <span class="lbl">白天</span>' : '🌙 <span class="lbl">夜晚</span>'; }
+nightBtn.onclick = () => setNight(!nightGoal);
+const distBtn = $('distBtn'), legend = $('legend');
+legend.innerHTML = Object.values(DIST).map(d => `<div><i style="background:#${d.c.toString(16).padStart(6, '0')}"></i>${d.name}</div>`).join('');
+function setDist(on){ showDist = on; distBtn.setAttribute('aria-pressed', String(on)); legend.classList.toggle('show', on); for (const v of villages){ const dd = DIST[v.info.dist]; v.topMat.color.set(on && dd ? dd.c : v.baseTop); } }
+distBtn.onclick = () => setDist(!showDist);
+const qs = new URLSearchParams(location.search);
+if (qs.has('night')) setNight(true);
+if (qs.has('dist')) setDist(true);
+
+/* ================= 點選／懸停 ================= */
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(); let downX = 0, downY = 0;
+function pickVillage(e){
+  const r = renderer.domElement.getBoundingClientRect(); mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(mouse, camera);
+  const hit = ray.intersectObjects(villages.map(v => v.mesh), false)[0]; return hit ? hit.object.userData.village : null;
+}
+renderer.domElement.addEventListener('pointermove', e => { if (e.pointerType === 'mouse'){ hoverName = pickVillage(e); stage.classList.toggle('hover', !!hoverName); } });
+renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+renderer.domElement.addEventListener('pointerup', e => { if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return; const n = pickVillage(e); if (n) select(n); });
+
+/* ================= 主迴圈 ================= */
+const v3 = new THREE.Vector3(), tc = new THREE.Color();
+function applyNight(n){
+  scene.background.copy(DAY.bg).lerp(NIGHT.bg, n); scene.fog.color.copy(scene.background); ground.material.color.copy(DAY.ground).lerp(NIGHT.ground, n);
+  sun.color.copy(DAY.sun).lerp(NIGHT.sun, n); sun.intensity = lerp(2.2, .8, n);
+  hemi.color.copy(DAY.hemiSky).lerp(NIGHT.hemiSky, n); hemi.groundColor.copy(DAY.hemiGround).lerp(NIGHT.hemiGround, n); hemi.intensity = lerp(.95, 1.25, n);
+  bulbMat.emissiveIntensity = n * 3; winMat.emissiveIntensity = .05 + n * 1.6; lanternMat.emissiveIntensity = .2 + n * 1.8; chrysMat.emissiveIntensity = n * .35;
+  lampCones.forEach(c => c.material.opacity = n * .22); nightLights.forEach(o => o.light.intensity = n * o.k);
+  starMat.opacity = n; moon.material.opacity = n; cloudMat.opacity = lerp(.9, .12, n);
+  const ld = $('loading'); if (ld) ld.style.background = scene.background.getStyle();
+}
+const clock = new THREE.Clock(); let T = 0, shiftX = 0, shiftY = 0;
+applyNight(0); resize(); resetView();
+function frame(){
+  requestAnimationFrame(frame);
+  const dt = Math.min(clock.getDelta(), .05); T += dt; uTime.value = T;
+  if (Math.abs(nightV - nightGoal) > .001){ nightV += (nightGoal - nightV) * Math.min(1, dt * 3); applyNight(nightV); }
+  if (!calm) swayers.forEach(g => g.rotation.x = Math.sin(T * 1.5 + g.userData.phase) * g.userData.amp);
+  anim.forEach(f => f(T, dt));
+  clouds.forEach(c => { c.position.x += c.userData.v * dt; if (c.position.x > 34) c.position.x = -34; });
+  birds.forEach(o => { const a = T * o.sp + o.ph; o.b.position.set(Math.cos(a) * o.rad, o.h + Math.sin(T * 1.2 + o.ph) * .3, Math.sin(a) * o.rad * .6); o.b.rotation.y = -a + Math.PI; const f = Math.sin(T * 9 + o.ph) * .7; o.L.rotation.z = f; o.Rr.rotation.z = -f; });
+  for (const v of villages){ const goal = v.name === selected ? .22 : v.name === hoverName ? .12 : 0; v.y += (goal - v.y) * Math.min(1, dt * 10); v.group.position.y = v.y; }
+  if (tweening){
+    const off = v3.copy(camera.position).sub(controls.target);
+    controls.target.lerp(goalTarget, Math.min(1, dt * 3.2)); off.setLength(lerp(off.length(), goalDist, Math.min(1, dt * 3.2))); camera.position.copy(controls.target).add(off);
+  }
+  const W_ = innerWidth, H_ = innerHeight, narrow = W_ <= 760, open = panel.classList.contains('open');
+  const wantX = open && !narrow ? W_ * .17 : 0, wantY = open && narrow ? H_ * .2 : 0;
+  shiftX += (wantX - shiftX) * Math.min(1, dt * 6); shiftY += (wantY - shiftY) * Math.min(1, dt * 6);
+  if (Math.abs(shiftX) + Math.abs(shiftY) > .5) camera.setViewOffset(W_, H_, shiftX, shiftY, W_, H_); else if (camera.view) camera.clearViewOffset();
+  controls.update();
+  if (!narrow) for (const v of villages){ tmp.copy(v.pos).add(v3.set(0, .55, 0)).project(camera); const el = chipMap.get(v.name).chip; el.classList.toggle('hidden', tmp.z > 1); el.style.transform = `translate(${(tmp.x * .5 + .5) * W_}px,${(-tmp.y * .5 + .5) * H_}px) translate(-50%,-100%)`; }
+  renderer.render(scene, camera);
+  if (T > .3 && !frame.done){ frame.done = true; $('loading').classList.add('done'); setTimeout(() => $('loading') && $('loading').remove(), 800); }
+}
+if (SLUG_REV[START_HASH]) select(SLUG_REV[START_HASH]);
+frame();
+window.__tw = { select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
+</script>
+</body>
+</html>
