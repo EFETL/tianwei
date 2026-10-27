@@ -1117,12 +1117,23 @@ const tzChev = new THREE.InstancedMesh(new THREE.ConeGeometry(.07, .2, 3), new T
 tzChev.frustumCulled = false; scene.add(tzChev);
 const _tm = new THREE.Matrix4(), _tq = new THREE.Quaternion(), _tup = new THREE.Vector3(0, 1, 0), _ts = new THREE.Vector3(1, .4, 1), _tp = new THREE.Vector3();
 function tzUpdateChev(t){ for (let i = 0; i < TZN; i++){ const a = tzAt(((i / TZN) + t * .014) % 1 * TZLEN); _tq.setFromUnitVectors(_tup, a.dir); _tp.set(a.p.x, TZY + .02, a.p.z); _tm.compose(_tp, _tq, _ts); tzChev.setMatrixAt(i, _tm); } tzChev.instanceMatrix.needsUpdate = true; }
+/* 車頂文字：HSR / Train / NO.7（平貼在車頂，沿車身方向） */
+function tzRoofLabel(text, len, wid, color, alongZ){
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = Math.max(64, Math.round(512 * wid / len)); const c = cv.getContext('2d');
+  c.fillStyle = color; c.textAlign = 'center'; c.textBaseline = 'middle';
+  let fs = cv.height * .86; c.font = `800 ${fs}px "Helvetica Neue", Arial, sans-serif`; const w = c.measureText(text).width; if (w > cv.width * .92) fs *= cv.width * .92 / w;
+  c.font = `800 ${fs}px "Helvetica Neue", Arial, sans-serif`; c.fillText(text, cv.width / 2, cv.height / 2 + fs * .04);
+  const tex = new THREE.CanvasTexture(cv); tex.anisotropy = 4; tex.colorSpace = THREE.SRGBColorSpace;
+  const geo = new THREE.PlaneGeometry(len, wid); geo.rotateX(-Math.PI / 2); if (alongZ) geo.rotateY(-Math.PI / 2);
+  return new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
+}
 const tzLampMat = new THREE.MeshStandardMaterial({ color: 0xfff1b8, emissive: 0xffd36b, emissiveIntensity: .1, flatShading: true });
 const tzBus = new THREE.Group();
 tzBus.add(box(.14, .13, .34, 0xf7f7f2, 0, .05, 0), box(.142, .035, .342, 0xe5484d, 0, .09, 0), box(.146, .045, .3, 0x4a6b8a, 0, .14, 0, { roughness: .3 }), box(.12, .02, .3, 0xf7f7f2, 0, .185, 0));
 for (const [x, z] of [[-.075, -.11], [.075, -.11], [-.075, .11], [.075, .11]]){ const w = cyl(.032, .032, .025, 0x2b2f36, x, 0, z, 8); w.position.y = .032; w.rotation.z = Math.PI / 2; tzBus.add(w); }
 const tzHl = new THREE.Mesh(new THREE.BoxGeometry(.03, .02, .01), tzLampMat); tzHl.position.set(-.04, .08, .172); const tzHr = tzHl.clone(); tzHr.position.x = .04; tzBus.add(tzHl, tzHr);
-tzBus.scale.setScalar(2.1); scene.add(tzBus);
+{ const l = tzRoofLabel('NO.7', .3, .115, '#d9382a', true); l.position.set(0, .2075, 0); tzBus.add(l); }
+tzBus.scale.setScalar(2.6); scene.add(tzBus);
 let tzBusT = 0;
 anim.push((t, dt) => {
   tzBusT += dt; const run = 40, dwell = 2.2, cyc = run + dwell * 2, u = tzBusT % cyc; let f = u < dwell ? 0 : u > dwell + run ? 1 : (u - dwell) / run; f = f * f * (3 - 2 * f) * .35 + f * .65;
@@ -1140,6 +1151,7 @@ tzPlace('田中火車站', 1.05, .2, g => {
   for (const x of [-.6, -.2, .2, .6]) g.add(cyl(.02, .02, .22, 0x8a8f95, x, .03, -.4, 5));
   g.add(box(1.7, .025, .24, 0x4a7fa8, 0, .25, -.42));
   const tr_ = new THREE.Group(); [0, 1, 2].forEach(i => tr_.add(box(.4, .15, .17, i % 2 ? 0xe8edf2 : 0xdfe5ea, i * .43 - .43, .03, 0), box(.4, .035, .172, 0x2f6fb5, i * .43 - .43, .1, 0)));
+  { const l = tzRoofLabel('Train', .38, .14, '#1f4f8a', false); l.position.set(0, .183, 0); tr_.add(l); }
   tr_.position.set(0, .02, -.81); g.add(tr_);
   anim.push((t) => { const c = (t % 22) / 22; tr_.position.x = c < .3 ? lerp(-3.2, 0, c / .3) : c < .6 ? 0 : lerp(0, 3.2, (c - .6) / .4); });
 });
@@ -1151,6 +1163,7 @@ tzPlace('高鐵彰化站', 1.15, -.3, g => {
   g.add(box(.92, .035, 1.12, 0xf08a24, .75, .2, 0));
   for (let k = 0; k < 4; k++){ const win = new THREE.Mesh(new THREE.PlaneGeometry(.1, .09), winMat); win.position.set(.29, .12, -.4 + k * .27); win.rotation.y = -Math.PI / 2; g.add(win); }
   const tr_ = new THREE.Group(); [0, 1, 2].forEach(i => tr_.add(box(.17, .13, .68, 0xfafafa, 0, .495, i * .7 - .7), box(.172, .03, .68, 0xf08a24, 0, .54, i * .7 - .7), box(.174, .022, .68, 0x2b3f8a, 0, .5, i * .7 - .7)));
+  { const l = tzRoofLabel('HSR', .66, .15, '#2b3f8a', true); l.position.set(0, .627, 0); tr_.add(l); }
   const nose = cone(.085, .26, 0xfafafa, 0, .495, 1.32, 6); nose.rotation.x = Math.PI / 2; nose.scale.set(1, 1, .75); tr_.add(nose); g.add(tr_);
   anim.push((t) => { const c = (t % 14) / 14; tr_.position.z = lerp(-4.5, 4.5, c); });
 });
