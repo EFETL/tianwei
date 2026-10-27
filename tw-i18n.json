@@ -2482,5 +2482,14 @@
 "vi": "Ảnh cánh đồng hoa cúc ban đêm: do EFETL chụp (2026)",
 "ko": "밤의 전조 국화밭 사진: EFETL 촬영(2026)",
 "de": "Foto des Chrysanthemenfelds bei Nacht: von EFETL (2026)"
+},
+"田中鎮 3D 地圖（tianzhong.html）：里界與站牌座標 © OpenStreetMap 貢獻者（ODbL）；公車路線依道路計算，僅供示意": {
+"en": "Tianzhong 3D map (tianzhong.html): village boundaries and stop coordinates © OpenStreetMap contributors (ODbL); the bus route is calculated from roads and is for illustration only",
+"ja": "田中鎮3Dマップ（tianzhong.html）：里の境界とバス停の座標 © OpenStreetMap contributors（ODbL）。バスのルートは道路から計算したイメージです",
+"th": "แผนที่ 3D เถียนจง (tianzhong.html): ขอบเขตหมู่บ้านและพิกัดป้ายรถ © OpenStreetMap contributors (ODbL) เส้นทางรถเมล์คำนวณจากถนน ใช้เป็นภาพประกอบเท่านั้น",
+"id": "Peta 3D Tianzhong (tianzhong.html): batas desa dan koordinat halte © OpenStreetMap contributors (ODbL); rute bus dihitung dari jalan dan hanya untuk ilustrasi",
+"vi": "Bản đồ 3D Tianzhong (tianzhong.html): ranh giới làng và tọa độ trạm © OpenStreetMap contributors (ODbL); tuyến xe buýt được tính theo đường bộ, chỉ mang tính minh họa",
+"ko": "톈중 3D 지도(tianzhong.html): 리 경계와 정류장 좌표 © OpenStreetMap contributors(ODbL). 버스 노선은 도로로 계산한 참고용입니다",
+"de": "Tianzhong-3D-Karte (tianzhong.html): Dorfgrenzen und Haltestellenkoordinaten © OpenStreetMap-Mitwirkende (ODbL); die Buslinie ist aus Straßen berechnet und nur zur Illustration"
 }
 }

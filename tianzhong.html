@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>田中鎮 3D 地圖與 7 號公車｜Tianzhong × Bus 7</title>
+<meta name="description" content="田中鎮 22 個里的 3D 島：標出田中火車站、高鐵彰化站，以及 7 號公車開往田尾的路線，在「田尾國小」下車就到田尾。非官方、教學用途。">
+<link rel="canonical" href="https://tianwei.efetl.com/tianzhong.html">
+<meta property="og:type" content="website"><meta property="og:locale" content="zh_TW">
+<meta property="og:site_name" content="花鄉田尾 Tianwei">
+<meta property="og:title" content="田中鎮 3D 地圖與 7 號公車｜Tianzhong × Bus 7">
+<meta property="og:description" content="從田中火車站、高鐵彰化站搭 7 號公車，在田尾國小下車就到田尾。">
+<meta property="og:url" content="https://tianwei.efetl.com/tianzhong.html">
+<meta property="og:image" content="https://tianwei.efetl.com/images/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"田中鎮 3D 地圖與 7 號公車","url":"https://tianwei.efetl.com/tianzhong.html","about":{"@type":"AdministrativeArea","name":"田中鎮","alternateName":"Tianzhong Township","containedInPlace":{"@type":"AdministrativeArea","name":"彰化縣"}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+JP:wght@400;600&family=Noto+Sans+KR:wght@400;600&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#2f6b4f; --green-dark:#1f4a36; --gold:#e3a33a; --pink:#d9668a; --red:#d9382a;
+  --card:rgba(255,255,255,.92); --text:#24302a; --muted:#5f6d65; --line:#e3e8e2;
+  --shadow:0 8px 28px rgba(31,74,54,.18); --radius:18px;
+}
+body.night{ --card:rgba(24,34,48,.9); --text:#eef2f7; --muted:#aab6c6; --line:#32425a; --green-dark:#9fdcbc; --green:#7cc3a0; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#dfeee9;font-family:"Noto Sans TC","Noto Sans JP","Noto Sans KR","Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;color:var(--text)}
+#stage{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#stage.hover canvas{cursor:pointer}
+.card{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:var(--radius);box-shadow:var(--shadow)}
+#title{position:fixed;top:max(14px,env(safe-area-inset-top));left:14px;padding:12px 18px;line-height:1.25;z-index:5;max-width:min(430px,calc(100vw - 480px))}
+#title b{display:block;font-size:22px;color:var(--green-dark)}
+#title small{color:var(--muted);font-size:15px;display:block;margin-top:2px}
+#tools{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;display:flex;gap:8px;z-index:5}
+.btn{font:inherit;font-size:16px;border:0;border-radius:14px;padding:10px 14px;min-height:44px;cursor:pointer;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{outline:2px solid var(--gold)}
+.btn:focus-visible{outline:3px solid var(--pink)}
+.btn[aria-pressed="true"]{background:var(--gold);color:#2b2208}
+#chips{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+.chip{position:absolute;left:0;top:0;pointer-events:auto;font:inherit;font-size:15px;font-weight:500;white-space:nowrap;cursor:pointer;
+  border:0;border-radius:999px;padding:3px 11px;background:var(--card);color:var(--text);box-shadow:0 3px 10px rgba(0,0,0,.14);will-change:transform}
+.chip.li{font-size:14px;opacity:.9;padding:2px 9px}
+.chip.main{z-index:3;font-size:17px;font-weight:700;padding:6px 14px;background:var(--red);color:#fff;box-shadow:0 5px 16px rgba(120,20,10,.35)}
+.chip.main.end{background:#c0392b}
+.chip.tw{background:#e9efe5;color:#4a5a4f;font-size:15px}
+body.night .chip.tw{background:#2a394d;color:#cfd9e6}
+.chip:hover,.chip.on{background:var(--gold);color:#2b2208}
+.chip.hidden,.chip.off{display:none}
+#routeCard{position:fixed;left:14px;top:96px;width:min(340px,calc(100vw - 28px));z-index:4;padding:14px 16px;font-size:16px;line-height:1.6}
+#routeCard b{display:block;font-size:18px;color:var(--green-dark);margin-bottom:2px}
+#routeCard p{margin:0 0 6px}
+#routeCard .sw{display:inline-block;width:14px;height:14px;border-radius:4px;background:#f6c85f;margin-right:6px;vertical-align:-2px}
+#routeCard .rc{font-size:14px;color:var(--muted)}
+#dock{position:fixed;left:0;right:0;bottom:max(12px,env(safe-area-inset-bottom));display:flex;gap:6px;padding:0 14px;overflow-x:auto;z-index:5;scrollbar-width:none;align-items:center;justify-content:safe center}
+#dock::-webkit-scrollbar{display:none}
+#dock .btn{flex:0 0 auto;padding:8px 12px;min-height:44px}
+#dock .btn.on{background:var(--gold);color:#2b2208}
+#dock .btn.end{outline:2px solid var(--red)}
+#dock .arr{flex:0 0 auto;color:var(--red);font-weight:700}
+#panel{position:fixed;z-index:6;right:14px;top:78px;width:min(410px,calc(100vw - 28px));max-height:calc(100vh - 170px);overflow:auto;padding:22px 22px 20px;
+  transform:translateX(120%);opacity:0;transition:transform .35s ease,opacity .35s ease;pointer-events:none}
+#panel.open{transform:none;opacity:1;pointer-events:auto}
+#panel .x{position:absolute;right:10px;top:10px;width:44px;height:44px;border-radius:50%;padding:0;justify-content:center;font-size:20px;background:transparent}
+#panel .emoji{font-size:40px;line-height:1}
+#panel h2{margin:6px 0 0;font-size:26px;color:var(--green-dark);line-height:1.3;padding-right:40px}
+#panel .en{color:var(--muted);margin:2px 0 8px}
+#panel .tag{display:inline-block;font-size:15px;border-radius:999px;padding:2px 12px;margin-bottom:10px;color:#fff;background:#888}
+#panel p{margin:0 0 10px;line-height:1.7}
+#panel .meta{font-size:16px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+#panel .src{font-size:14px;color:var(--muted)}
+#panel a{color:var(--green);font-weight:700;text-decoration:none}
+#panel .links a{display:block;margin:4px 0}
+#loading{position:fixed;inset:0;display:grid;place-items:center;background:#dfeee9;z-index:20;transition:opacity .6s;color:#1f4a36;text-align:center}
+#loading.done{opacity:0;pointer-events:none}
+#loading div{font-size:22px}
+#loading small{display:block;font-size:16px;opacity:.7;margin-top:6px}
+#nogl{display:none;position:fixed;inset:0;place-items:center;text-align:center;padding:24px;z-index:30;background:#fbfaf6}
+#nogl.show{display:grid}
+#langSel{font:inherit;font-size:16px;color:var(--text);background:transparent;border:0;max-width:8em;cursor:pointer;padding:0}
+.stack{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:5;display:flex;flex-direction:column;gap:8px;margin-top:80px}
+.sbtn{width:46px;height:46px;border:0;border-radius:14px;display:grid;place-items:center;font:inherit;font-size:20px;color:var(--text);cursor:pointer;padding:0}
+.sbtn:hover{outline:2px solid var(--gold)}
+#compass{display:block;width:26px;height:26px}
+#hint{position:fixed;left:50%;transform:translateX(-50%);bottom:76px;z-index:6;padding:10px 18px;font-size:15px;max-width:calc(100vw - 100px);text-align:center;pointer-events:none}
+body.shot #title,body.shot #tools,body.shot #routeCard,body.shot #dock,body.shot #chips,body.shot #stack,body.shot #hint,body.shot #panel,body.shot #loading{display:none!important}
+@media (max-width:1100px){ #title{max-width:calc(100vw - 28px);top:max(66px,env(safe-area-inset-top))} #routeCard{display:none} }
+@media (max-width:760px){
+  #title{padding:8px 12px;top:66px;left:10px;max-width:calc(100vw - 80px)} #title b{font-size:17px} #title small{font-size:13px}
+  #tools{gap:4px;right:8px;left:8px;justify-content:space-between} #tools .btn{padding:10px 9px;gap:3px} #tools .lbl{display:none}
+  #langSel{max-width:4.4em}
+  .stack{left:auto;right:10px;top:150px;transform:none;margin:0}
+  #panel{right:0;left:0;top:auto;bottom:0;width:auto;max-height:54vh;border-radius:22px 22px 0 0;transform:translateY(110%);padding-bottom:84px}
+  #panel.open{transform:none}
+  #hint{bottom:132px}
+}
+@media (prefers-reduced-motion:reduce){ #panel{transition:none} }
+</style>
+</head>
+<body>
+<div id="stage" aria-label="田中鎮 3D 互動地圖：拖曳旋轉，點選田中火車站、高鐵彰化站與 7 號公車路線"></div>
+<div id="chips"></div>
+<div id="title" class="card"><b id="tTitle">田中鎮 × 7 號公車</b><small id="tSub"></small></div>
+<div id="tools">
+  <label class="btn card" title="Language">🌐 <select id="langSel" aria-label="Language"></select></label>
+  <button class="btn card" id="namesBtn" aria-pressed="false">🏷️ <span class="lbl" id="nLbl"></span></button>
+  <button class="btn card" id="nightBtn" aria-pressed="false">🌙 <span class="lbl"></span></button>
+  <button class="btn card" id="resetBtn">↺ <span class="lbl" id="rLbl"></span></button>
+  <a class="btn card" id="twBtn" href="township.html">🌼 <span class="lbl" id="twLbl"></span></a>
+  <a class="btn card" id="homeBtn" href="index.html">🏠 <span class="lbl" id="hLbl"></span></a>
+</div>
+<div id="stack" class="stack">
+  <button class="sbtn card" id="bZin" aria-label="zoom in">＋</button>
+  <button class="sbtn card" id="bZout" aria-label="zoom out">－</button>
+  <button class="sbtn card" id="bNorth" aria-label="north"><svg id="compass" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" stroke-opacity=".3"/><path d="M13 3 L17.5 13 L13 11 L8.5 13 Z" fill="#d9382a"/><path d="M13 23 L8.5 13 L13 15 L17.5 13 Z" fill="currentColor" fill-opacity=".45"/></svg></button>
+</div>
+<div id="routeCard" class="card"></div>
+<div id="hint" class="card" hidden></div>
+<aside id="panel" class="card" aria-live="polite">
+  <button class="btn x" id="closeBtn" aria-label="close">✕</button>
+  <div class="emoji" id="pEmoji"></div>
+  <h2 id="pZh"></h2>
+  <div class="en" id="pEn"></div>
+  <span class="tag" id="pTag"></span>
+  <p id="pText"></p>
+  <p class="meta" id="pMeta"></p>
+  <p class="links" id="pLinks"></p>
+  <p class="src" id="pSrc"></p>
+</aside>
+<nav id="dock" aria-label="7"></nav>
+<div id="loading"><div id="ldMsg">🚌</div></div>
+<div id="nogl"><div id="noglBox"></div></div>
+<noscript><div style="position:fixed;inset:0;z-index:40;background:#fbfaf6;color:#24302a;padding:24px;font-size:18px"><h2>田中鎮 × 7 號公車</h2><p>需要 JavaScript 才能顯示 3D 地圖。7 號公車（彰化客運）：田中火車站 → 龍潭里 → 高鐵彰化站 → 大社 → 富農 → 田尾國小（下車）。<a href="index.html">回到田尾主網站</a></p></div></noscript>
+
+<script>if(/[?&]timer/.test(location.search)){window.requestAnimationFrame=cb=>setTimeout(()=>cb(performance.now()),33)}
+window.__errs=[];addEventListener('error',e=>window.__errs.push(e.message+' @'+e.lineno+':'+e.colno));addEventListener('unhandledrejection',e=>window.__errs.push('rej '+(e.reason&&e.reason.message||e.reason)));</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+/* ===== 資料：里界（OpenStreetMap，ODbL）、7 號公車路線（OSRM 道路路徑）、站牌座標（OpenStreetMap）；單位：世界座標（1 公里 = 1.5） ===== */
+const DATA = {"li":{"大社里":{"pts":[[-2.335,-1.484],[-2.162,-1.404],[-2.172,-1.256],[-1.867,-1.08],[-1.942,-0.9],[-1.75,-0.723],[-1.305,-0.51],[-1.163,-0.375],[-0.888,-0.428],[-0.717,-0.119],[-0.381,-0.162],[-0.102,-0.299],[0.142,-0.359],[0.071,-0.455],[-0.064,-0.846],[0.13,-1.153],[0.01,-1.51],[-0.126,-2.418],[-0.104,-2.517],[0.044,-2.666],[0.034,-2.783],[-0.122,-3.003],[-0.115,-3.216],[-0.037,-3.376],[-0.641,-2.744],[-1.033,-2.259],[-0.933,-1.949],[-0.772,-1.687],[-0.653,-1.625],[-0.672,-1.563],[-1.359,-1.829],[-2.277,-1.801]],"pole":[-1.013,-1.032],"r":0.613,"area_km2":1.693},"三光里":{"pts":[[-2.189,-1.225],[-2.373,-1.143],[-2.475,-1.167],[-2.61,-1.005],[-2.72,-0.281],[-2.805,0.012],[-2.79,0.226],[-1.349,0.44],[-1.374,0.554],[-1.077,1.028],[-0.88,0.904],[-0.778,0.905],[-0.753,0.969],[-0.335,1.153],[-0.063,0.823],[-0.574,-0.08],[-0.738,-0.088],[-0.904,-0.392],[-1.178,-0.325],[-1.321,-0.478],[-1.769,-0.693],[-1.98,-0.885],[-1.903,-1.06]],"pole":[-2.164,-0.272],"r":0.6,"area_km2":1.329},"三民里":{"pts":[[-3.481,-0.233],[-3.54,0.282],[-3.342,0.611],[-3.251,0.589],[-3.088,0.653],[-2.966,0.841],[-3.035,0.87],[-3.077,1.667],[-2.862,1.724],[-1.999,2.409],[-1.813,2.831],[-0.458,3.925],[-0.29,3.839],[0.037,3.44],[-0.218,3.11],[-0.506,3.015],[-0.448,2.9],[-0.466,2.798],[-0.651,2.6],[-0.643,2.239],[-0.454,2.234],[-0.374,2.129],[-0.175,2.129],[-0.405,1.352],[-0.354,1.183],[-0.78,1.0],[-0.789,0.941],[-0.87,0.939],[-1.091,1.068],[-1.409,0.563],[-1.376,0.473],[-2.808,0.261],[-2.847,0.127],[-2.934,0.082],[-2.923,0.042],[-3.075,-0.03],[-3.111,0.018],[-3.326,-0.108],[-3.386,-0.206]],"pole":[-1.952,1.315],"r":0.914,"area_km2":2.826},"龍潭里":{"pts":[[-0.306,1.172],[0.412,1.785],[0.568,1.799],[0.786,1.926],[0.871,1.41],[0.948,1.356],[0.96,1.23],[1.062,1.161],[1.036,1.093],[1.112,1.057],[1.088,0.976],[1.14,0.801],[1.106,0.502],[0.986,0.354],[0.729,0.183],[0.61,-0.125],[0.251,-0.255],[0.17,-0.328],[-0.543,-0.094],[-0.026,0.822]],"pole":[0.541,0.793],"r":0.618,"area_km2":0.981},"中潭里":{"pts":[[0.682,-0.074],[0.754,0.158],[1.071,0.38],[1.158,0.553],[1.174,0.803],[1.121,0.98],[1.16,1.089],[1.089,1.084],[1.092,1.179],[0.982,1.259],[0.982,1.38],[0.902,1.424],[0.891,1.575],[1.351,1.843],[1.367,1.623],[1.299,1.397],[1.523,1.323],[1.714,1.522],[1.899,1.638],[2.272,1.59],[2.798,1.628],[2.892,1.715],[3.011,1.967],[3.04,1.494],[2.686,1.205],[2.546,1.189],[2.184,0.903],[2.069,0.68],[1.916,0.565],[1.857,0.424],[1.681,0.348],[1.538,-0.285],[1.285,-0.239],[1.288,-0.174],[1.18,-0.137],[1.071,-0.333]],"pole":[1.595,0.867],"r":0.463,"area_km2":0.948},"頂潭里":{"pts":[[1.572,-0.288],[1.708,0.322],[1.881,0.397],[1.942,0.541],[2.096,0.657],[2.207,0.875],[2.561,1.157],[2.702,1.171],[3.069,1.476],[3.042,2.01],[3.431,1.815],[2.764,-0.006],[2.72,-0.316]],"pole":[2.324,0.196],"r":0.52,"area_km2":0.759},"平和里":{"pts":[[3.043,0.69],[3.537,0.592],[4.067,0.557],[4.248,0.636],[4.594,0.921],[4.798,0.925],[4.904,0.874],[5.102,0.932],[5.437,0.713],[6.249,0.972],[6.571,0.98],[6.853,1.069],[6.929,1.009],[7.054,1.043],[7.105,0.838],[7.373,0.909],[7.46,0.992],[7.438,0.81],[7.497,0.736],[7.432,0.579],[7.564,0.551],[7.687,0.385],[7.739,0.255],[7.734,-0.034],[7.667,-0.168],[7.613,-0.184],[7.591,-0.325],[7.033,-0.4],[6.898,-0.525],[6.622,-0.561],[6.434,-0.724],[5.757,-0.916],[5.079,-0.897],[4.92,-0.82],[4.626,-0.816],[4.537,-0.984],[3.537,-1.025],[3.334,-1.199],[3.27,-1.339],[2.951,-1.314],[2.721,-1.252],[2.758,-1.128],[2.706,-0.715],[2.781,-0.078]],"pole":[4.939,0.028],"r":0.848,"area_km2":3.549},"復興里":{"pts":[[5.409,2.425],[5.329,2.361],[5.47,2.345],[6.9,1.643],[6.863,1.571],[6.946,1.445],[6.905,1.376],[6.947,1.179],[6.742,1.064],[6.242,1.008],[5.671,0.838],[5.541,0.756],[5.364,0.78],[5.084,0.97],[4.9,0.912],[4.802,0.961],[4.584,0.957],[4.228,0.666],[4.065,0.594],[3.541,0.628],[3.057,0.725],[3.467,1.813],[3.048,2.046],[3.282,2.6],[3.357,2.679],[3.755,2.873],[3.788,2.429],[3.857,2.408],[4.018,2.553],[4.55,2.619],[5.129,2.526],[5.335,2.746],[5.553,2.611],[5.401,2.519]],"pole":[4.329,1.739],"r":0.833,"area_km2":2.485},"北路里":{"pts":[[1.335,1.424],[1.4,1.619],[1.384,1.867],[1.942,2.347],[1.847,2.398],[1.943,2.485],[2.141,2.508],[2.222,2.58],[2.229,2.453],[2.38,2.374],[2.5,2.648],[2.675,2.574],[2.715,2.647],[3.188,2.479],[2.864,1.735],[2.785,1.661],[2.271,1.627],[1.912,1.678],[1.693,1.551],[1.518,1.36]],"pole":[2.603,2.056],"r":0.4,"area_km2":0.573},"西路里":{"pts":[[0.865,1.601],[0.847,1.838],[0.739,2.209],[0.963,2.298],[0.922,2.635],[1.197,2.65],[1.218,2.388],[1.391,2.454],[1.298,2.611],[1.308,2.719],[1.402,2.777],[1.422,2.859],[1.623,2.831],[1.53,2.473],[1.515,2.025]],"pole":[1.162,2.102],"r":0.292,"area_km2":0.256},"梅州里":{"pts":[[-0.615,2.267],[-0.617,2.591],[-0.434,2.788],[-0.413,2.906],[-0.465,2.991],[-0.198,3.08],[0.062,3.416],[0.569,3.072],[1.244,2.89],[1.279,2.937],[1.389,2.929],[1.381,2.81],[1.279,2.737],[1.264,2.612],[1.353,2.474],[1.231,2.431],[1.219,2.686],[0.893,2.667],[0.93,2.319],[0.701,2.224],[0.776,1.961],[0.559,1.834],[0.396,1.818],[-0.325,1.203],[-0.371,1.348],[-0.143,2.152],[-0.364,2.165],[-0.436,2.267]],"pole":[0.251,2.577],"r":0.603,"area_km2":0.901},"東源里":{"pts":[[3.828,2.448],[3.778,2.899],[3.952,3.589],[4.098,3.61],[4.217,3.581],[4.343,3.454],[4.419,3.588],[4.461,3.514],[4.526,3.568],[4.635,3.537],[4.584,3.482],[4.581,3.379],[4.692,3.39],[4.722,3.466],[4.801,3.491],[5.042,3.207],[5.321,3.204],[5.426,3.291],[5.803,3.328],[5.928,3.299],[6.186,3.105],[6.32,3.072],[7.784,2.925],[7.882,2.851],[7.857,2.742],[7.694,2.884],[7.77,2.741],[7.603,2.755],[7.502,2.63],[7.535,2.538],[7.395,2.512],[7.338,2.43],[7.269,2.491],[7.199,2.479],[7.206,2.426],[7.354,2.315],[7.347,2.211],[7.395,2.167],[7.239,2.078],[7.272,1.991],[7.181,1.923],[6.959,1.897],[6.942,1.665],[5.48,2.38],[5.374,2.382],[5.439,2.404],[5.427,2.495],[5.553,2.548],[5.595,2.618],[5.336,2.786],[5.119,2.562],[4.548,2.656],[4.046,2.599]],"pole":[6.642,2.458],"r":0.602,"area_km2":1.565},"新庄里":{"pts":[[3.743,2.91],[3.338,2.709],[3.203,2.513],[2.709,2.688],[2.666,2.616],[2.513,2.682],[3.303,4.736],[3.432,4.644],[3.54,4.451],[3.881,4.372],[3.804,4.049],[3.628,4.0],[3.846,3.886],[3.918,3.601]],"pole":[3.317,3.309],"r":0.569,"area_km2":0.792},"碧峰里":{"pts":[[3.714,3.993],[3.829,4.024],[3.869,4.224],[4.23,4.153],[4.443,4.193],[4.485,4.146],[5.213,4.575],[6.149,4.609],[6.867,4.533],[7.401,4.538],[7.372,4.474],[7.314,4.497],[6.802,4.383],[6.808,4.345],[6.954,4.296],[6.768,4.203],[7.081,4.228],[7.148,4.196],[7.197,4.295],[7.287,4.341],[7.324,4.151],[7.391,4.304],[7.43,4.086],[7.597,3.979],[7.544,3.759],[7.764,3.792],[7.751,3.589],[7.809,3.46],[7.656,3.279],[7.816,3.345],[7.843,3.277],[7.781,3.189],[7.819,3.107],[7.884,3.096],[8.046,2.912],[6.877,3.076],[6.325,3.108],[6.2,3.138],[5.941,3.333],[5.806,3.365],[5.417,3.326],[5.311,3.24],[5.053,3.243],[4.812,3.529],[4.609,3.417],[4.684,3.543],[4.667,3.576],[4.522,3.605],[4.468,3.553],[4.409,3.638],[4.343,3.499],[4.236,3.615],[3.947,3.625],[3.876,3.904]],"pole":[6.205,3.933],"r":0.667,"area_km2":1.924},"香山里":{"pts":[[3.317,4.77],[3.889,6.213],[3.985,6.277],[4.148,6.164],[4.241,6.035],[4.282,6.165],[4.645,6.64],[4.776,6.547],[4.781,6.445],[5.191,6.251],[5.461,5.997],[5.704,5.973],[6.101,5.755],[6.265,5.591],[6.496,5.58],[6.687,5.511],[6.822,5.392],[6.603,5.393],[6.598,5.289],[6.798,5.22],[6.668,5.153],[6.594,5.044],[6.663,5.017],[6.781,5.095],[7.031,5.056],[7.071,4.975],[7.046,4.863],[7.138,4.8],[7.103,4.7],[7.241,4.655],[7.321,4.702],[7.414,4.596],[7.024,4.562],[5.929,4.649],[5.86,4.614],[5.207,4.611],[4.488,4.189],[4.438,4.23],[4.233,4.189],[3.903,4.254],[3.91,4.399],[3.557,4.483],[3.459,4.667]],"pole":[4.374,5.146],"r":0.903,"area_km2":2.323},"東路里":{"pts":[[1.542,2.048],[1.563,2.466],[1.656,2.826],[1.868,2.801],[1.833,2.729],[1.938,2.558],[1.794,2.389],[1.892,2.351]],"pole":[1.752,2.577],"r":0.167,"area_km2":0.081},"中路里":{"pts":[[1.964,2.531],[1.949,2.65],[1.87,2.737],[1.917,2.816],[2.136,2.804],[2.157,2.926],[2.091,3.097],[2.184,3.1],[2.309,3.598],[2.801,3.534],[2.368,2.416],[2.259,2.474],[2.239,2.628],[2.132,2.546]],"pole":[2.46,3.292],"r":0.251,"area_km2":0.227},"新民里":{"pts":[[0.859,3.039],[1.078,3.701],[1.182,3.79],[1.392,4.177],[1.455,4.177],[1.649,4.473],[1.751,4.424],[2.294,4.47],[2.226,4.282],[2.238,3.976],[1.865,3.581],[1.802,3.306],[1.715,3.178],[1.61,3.133],[1.572,3.024],[1.415,2.951],[1.267,2.974],[1.236,2.93]],"pole":[1.447,3.505],"r":0.406,"area_km2":0.537},"沙崙里":{"pts":[[-0.427,6.934],[-0.388,6.585],[-0.084,6.933],[0.628,6.357],[0.638,6.31],[0.82,6.243],[0.786,5.788],[1.293,5.169],[1.524,4.62],[1.622,4.497],[1.435,4.207],[1.371,4.208],[1.156,3.812],[1.052,3.726],[0.826,3.048],[0.58,3.106],[0.07,3.454],[-0.997,4.752],[-1.495,4.561],[-2.288,4.469],[-2.51,4.372],[-2.415,4.582],[-2.276,4.756]],"pole":[-0.207,5.476],"r":1.126,"area_km2":3.329},"南路里":{"pts":[[2.121,2.912],[2.107,2.832],[1.418,2.907],[1.591,2.994],[1.635,3.109],[1.746,3.16],[1.833,3.291],[1.893,3.56],[2.266,3.955],[2.26,4.277],[2.329,4.47],[2.72,4.483],[2.77,4.545],[3.173,4.529],[2.815,3.569],[2.28,3.629],[2.155,3.127],[2.05,3.122]],"pole":[2.627,4.099],"r":0.389,"area_km2":0.461},"三安里":{"pts":[[0.819,5.801],[1.782,6.903],[2.639,6.344],[3.231,6.28],[3.116,6.07],[3.093,5.925],[3.149,5.932],[3.353,6.18],[3.48,6.108],[3.844,6.198],[3.19,4.565],[2.761,4.582],[2.71,4.52],[1.715,4.47],[1.554,4.638],[1.32,5.19]],"pole":[2.202,5.487],"r":0.983,"area_km2":1.97},"大崙里":{"pts":[[-0.061,6.96],[0.878,8.084],[1.253,7.773],[1.957,8.573],[2.557,9.079],[3.234,9.23],[4.089,9.013],[4.395,9.303],[4.462,9.232],[4.281,8.801],[4.095,8.52],[4.028,8.166],[3.847,8.157],[3.759,7.772],[3.812,7.473],[3.722,7.332],[3.5,7.303],[3.481,7.144],[3.544,6.669],[3.251,6.315],[2.651,6.379],[1.777,6.944],[0.821,5.858],[0.85,6.263],[0.754,6.336],[0.663,6.342]],"pole":[2.567,7.696],"r":1.091,"area_km2":3.301}},"tianwei":{"pts":[[-15.288,-7.797],[-15.187,-7.258],[-15.429,-6.332],[-14.129,-4.748],[-12.962,-4.105],[-12.936,-3.856],[-11.861,-3.649],[-11.235,-3.143],[-10.139,-3.015],[-9.099,-2.531],[-8.661,-2.179],[-8.42,-2.161],[-8.306,-2.005],[-8.235,-1.546],[-7.603,-1.247],[-6.619,-1.561],[-6.196,-1.511],[-5.758,-1.688],[-5.187,-1.602],[-4.869,-1.446],[-4.565,-1.247],[-4.335,-0.735],[-4.228,0.131],[-4.123,0.343],[-4.188,0.547],[-4.082,0.721],[-2.985,0.861],[-3.097,0.668],[-3.35,0.632],[-3.556,0.29],[-3.497,-0.244],[-2.835,0.106],[-2.626,-1.012],[-2.495,-1.176],[-2.18,-1.282],[-2.176,-1.393],[-2.353,-1.474],[-2.294,-1.814],[-1.354,-1.848],[-0.666,-1.592],[-0.948,-1.941],[-1.356,-3.14],[-1.612,-4.737],[-2.779,-4.478],[-2.707,-3.884],[-2.849,-3.87],[-3.054,-5.072],[-3.219,-5.059],[-3.297,-5.347],[-3.609,-5.391],[-3.631,-5.311],[-4.04,-5.211],[-4.229,-5.335],[-4.399,-5.308],[-4.26,-4.44],[-5.309,-4.279],[-5.663,-4.449],[-5.547,-4.777],[-5.529,-5.364],[-5.927,-5.504],[-6.487,-6.092],[-7.711,-6.531],[-7.786,-6.364],[-8.464,-6.46],[-9.087,-6.354],[-9.467,-6.656],[-9.771,-6.724],[-9.725,-7.034],[-10.568,-7.289],[-11.043,-7.706],[-11.177,-8.041],[-11.351,-8.022],[-11.966,-8.372],[-12.396,-8.301],[-12.386,-8.097],[-12.858,-8.102],[-12.936,-7.546],[-13.657,-7.528],[-13.903,-7.389],[-14.171,-7.575],[-14.964,-7.646]],"area_km2":24.67},"route":[[2.384,2.817],[2.155,2.27],[1.81,2.387],[1.418,2.474],[-0.058,1.93],[-0.046,1.777],[-0.128,1.111],[-0.119,1.054],[-0.086,0.986],[0.001,0.915],[-0.172,0.596],[0.183,0.399],[0.178,0.324],[0.198,0.16],[0.179,0.1],[-0.275,0.402],[-0.723,-0.405],[-0.854,-0.503],[-3.32,-1.861],[-3.481,-1.901],[-3.551,-1.904],[-3.537,-2.022],[-3.699,-2.003],[-3.965,-2.007],[-4.068,-1.945],[-4.21,-1.91],[-4.219,-1.875],[-5.251,-1.82],[-5.427,-1.866],[-7.317,-2.517],[-6.989,-2.773]],"stops":{"田中火車站":[2.377,2.82],"高鐵彰化站":[0.021,0.06],"大社":[-1.422,-0.806],"富農":[-3.532,-1.922],"田尾國小":[-6.992,-2.776]},"route_km":9.5,"bbox_tz":[-3.54,-3.376,8.046,9.303],"bbox_all":[-15.429,-8.372,8.046,9.303]};
+/* ================= 多語：介面文字（英文以外由 AI 初譯，建議請母語者校對） ================= */
+const LANGS = { zh:'中文', en:'English', ja:'日本語', th:'ไทย', id:'Indonesia', vi:'Tiếng Việt', ko:'한국어', de:'Deutsch' };
+const NAMES = { '東路里':'Donglu','西路里':'Xilu','南路里':'Nanlu','北路里':'Beilu','中路里':'Zhonglu','新民里':'Xinmin','三民里':'Sanmin','三光里':'Sanguang','梅州里':'Meizhou','中潭里':'Zhongtan','頂潭里':'Dingtan','龍潭里':'Longtan','大社里':'Dashe','沙崙里':'Shalun','三安里':'Sanan','大崙里':'Dalun','新庄里':'Xinzhuang','東源里':'Dongyuan','碧峰里':'Bifeng','香山里':'Xiangshan','復興里':'Fuxing','平和里':'Pinghe' };
+const UI = {
+ zh:{ title:'田中鎮 × 7 號公車', sub:'從田中火車站、高鐵彰化站，搭到田尾國小下車', names:'里名', night:'夜晚', day:'白天', reset:'重置', tw:'田尾 3D 地圖', home:'主網站',
+      tNames:'顯示或隱藏 22 個里的名字', tNight:'切換白天／夜晚', tReset:'回到初始視角', tTw:'到田尾鄉的 3D 地圖', tHome:'回到完整網站',
+      load:'🚌 正在開車…', loadSub:'載入田中鎮', glH:'這個瀏覽器不支援 3D', glP:'請改用最新版的 Chrome、Safari 或 Edge，或回到<a href="index.html">完整網站</a>。',
+      routeT:'🚌 7 號公車（彰化客運）', routeD:'在田中火車站或高鐵彰化站，搭往「員林轉運站」方向的 7 號公車。', board:'上車', alight:'下車', pickT:'點一下看說明', hint:'拖曳旋轉；點「田中火車站」「高鐵彰化站」或紅色路線看說明',
+      area:'標示的區域', liTag:'田中鎮的里', ofTown:'田中鎮', li:'{x}里', stopTag:'7 號公車站牌', outside:'田尾鄉', tipEnd:'在這一站下車，就到田尾了。',
+      note:'3D 場景為示意。里界與站牌座標：© OpenStreetMap 貢獻者（ODbL）；紅色路線依道路與站牌位置畫出，實際行駛路徑、班次與票價請以彰化客運公告為準。', timetable:'彰化客運：7 路資訊', kmTxt:'地圖估算全程約 {n} 公里',
+      s:{ station:'田中火車站', hsr:'高鐵彰化站', longtan:'龍潭里', dashe:'大社', funong:'富農', school:'田尾國小', tianwei:'田尾鄉' },
+      p:{
+        station:{ tag:'臺鐵', t:'臺鐵田中站在中路里（中州路一段 1 號），是田中鎮最熱鬧的市區。出站後到站牌，搭 7 號公車往員林轉運站方向，一路開到田尾。', m:'📍 中路里' },
+        hsr:{ tag:'高鐵', t:'高鐵彰化站在龍潭里（站區路二段 99 號），2015 年 12 月通車，離臺鐵田中站約 3 公里。7 號公車也停在這裡，可以從高鐵直接搭到田尾國小。', m:'📍 龍潭里' },
+        school:{ tag:'下車', t:'「田尾國小」是 7 號公車在田尾鄉的站牌。在這一站下車，就到田尾了。', m:'📍 田尾鄉' },
+        route:{ tag:'7 號公車', t:'彰化客運的 7 號公車，從員林轉運站開到田中火車站，中途經過高鐵彰化站。從田中這一頭搭往員林方向，依序停：田中火車站 → 龍潭里 → 高鐵彰化站 → 大社 → 富農 → 田尾國小。', m:'站序依公開資料整理，班次與異動以彰化客運為準。' },
+        stop:{ tag:'7 號公車站牌' },
+        tianwei:{ tag:'鄰近的鄉', t:'田尾鄉在田中鎮的西邊。想看田尾 20 個村，請到田尾的 3D 地圖。', m:'' },
+        li:{ t:'田中鎮共有 22 個里。' }
+      } },
+ en:{ title:'Tianzhong × Bus 7', sub:'From Tianzhong Station or Changhua HSR Station — get off at Tianwei Elementary School', names:'Names', night:'Night', day:'Day', reset:'Reset', tw:'Tianwei 3D map', home:'Main site',
+      tNames:'Show or hide the names of the 22 villages (li)', tNight:'Switch day / night', tReset:'Back to the first view', tTw:'Open the 3D map of Tianwei Township', tHome:'Back to the main site',
+      load:'🚌 Starting the bus…', loadSub:'Loading Tianzhong', glH:'This browser does not support 3D', glP:'Please use a recent Chrome, Safari or Edge, or go back to the <a href="index.html">main site</a>.',
+      routeT:'🚌 Bus 7 (Changhua Bus)', routeD:'At Tianzhong Station or Changhua HSR Station, take Bus 7 toward Yuanlin Transfer Station.', board:'Board', alight:'Get off', pickT:'Tap for details', hint:'Drag to rotate; tap “Tianzhong Station”, “Changhua HSR Station” or the red route',
+      area:'Highlighted areas', liTag:'A village (li) of Tianzhong', ofTown:'Tianzhong', li:'{x} Village', stopTag:'Bus 7 stop', outside:'Tianwei', tipEnd:'Get off at this stop and you are in Tianwei.',
+      note:'3D scenes are illustrative. Village boundaries and stop coordinates: © OpenStreetMap contributors (ODbL). The red route is drawn from roads and stop positions; for the actual path, timetable and fares please check Changhua Bus.', timetable:'Changhua Bus: route 7 info', kmTxt:'About {n} km in total (map estimate)',
+      s:{ station:'Tianzhong Railway Station', hsr:'Changhua HSR Station', longtan:'Longtan Village', dashe:'Dashe', funong:'Funong', school:'Tianwei Elementary School', tianwei:'Tianwei Township' },
+      p:{
+        station:{ tag:'TRA railway', t:'Tianzhong Station (Taiwan Railway) is in Zhonglu Village (No. 1, Sec. 1, Zhongzhou Rd.), in the busiest part of town. Outside the station, take Bus 7 toward Yuanlin Transfer Station — it runs all the way to Tianwei.', m:'📍 Zhonglu Village' },
+        hsr:{ tag:'High-speed rail', t:'Changhua HSR Station is in Longtan Village (No. 99, Sec. 2, Zhanqu Rd.). It opened in December 2015 and is about 3 km from Tianzhong Station. Bus 7 stops here too, so you can ride from the HSR station straight to Tianwei Elementary School.', m:'📍 Longtan Village' },
+        school:{ tag:'Get off here', t:'“Tianwei Elementary School” is Bus 7’s stop in Tianwei Township. Get off here and you have arrived in Tianwei.', m:'📍 Tianwei Township' },
+        route:{ tag:'Bus 7', t:'Bus 7 of Changhua Bus runs between Yuanlin Transfer Station and Tianzhong Station, passing Changhua HSR Station. Heading from Tianzhong toward Yuanlin, it stops at: Tianzhong Station → Longtan → Changhua HSR Station → Dashe → Funong → Tianwei Elementary School.', m:'Stop order compiled from public sources; timetable and changes: check Changhua Bus.' },
+        stop:{ tag:'Bus 7 stop' },
+        tianwei:{ tag:'Next-door township', t:'Tianwei lies just west of Tianzhong. To see its 20 villages, open the Tianwei 3D map.', m:'' },
+        li:{ t:'Tianzhong has 22 villages (li).' }
+      } },
+ ja:{ title:'田中鎮 × 7番バス', sub:'田中駅・高鉄彰化駅から乗って、田尾国小で降りる', names:'里名', night:'夜', day:'昼', reset:'リセット', tw:'田尾3Dマップ', home:'メインサイト',
+      tNames:'22の里の名前を表示／非表示', tNight:'昼と夜を切り替え', tReset:'最初の視点に戻る', tTw:'田尾郷の3Dマップへ', tHome:'メインサイトに戻る',
+      load:'🚌 発車準備中…', loadSub:'田中鎮を読み込み中', glH:'このブラウザは3Dに対応していません', glP:'新しいChrome・Safari・Edgeをお使いいただくか、<a href="index.html">メインサイト</a>へ戻ってください。',
+      routeT:'🚌 7番バス（彰化客運）', routeD:'田中駅または高鉄彰化駅から、「員林轉運站」方面の7番バスに乗ります。', board:'乗車', alight:'降車', pickT:'タップで説明', hint:'ドラッグで回転。「田中駅」「高鉄彰化駅」や赤いルートをタップ',
+      area:'表示中のエリア', liTag:'田中鎮の里', ofTown:'田中鎮', li:'{x}里', stopTag:'7番バス停', outside:'田尾郷', tipEnd:'このバス停で降りれば、田尾です。',
+      note:'3Dの場面はイメージです。里の境界とバス停の座標：© OpenStreetMap contributors（ODbL）。赤いルートは道路とバス停の位置から描いたもので、実際の経路・時刻・運賃は彰化客運の案内をご確認ください。', timetable:'彰化客運：7番の情報', kmTxt:'地図上の推定で全長およそ{n}km',
+      s:{ station:'田中駅（台鉄）', hsr:'高鉄彰化駅', longtan:'龍潭里', dashe:'大社', funong:'富農', school:'田尾国小', tianwei:'田尾郷' },
+      p:{
+        station:{ tag:'台鉄', t:'台鉄の田中駅は中路里（中州路一段1号）にあり、田中鎮でいちばんにぎやかな中心部です。駅を出たらバス停から、員林轉運站方面の7番バスに乗ると、田尾までずっと走ります。', m:'📍 中路里' },
+        hsr:{ tag:'高鉄', t:'高鉄彰化駅は龍潭里（站區路二段99号）にあり、2015年12月に開業しました。台鉄の田中駅から約3kmです。7番バスもここに停まるので、高鉄から田尾国小まで直接乗れます。', m:'📍 龍潭里' },
+        school:{ tag:'ここで降りる', t:'「田尾国小」は、7番バスの田尾郷にあるバス停です。ここで降りれば、田尾に着きます。', m:'📍 田尾郷' },
+        route:{ tag:'7番バス', t:'彰化客運の7番バスは、員林轉運站から田中駅まで走り、途中で高鉄彰化駅に停まります。田中から員林方面に乗ると、田中駅 → 龍潭里 → 高鉄彰化駅 → 大社 → 富農 → 田尾国小 の順に停まります。', m:'停留所の順番は公開情報をもとにまとめています。時刻や変更は彰化客運でご確認ください。' },
+        stop:{ tag:'7番バス停' },
+        tianwei:{ tag:'隣の郷', t:'田尾郷は田中鎮の西にあります。20の村を見るには田尾の3Dマップへどうぞ。', m:'' },
+        li:{ t:'田中鎮には22の里があります。' }
+      } },
+ th:{ title:'เถียนจง × รถเมล์สาย 7', sub:'จากสถานีรถไฟเถียนจงหรือสถานีรถไฟความเร็วสูงจางฮั่ว ไปลงที่โรงเรียนประถมเถียนเว่ย', names:'ชื่อหมู่บ้าน', night:'กลางคืน', day:'กลางวัน', reset:'รีเซ็ต', tw:'แผนที่ 3D เถียนเว่ย', home:'เว็บหลัก',
+      tNames:'แสดงหรือซ่อนชื่อ 22 หมู่บ้าน (หลี่)', tNight:'สลับกลางวัน / กลางคืน', tReset:'กลับไปมุมมองแรก', tTw:'เปิดแผนที่ 3D ของอำเภอเถียนเว่ย', tHome:'กลับไปเว็บหลัก',
+      load:'🚌 กำลังออกรถ…', loadSub:'กำลังโหลดเถียนจง', glH:'เบราว์เซอร์นี้ไม่รองรับ 3D', glP:'โปรดใช้ Chrome, Safari หรือ Edge เวอร์ชันล่าสุด หรือกลับไปที่<a href="index.html">เว็บหลัก</a>',
+      routeT:'🚌 รถเมล์สาย 7 (Changhua Bus)', routeD:'ที่สถานีรถไฟเถียนจงหรือสถานีรถไฟความเร็วสูงจางฮั่ว ให้ขึ้นสาย 7 ไปทางสถานีขนส่งหยวนหลิน', board:'ขึ้นรถ', alight:'ลงรถ', pickT:'แตะเพื่อดูรายละเอียด', hint:'ลากเพื่อหมุน แตะ “สถานีรถไฟเถียนจง” “สถานีรถไฟความเร็วสูงจางฮั่ว” หรือเส้นทางสีแดง',
+      area:'พื้นที่ที่ไฮไลต์', liTag:'หมู่บ้าน (หลี่) ของเถียนจง', ofTown:'เถียนจง', li:'หมู่บ้าน{x}', stopTag:'ป้ายรถเมล์สาย 7', outside:'เถียนเว่ย', tipEnd:'ลงที่ป้ายนี้ก็ถึงเถียนเว่ยแล้ว',
+      note:'ฉาก 3D เป็นภาพประกอบ ขอบเขตหมู่บ้านและพิกัดป้ายรถ: © OpenStreetMap contributors (ODbL) เส้นสีแดงวาดจากถนนและตำแหน่งป้าย เส้นทางจริง ตารางเวลา และค่าโดยสาร โปรดตรวจสอบกับ Changhua Bus', timetable:'Changhua Bus: ข้อมูลสาย 7', kmTxt:'ระยะทางรวมประมาณ {n} กม. (ประมาณจากแผนที่)',
+      s:{ station:'สถานีรถไฟเถียนจง', hsr:'สถานีรถไฟความเร็วสูงจางฮั่ว', longtan:'หมู่บ้านหลงถาน', dashe:'ต้าเชอ', funong:'ฝูหนง', school:'โรงเรียนประถมเถียนเว่ย', tianwei:'อำเภอเถียนเว่ย' },
+      p:{
+        station:{ tag:'รถไฟไต้หวัน', t:'สถานีรถไฟเถียนจงอยู่ในหมู่บ้านจงลู่ (ถนนจงโจว ตอน 1 เลขที่ 1) เป็นใจกลางเมืองที่คึกคักที่สุด ออกจากสถานีแล้วไปที่ป้ายรถเมล์ ขึ้นสาย 7 ไปทางสถานีขนส่งหยวนหลิน รถจะวิ่งไปถึงเถียนเว่ย', m:'📍 หมู่บ้านจงลู่' },
+        hsr:{ tag:'รถไฟความเร็วสูง', t:'สถานีรถไฟความเร็วสูงจางฮั่วอยู่ในหมู่บ้านหลงถาน (ถนนจ้านชวี ตอน 2 เลขที่ 99) เปิดเมื่อเดือนธันวาคม 2015 ห่างจากสถานีรถไฟเถียนจงประมาณ 3 กม. รถสาย 7 จอดที่นี่ด้วย จึงนั่งจากสถานีรถไฟความเร็วสูงไปโรงเรียนประถมเถียนเว่ยได้เลย', m:'📍 หมู่บ้านหลงถาน' },
+        school:{ tag:'ลงที่นี่', t:'“โรงเรียนประถมเถียนเว่ย” คือป้ายของรถสาย 7 ในอำเภอเถียนเว่ย ลงที่นี่ก็ถึงเถียนเว่ยแล้ว', m:'📍 อำเภอเถียนเว่ย' },
+        route:{ tag:'สาย 7', t:'รถเมล์สาย 7 ของ Changhua Bus วิ่งระหว่างสถานีขนส่งหยวนหลินกับสถานีรถไฟเถียนจง ผ่านสถานีรถไฟความเร็วสูงจางฮั่ว จากเถียนจงไปทางหยวนหลินจะจอดตามลำดับ: สถานีรถไฟเถียนจง → หลงถาน → สถานีรถไฟความเร็วสูงจางฮั่ว → ต้าเชอ → ฝูหนง → โรงเรียนประถมเถียนเว่ย', m:'ลำดับป้ายรวบรวมจากข้อมูลสาธารณะ ตารางเวลาและการเปลี่ยนแปลงโปรดดูที่ Changhua Bus' },
+        stop:{ tag:'ป้ายรถเมล์สาย 7' },
+        tianwei:{ tag:'อำเภอข้างเคียง', t:'เถียนเว่ยอยู่ทางตะวันตกของเถียนจง หากอยากดู 20 หมู่บ้านของเถียนเว่ย เชิญเปิดแผนที่ 3D ของเถียนเว่ย', m:'' },
+        li:{ t:'เถียนจงมี 22 หมู่บ้าน (หลี่)' }
+      } },
+ id:{ title:'Tianzhong × Bus 7', sub:'Dari Stasiun Tianzhong atau Stasiun HSR Changhua — turun di SD Tianwei', names:'Nama', night:'Malam', day:'Siang', reset:'Atur ulang', tw:'Peta 3D Tianwei', home:'Situs utama',
+      tNames:'Tampilkan atau sembunyikan nama 22 desa (li)', tNight:'Ganti siang / malam', tReset:'Kembali ke tampilan awal', tTw:'Buka peta 3D Kecamatan Tianwei', tHome:'Kembali ke situs utama',
+      load:'🚌 Menyalakan bus…', loadSub:'Memuat Tianzhong', glH:'Peramban ini tidak mendukung 3D', glP:'Gunakan Chrome, Safari, atau Edge terbaru, atau kembali ke <a href="index.html">situs utama</a>.',
+      routeT:'🚌 Bus 7 (Changhua Bus)', routeD:'Di Stasiun Tianzhong atau Stasiun HSR Changhua, naik Bus 7 ke arah Terminal Yuanlin.', board:'Naik', alight:'Turun', pickT:'Ketuk untuk detail', hint:'Seret untuk memutar; ketuk “Stasiun Tianzhong”, “Stasiun HSR Changhua”, atau rute merah',
+      area:'Area yang ditandai', liTag:'Desa (li) di Tianzhong', ofTown:'Tianzhong', li:'Desa {x}', stopTag:'Halte Bus 7', outside:'Tianwei', tipEnd:'Turun di halte ini, dan Anda sudah sampai di Tianwei.',
+      note:'Adegan 3D hanya ilustrasi. Batas desa dan koordinat halte: © OpenStreetMap contributors (ODbL). Rute merah digambar dari jalan dan posisi halte; untuk rute sebenarnya, jadwal, dan tarif, periksa Changhua Bus.', timetable:'Changhua Bus: info rute 7', kmTxt:'Total sekitar {n} km (perkiraan peta)',
+      s:{ station:'Stasiun Kereta Tianzhong', hsr:'Stasiun HSR Changhua', longtan:'Desa Longtan', dashe:'Dashe', funong:'Funong', school:'SD Tianwei', tianwei:'Kecamatan Tianwei' },
+      p:{
+        station:{ tag:'Kereta TRA', t:'Stasiun Tianzhong (Kereta Api Taiwan) berada di Desa Zhonglu (Jl. Zhongzhou Sec. 1 No. 1), di pusat kota yang paling ramai. Dari stasiun, naik Bus 7 ke arah Terminal Yuanlin — bus ini melaju sampai Tianwei.', m:'📍 Desa Zhonglu' },
+        hsr:{ tag:'Kereta cepat', t:'Stasiun HSR Changhua berada di Desa Longtan (Jl. Zhanqu Sec. 2 No. 99). Dibuka pada Desember 2015, jaraknya sekitar 3 km dari Stasiun Tianzhong. Bus 7 juga berhenti di sini, jadi dari stasiun HSR bisa langsung ke SD Tianwei.', m:'📍 Desa Longtan' },
+        school:{ tag:'Turun di sini', t:'“SD Tianwei” adalah halte Bus 7 di Kecamatan Tianwei. Turun di sini, dan Anda sudah tiba di Tianwei.', m:'📍 Kecamatan Tianwei' },
+        route:{ tag:'Bus 7', t:'Bus 7 Changhua Bus melayani Terminal Yuanlin sampai Stasiun Tianzhong, lewat Stasiun HSR Changhua. Dari Tianzhong ke arah Yuanlin, bus berhenti di: Stasiun Tianzhong → Longtan → Stasiun HSR Changhua → Dashe → Funong → SD Tianwei.', m:'Urutan halte disusun dari sumber publik; jadwal dan perubahan: periksa Changhua Bus.' },
+        stop:{ tag:'Halte Bus 7' },
+        tianwei:{ tag:'Kecamatan tetangga', t:'Tianwei terletak di sebelah barat Tianzhong. Untuk melihat 20 desanya, buka peta 3D Tianwei.', m:'' },
+        li:{ t:'Tianzhong memiliki 22 desa (li).' }
+      } },
+ vi:{ title:'Tianzhong × Xe buýt số 7', sub:'Từ ga Tianzhong hoặc ga cao tốc Chương Hóa — xuống ở Trường Tiểu học Tianwei', names:'Tên', night:'Đêm', day:'Ngày', reset:'Đặt lại', tw:'Bản đồ 3D Tianwei', home:'Trang chính',
+      tNames:'Hiện hoặc ẩn tên 22 làng (li)', tNight:'Chuyển ngày / đêm', tReset:'Về góc nhìn ban đầu', tTw:'Mở bản đồ 3D của Tianwei', tHome:'Về trang chính',
+      load:'🚌 Đang khởi động xe…', loadSub:'Đang tải Tianzhong', glH:'Trình duyệt này không hỗ trợ 3D', glP:'Hãy dùng Chrome, Safari hoặc Edge mới nhất, hoặc quay về <a href="index.html">trang chính</a>.',
+      routeT:'🚌 Xe buýt số 7 (Changhua Bus)', routeD:'Tại ga Tianzhong hoặc ga cao tốc Chương Hóa, đi xe buýt số 7 hướng đến Bến xe Yuanlin.', board:'Lên xe', alight:'Xuống xe', pickT:'Chạm để xem chi tiết', hint:'Kéo để xoay; chạm “Ga Tianzhong”, “Ga cao tốc Chương Hóa” hoặc tuyến màu đỏ',
+      area:'Khu vực được đánh dấu', liTag:'Một làng (li) của Tianzhong', ofTown:'Tianzhong', li:'Làng {x}', stopTag:'Trạm xe buýt số 7', outside:'Tianwei', tipEnd:'Xuống ở trạm này là bạn đã đến Tianwei.',
+      note:'Cảnh 3D chỉ mang tính minh họa. Ranh giới làng và tọa độ trạm: © OpenStreetMap contributors (ODbL). Tuyến màu đỏ được vẽ theo đường và vị trí trạm; lộ trình thực tế, giờ chạy và giá vé xin xem Changhua Bus.', timetable:'Changhua Bus: thông tin tuyến 7', kmTxt:'Toàn tuyến khoảng {n} km (ước tính trên bản đồ)',
+      s:{ station:'Ga Tianzhong', hsr:'Ga cao tốc Chương Hóa', longtan:'Làng Longtan', dashe:'Dashe', funong:'Funong', school:'Trường Tiểu học Tianwei', tianwei:'Tianwei' },
+      p:{
+        station:{ tag:'Đường sắt', t:'Ga Tianzhong (Đường sắt Đài Loan) nằm ở làng Zhonglu (số 1, đoạn 1, đường Zhongzhou), khu trung tâm sầm uất nhất thị trấn. Ra khỏi ga, ra trạm xe buýt đi tuyến số 7 hướng Bến xe Yuanlin — xe chạy thẳng đến Tianwei.', m:'📍 Làng Zhonglu' },
+        hsr:{ tag:'Đường sắt cao tốc', t:'Ga cao tốc Chương Hóa nằm ở làng Longtan (số 99, đoạn 2, đường Zhanqu), khai trương tháng 12 năm 2015, cách ga Tianzhong khoảng 3 km. Xe buýt số 7 cũng dừng ở đây nên có thể đi thẳng từ ga cao tốc đến Trường Tiểu học Tianwei.', m:'📍 Làng Longtan' },
+        school:{ tag:'Xuống ở đây', t:'“Trường Tiểu học Tianwei” là trạm của xe buýt số 7 tại Tianwei. Xuống ở đây là bạn đã đến Tianwei.', m:'📍 Tianwei' },
+        route:{ tag:'Tuyến số 7', t:'Xe buýt số 7 của Changhua Bus chạy từ Bến xe Yuanlin đến ga Tianzhong, đi qua ga cao tốc Chương Hóa. Từ Tianzhong đi hướng Yuanlin, xe dừng lần lượt: ga Tianzhong → Longtan → ga cao tốc Chương Hóa → Dashe → Funong → Trường Tiểu học Tianwei.', m:'Thứ tự trạm được tổng hợp từ nguồn công khai; giờ chạy và thay đổi xin xem Changhua Bus.' },
+        stop:{ tag:'Trạm xe buýt số 7' },
+        tianwei:{ tag:'Thị trấn bên cạnh', t:'Tianwei nằm ngay phía tây Tianzhong. Muốn xem 20 làng của Tianwei, hãy mở bản đồ 3D Tianwei.', m:'' },
+        li:{ t:'Tianzhong có 22 làng (li).' }
+      } },
+ ko:{ title:'톈중 × 7번 버스', sub:'톈중역·장화 고속철도역에서 타고 톈웨이초등학교에서 내리기', names:'이름', night:'밤', day:'낮', reset:'초기화', tw:'톈웨이 3D 지도', home:'메인 사이트',
+      tNames:'22개 리(里) 이름 표시/숨기기', tNight:'낮/밤 전환', tReset:'처음 시점으로', tTw:'톈웨이향 3D 지도 열기', tHome:'메인 사이트로 돌아가기',
+      load:'🚌 버스 시동 거는 중…', loadSub:'톈중을 불러오는 중', glH:'이 브라우저는 3D를 지원하지 않습니다', glP:'최신 Chrome, Safari 또는 Edge를 사용하거나 <a href="index.html">메인 사이트</a>로 돌아가세요.',
+      routeT:'🚌 7번 버스(장화객운)', routeD:'톈중역이나 장화 고속철도역에서 위안린 환승센터 방면 7번 버스를 탑니다.', board:'승차', alight:'하차', pickT:'눌러서 설명 보기', hint:'드래그해서 회전, “톈중역”, “장화 고속철도역” 또는 빨간 노선을 눌러 보세요',
+      area:'표시된 지역', liTag:'톈중진의 리(里)', ofTown:'톈중진', li:'{x}리', stopTag:'7번 버스 정류장', outside:'톈웨이향', tipEnd:'이 정류장에서 내리면 톈웨이입니다.',
+      note:'3D 장면은 이해를 돕기 위한 그림입니다. 리 경계와 정류장 좌표: © OpenStreetMap contributors (ODbL). 빨간 노선은 도로와 정류장 위치로 그린 것이며, 실제 경로·시간표·요금은 장화객운 공지를 확인하세요.', timetable:'장화객운: 7번 노선 안내', kmTxt:'지도 추정 전체 약 {n}km',
+      s:{ station:'톈중역(타이완철도)', hsr:'장화 고속철도역', longtan:'룽탄리', dashe:'다서', funong:'푸눙', school:'톈웨이초등학교', tianwei:'톈웨이향' },
+      p:{
+        station:{ tag:'타이완철도', t:'타이완철도 톈중역은 중루리(중저우로 1단 1호)에 있으며 톈중진에서 가장 번화한 시가지입니다. 역을 나와 정류장에서 위안린 환승센터 방면 7번 버스를 타면 톈웨이까지 곧장 갑니다.', m:'📍 중루리' },
+        hsr:{ tag:'고속철도', t:'장화 고속철도역은 룽탄리(잔취로 2단 99호)에 있으며 2015년 12월에 개통했습니다. 톈중역에서 약 3km 떨어져 있습니다. 7번 버스도 여기에 서므로 고속철도역에서 톈웨이초등학교까지 바로 갈 수 있습니다.', m:'📍 룽탄리' },
+        school:{ tag:'여기서 하차', t:'“톈웨이초등학교”는 7번 버스의 톈웨이향 정류장입니다. 여기서 내리면 톈웨이에 도착한 것입니다.', m:'📍 톈웨이향' },
+        route:{ tag:'7번 버스', t:'장화객운 7번 버스는 위안린 환승센터와 톈중역을 오가며 장화 고속철도역을 지납니다. 톈중에서 위안린 방면으로 타면 톈중역 → 룽탄리 → 장화 고속철도역 → 다서 → 푸눙 → 톈웨이초등학교 순으로 섭니다.', m:'정류장 순서는 공개 자료를 정리한 것입니다. 시간표와 변경 사항은 장화객운에서 확인하세요.' },
+        stop:{ tag:'7번 버스 정류장' },
+        tianwei:{ tag:'이웃 향', t:'톈웨이향은 톈중진의 서쪽에 있습니다. 20개 마을을 보려면 톈웨이 3D 지도를 열어 보세요.', m:'' },
+        li:{ t:'톈중진에는 22개의 리(里)가 있습니다.' }
+      } },
+ de:{ title:'Tianzhong × Bus 7', sub:'Ab Bahnhof Tianzhong oder HSR-Bahnhof Changhua — Ausstieg an der Grundschule Tianwei', names:'Namen', night:'Nacht', day:'Tag', reset:'Zurücksetzen', tw:'Tianwei-3D-Karte', home:'Hauptseite',
+      tNames:'Namen der 22 Dörfer (li) ein- oder ausblenden', tNight:'Zwischen Tag und Nacht wechseln', tReset:'Zurück zur Startansicht', tTw:'3D-Karte der Gemeinde Tianwei öffnen', tHome:'Zurück zur Hauptseite',
+      load:'🚌 Der Bus startet…', loadSub:'Tianzhong wird geladen', glH:'Dieser Browser unterstützt kein 3D', glP:'Bitte nutze ein aktuelles Chrome, Safari oder Edge oder gehe zurück zur <a href="index.html">Hauptseite</a>.',
+      routeT:'🚌 Bus 7 (Changhua Bus)', routeD:'Am Bahnhof Tianzhong oder am HSR-Bahnhof Changhua nimmst du Bus 7 Richtung Busbahnhof Yuanlin.', board:'Einstieg', alight:'Ausstieg', pickT:'Antippen für Details', hint:'Ziehen zum Drehen; tippe auf „Bahnhof Tianzhong“, „HSR-Bahnhof Changhua“ oder die rote Route',
+      area:'Markierte Bereiche', liTag:'Ein Dorf (li) von Tianzhong', ofTown:'Tianzhong', li:'Dorf {x}', stopTag:'Haltestelle Bus 7', outside:'Tianwei', tipEnd:'Steig an dieser Haltestelle aus, dann bist du in Tianwei.',
+      note:'Die 3D-Szenen sind nur Illustrationen. Dorfgrenzen und Haltestellenkoordinaten: © OpenStreetMap-Mitwirkende (ODbL). Die rote Route ist aus Straßen und Haltestellenpositionen gezeichnet; den tatsächlichen Weg, Fahrplan und Preise erfährst du bei Changhua Bus.', timetable:'Changhua Bus: Infos zu Linie 7', kmTxt:'Insgesamt etwa {n} km (Kartenschätzung)',
+      s:{ station:'Bahnhof Tianzhong', hsr:'HSR-Bahnhof Changhua', longtan:'Dorf Longtan', dashe:'Dashe', funong:'Funong', school:'Grundschule Tianwei', tianwei:'Gemeinde Tianwei' },
+      p:{
+        station:{ tag:'Taiwan Railway', t:'Der Bahnhof Tianzhong (Taiwan Railway) liegt im Dorf Zhonglu (Zhongzhou Rd. Sec. 1 Nr. 1) im belebtesten Teil der Stadt. Vor dem Bahnhof nimmst du Bus 7 Richtung Busbahnhof Yuanlin — er fährt bis nach Tianwei.', m:'📍 Dorf Zhonglu' },
+        hsr:{ tag:'Hochgeschwindigkeitsbahn', t:'Der HSR-Bahnhof Changhua liegt im Dorf Longtan (Zhanqu Rd. Sec. 2 Nr. 99). Er wurde im Dezember 2015 eröffnet und ist etwa 3 km vom Bahnhof Tianzhong entfernt. Auch Bus 7 hält hier, du kannst also vom HSR-Bahnhof direkt bis zur Grundschule Tianwei fahren.', m:'📍 Dorf Longtan' },
+        school:{ tag:'Hier aussteigen', t:'„Grundschule Tianwei“ ist die Haltestelle von Bus 7 in der Gemeinde Tianwei. Steig hier aus, dann bist du in Tianwei angekommen.', m:'📍 Gemeinde Tianwei' },
+        route:{ tag:'Bus 7', t:'Bus 7 von Changhua Bus verbindet den Busbahnhof Yuanlin mit dem Bahnhof Tianzhong und hält am HSR-Bahnhof Changhua. Von Tianzhong Richtung Yuanlin hält er an: Bahnhof Tianzhong → Longtan → HSR-Bahnhof Changhua → Dashe → Funong → Grundschule Tianwei.', m:'Die Haltestellenfolge stammt aus öffentlichen Quellen; Fahrplan und Änderungen bei Changhua Bus prüfen.' },
+        stop:{ tag:'Haltestelle Bus 7' },
+        tianwei:{ tag:'Nachbargemeinde', t:'Tianwei liegt direkt westlich von Tianzhong. Die 20 Dörfer siehst du auf der Tianwei-3D-Karte.', m:'' },
+        li:{ t:'Tianzhong hat 22 Dörfer (li).' }
+      } }
+};
+
+
+/* ================= 工具 ================= */
+const lerp = (a, b, t) => a + (b - a) * t, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function mulberry32(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const hashStr = s => { let h = 2166136261; for (const c of s) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; };
+const matCache = new Map();
+function M(c, o = {}){ const k = c + JSON.stringify(o); if (!matCache.has(k)) matCache.set(k, new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: .9, metalness: 0, ...o })); return matCache.get(k); }
+const uTime = { value: 0 };
+const windCache = new Map();
+function W(c = 0xffffff, sway = .03){
+  const k = c + '|' + sway;
+  if (!windCache.has(k)){
+    const m = new THREE.MeshStandardMaterial({ color: c, flatShading: true, roughness: .9 });
+    m.onBeforeCompile = (sh) => { sh.uniforms.uTime = uTime; sh.vertexShader = 'uniform float uTime;\n' + sh.vertexShader.replace('#include <begin_vertex>', `#include <begin_vertex>
+      #ifdef USE_INSTANCING
+      float sw = sin(uTime*1.7 + instanceMatrix[3].x*3.1 + instanceMatrix[3].z*2.3);
+      transformed.x += sw*${sway.toFixed(3)}*max(position.y + 0.5, 0.0);
+      #endif`); };
+    windCache.set(k, m);
+  }
+  return windCache.get(k);
+}
+function shade(m){ m.castShadow = true; m.receiveShadow = true; return m; }
+function box(w, h, d, c, x = 0, y = 0, z = 0, o){ const m = shade(new THREE.Mesh(new THREE.BoxGeometry(w, h, d), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function cyl(rt, rb, h, c, x = 0, y = 0, z = 0, seg = 8, o){ const m = shade(new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function cone(r, h, c, x = 0, y = 0, z = 0, seg = 6, o){ const m = shade(new THREE.Mesh(new THREE.ConeGeometry(r, h, seg), M(c, o))); m.position.set(x, y + h / 2, z); return m; }
+function sph(r, c, x = 0, y = 0, z = 0, o, detail = 1){ const m = shade(new THREE.Mesh(new THREE.IcosahedronGeometry(r, detail), M(c, o))); m.position.set(x, y, z); return m; }
+function inst(geo, mat, items){
+  const im = new THREE.InstancedMesh(geo, mat, items.length);
+  const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), p = new THREE.Vector3(), s = new THREE.Vector3(), col = new THREE.Color();
+  items.forEach((it, i) => { p.set(...it.p); const sc = typeof it.s === 'number' ? [it.s, it.s, it.s] : (it.s || [1, 1, 1]); s.set(...sc); q.setFromEuler(e.set(0, it.ry || 0, it.rz || 0, 'YXZ')); m.compose(p, q, s); im.setMatrixAt(i, m); if (it.c !== undefined) im.setColorAt(i, col.set(it.c)); });
+  im.castShadow = true; im.receiveShadow = true; im.frustumCulled = false; return im;
+}
+const $ = id => document.getElementById(id);
+
+/* ================= 語言 ================= */
+let LANG = 'en';
+try { const sv = localStorage.getItem('tw-lang'); if (sv && LANGS[sv]) LANG = sv; else { const n = (navigator.language || 'en').toLowerCase(); LANG = n.startsWith('zh') ? 'zh' : (['ja','th','id','vi','ko','de'].find(x => n.startsWith(x)) || 'en'); } } catch (e) {}
+const qs = new URLSearchParams(location.search), START_HASH = decodeURIComponent(location.hash.slice(1));
+if (UI[qs.get('lang')]) LANG = qs.get('lang');
+const tr = k => UI[LANG][k];
+{ const ld = $('ldMsg'); if (ld) ld.innerHTML = UI[LANG].load + '<small>' + UI[LANG].loadSub + '</small>'; }
+
+/* ================= 場景與燈光 ================= */
+const stage = $('stage');
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ antialias: true }); }
+catch (e) { $('nogl').classList.add('show'); $('loading').remove(); $('noglBox').innerHTML = `<h2>${UI[LANG].glH}</h2><p>${UI[LANG].glP}</p>`; throw e; }
+const coarse = matchMedia('(pointer:coarse)').matches, calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+renderer.setPixelRatio(Math.min(devicePixelRatio, coarse ? 1.75 : 2));
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement); renderer.domElement.tabIndex = 0;
+
+const BB = DATA.bbox_all, CX = (BB[0] + BB[2]) / 2, CZ = (BB[1] + BB[3]) / 2;
+const scene = new THREE.Scene();
+const DAY = { bg: new THREE.Color(0xdfeee9), ground: new THREE.Color(0xe9efe3), sun: new THREE.Color(0xfff1d6), hemiSky: new THREE.Color(0xffffff), hemiGround: new THREE.Color(0xcfe3d4) };
+const NIGHT = { bg: new THREE.Color(0x0f1b2d), ground: new THREE.Color(0x172233), sun: new THREE.Color(0x7d8fc4), hemiSky: new THREE.Color(0x6f86c8), hemiGround: new THREE.Color(0x1d2b3c) };
+scene.background = DAY.bg.clone(); scene.fog = new THREE.Fog(DAY.bg.clone(), 70, 150);
+const camera = new THREE.PerspectiveCamera(35, 1, .5, 300);
+const hemi = new THREE.HemisphereLight(0xffffff, 0xcfe3d4, .95); scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff1d6, 2.2);
+sun.position.set(CX + 14, 24, CZ + 12); sun.target.position.set(CX, 0, CZ); scene.add(sun.target);
+sun.castShadow = true; sun.shadow.mapSize.set(coarse ? 2048 : 4096, coarse ? 2048 : 4096);
+Object.assign(sun.shadow.camera, { left: -17, right: 17, top: 14, bottom: -14, near: 1, far: 70 });
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = .04; scene.add(sun);
+let nightV = 0, nightGoal = 0;
+const winMat = new THREE.MeshStandardMaterial({ color: 0xfff1d0, emissive: 0xffd9a0, emissiveIntensity: .05, flatShading: true, side: THREE.DoubleSide });
+const lampMat = new THREE.MeshStandardMaterial({ color: 0xfff1b8, emissive: 0xffd36b, emissiveIntensity: .1, flatShading: true });
+const routeMat = new THREE.MeshStandardMaterial({ color: 0xe5484d, emissive: 0xff3b30, emissiveIntensity: .08, flatShading: true, roughness: .6 });
+const anim = [];
+
+/* ================= 幾何工具 ================= */
+function pip(poly, x, z){ let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const [xi, zi] = poly[i], [xj, zj] = poly[j]; if ((zi > z) !== (zj > z) && x < (xj - xi) * (z - zi) / (zj - zi) + xi) c = !c; } return c; }
+function edgeDist(poly, x, z){ let best = 1e9; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++){ const [ax, az] = poly[j], [bx, bz] = poly[i], dx = bx - ax, dz = bz - az, l2 = dx * dx + dz * dz || 1; const t = clamp(((x - ax) * dx + (z - az) * dz) / l2, 0, 1); best = Math.min(best, Math.hypot(x - (ax + t * dx), z - (az + t * dz))); } return best; }
+function bounds(poly){ let a = 1e9, b = 1e9, c = -1e9, d = -1e9; for (const [x, z] of poly){ a = Math.min(a, x); b = Math.min(b, z); c = Math.max(c, x); d = Math.max(d, z); } return [a, b, c, d]; }
+function polyArea(p){ let a = 0; for (let i = 0, j = p.length - 1; i < p.length; j = i++) a += (p[j][0] + p[i][0]) * (p[j][1] - p[i][1]); return Math.abs(a / 2); }
+const free = (x, z, occ, pad = 0) => occ.every(o => Math.hypot(x - o[0], z - o[1]) > o[2] + pad);
+function lattice(poly, step, rnd, occ, margin = .1, jitter = .3){ const [x0, z0, x1, z1] = bounds(poly), out = []; for (let z = z0 + step / 2; z < z1; z += step) for (let x = x0 + step / 2; x < x1; x += step){ const px = x + (rnd() - .5) * step * jitter, pz = z + (rnd() - .5) * step * jitter; if (pip(poly, px, pz) && edgeDist(poly, px, pz) > margin && free(px, pz, occ)) out.push([px, pz]); } return out; }
+function scatter(poly, n, minD, rnd, occ, margin = .2){ const [x0, z0, x1, z1] = bounds(poly), out = []; for (let t = 0; t < n * 40 && out.length < n; t++){ const x = lerp(x0, x1, rnd()), z = lerp(z0, z1, rnd()); if (!pip(poly, x, z) || edgeDist(poly, x, z) < margin || !free(x, z, occ)) continue; if (out.every(q => Math.hypot(q[0] - x, q[1] - z) > minD)) out.push([x, z]); } return out; }
+
+/* ================= 田野／房屋／樹（示意） ================= */
+const headGeo = new THREE.IcosahedronGeometry(1, 0);
+const FILL = {};
+FILL.rice = (g, poly, rnd, occ) => { const pts = lattice(poly, .13, rnd, occ, .08, .5), t = [], cols = [0x8cc65a, 0x9ccf5a, 0x7fbb52, 0xb9d85a]; pts.forEach(([x, z]) => t.push({ p: [x, .08, z], s: [.05, .16, .05], c: cols[Math.floor(rnd() * 4)] })); if (t.length) g.add(inst(new THREE.ConeGeometry(1, 1, 5), W(0xffffff, .06), t)); };
+FILL.orchard = (g, poly, rnd, occ, n = 40) => {
+  const pts = scatter(poly, clamp(n, 4, 140), .34, rnd, occ, .2), tr_ = [], c1 = [], c2 = [];
+  pts.forEach(([x, z]) => { const s = .75 + rnd() * .5; tr_.push({ p: [x, .07 * s, z], s: [s, s, s] }); c1.push({ p: [x, .2 * s, z], s: [.14 * s, .2 * s, .14 * s], c: [0x3f8f55, 0x4aa05e, 0x2f7a49][Math.floor(rnd() * 3)] }); c2.push({ p: [x, .34 * s, z], s: [.1 * s, .16 * s, .1 * s], c: 0x4aa05e }); });
+  if (pts.length) g.add(inst(new THREE.CylinderGeometry(.025, .035, .14, 5), M(0x8a5a36), tr_), inst(new THREE.ConeGeometry(1, 1, 6), W(0xffffff, .02), c1), inst(new THREE.ConeGeometry(1, 1, 6), W(0xffffff, .02), c2));
+};
+FILL.houses = (g, poly, rnd, occ, n = 6) => {
+  const pts = scatter(poly, n, .42, rnd, occ, .16), walls = [], roofs = [], pal = [0xf4a6c0, 0xf3c04a, 0x7ec8c0, 0xe08a6a, 0xa9d28b, 0xf1ece0], rp = [0xb4553f, 0x4a7fa8, 0x5a6f8a];
+  pts.forEach(([x, z]) => { const w = .17 + rnd() * .08, d = .15 + rnd() * .07, h = .11 + rnd() * .07, ry = Math.floor(rnd() * 4) * Math.PI / 2 + (rnd() - .5) * .3;
+    walls.push({ p: [x, h / 2, z], s: [w, h, d], ry, c: pal[Math.floor(rnd() * pal.length)] }); roofs.push({ p: [x, h + w * .12, z], s: [w * .74, w * .74, d + .03], ry, rz: Math.PI / 4, c: rp[Math.floor(rnd() * 3)] }); occ.push([x, z, .2]);
+    const win = new THREE.Mesh(new THREE.PlaneGeometry(.045, .045), winMat); win.position.set(x + Math.sin(ry) * (d / 2 + .003), h * .55, z + Math.cos(ry) * (d / 2 + .003)); win.rotation.y = ry; g.add(win); });
+  if (pts.length) g.add(inst(new THREE.BoxGeometry(1, 1, 1), M(0xffffff), walls), inst(new THREE.BoxGeometry(1, 1, 1), M(0xffffff), roofs));
+};
+const KIND = { '中路里':'urban','東路里':'urban','西路里':'urban','南路里':'urban','北路里':'urban','新民里':'urban','中潭里':'urban','頂潭里':'urban','梅州里':'urban','新庄里':'urban',
+  '三民里':'farm','大社里':'farm','三光里':'farm','龍潭里':'farm','沙崙里':'farm','三安里':'farm','大崙里':'farm','平和里':'farm','東源里':'orchard','碧峰里':'orchard','復興里':'orchard','香山里':'orchard' };
+const TOP = { urban: 0xe6dec4, farm: 0xc3e29e, orchard: 0xa9d58f };
+const HOT = { '中路里': 'station', '龍潭里': 'hsr' };
+
+/* ================= 組裝 22 個里 ================= */
+const world = new THREE.Group(); scene.add(world);
+const SKIRT = .7, villages = [], byName = {}, pickMeshes = [];
+const ROUTE = DATA.route, STOPS = DATA.stops;
+function buildVillage(name){
+  const P = DATA.li[name], pole = P.pole, poly = P.pts.map(p => [p[0] - pole[0], p[1] - pole[1]]);
+  const shape = new THREE.Shape(poly.map(([x, z]) => new THREE.Vector2(x, -z)));
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: SKIRT, bevelEnabled: false }); geo.rotateX(-Math.PI / 2); geo.translate(0, -SKIRT, 0);
+  const rnd = mulberry32(hashStr(name)), kind = KIND[name] || 'farm', hot = !!HOT[name];
+  const base = new THREE.Color(hot ? 0xf6c85f : TOP[kind]); if (!hot) base.offsetHSL(0, (rnd() - .5) * .06, (rnd() - .5) * .05);
+  const topMat = new THREE.MeshStandardMaterial({ color: base, flatShading: true, roughness: .95 });
+  const mesh = shade(new THREE.Mesh(geo, [topMat, M(0xb98c5e)]));
+  const g = new THREE.Group(); g.position.set(pole[0], 0, pole[1]); g.add(mesh);
+  const content = new THREE.Group(); g.add(content);
+  const occ = [], area = polyArea(poly);
+  for (const [sn, sp] of Object.entries(STOPS)) if (pip(poly, sp[0] - pole[0], sp[1] - pole[1])) occ.push([sp[0] - pole[0], sp[1] - pole[1], .8]);
+  for (let i = 0; i < ROUTE.length - 1; i++){ const a = ROUTE[i], b = ROUTE[i + 1], n = Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / .12); for (let k = 0; k <= n; k++){ const x = lerp(a[0], b[0], k / n) - pole[0], z = lerp(a[1], b[1], k / n) - pole[1]; if (Math.abs(x) < 6 && Math.abs(z) < 6) occ.push([x, z, .13]); } }
+  if (!hot){
+    if (kind === 'urban'){ FILL.houses(content, poly, rnd, occ, clamp(Math.round(area * 8), 3, 26)); FILL.orchard(content, poly, rnd, occ, Math.round(area * 1.5)); }
+    else if (kind === 'farm'){ FILL.rice(content, poly, rnd, occ); FILL.houses(content, poly, rnd, occ, clamp(Math.round(area * 2.2), 2, 12)); }
+    else { FILL.orchard(content, poly, rnd, occ, Math.round(area * 5)); FILL.houses(content, poly, rnd, occ, clamp(Math.round(area * 1.4), 2, 8)); }
+  } else { FILL.houses(content, poly, rnd, occ, clamp(Math.round(area * 6), 2, 14)); FILL.orchard(content, poly, rnd, occ, Math.round(area * 1.5)); }
+  world.add(g);
+  const v = { name, group: g, mesh, topMat, base, pos: new THREE.Vector3(pole[0], 0, pole[1]), r: P.r, hot: HOT[name] || null };
+  mesh.userData.pick = name; villages.push(v); byName[name] = v; pickMeshes.push(mesh);
+}
+Object.keys(DATA.li).forEach(buildVillage);
+
+/* 鄰近的田尾鄉（淡色，只當背景） */
+const twMesh = (() => {
+  const pts = DATA.tianwei.pts, shape = new THREE.Shape(pts.map(([x, z]) => new THREE.Vector2(x, -z)));
+  const geo = new THREE.ExtrudeGeometry(shape, { depth: SKIRT, bevelEnabled: false }); geo.rotateX(-Math.PI / 2); geo.translate(0, -SKIRT, 0);
+  const m = shade(new THREE.Mesh(geo, [new THREE.MeshStandardMaterial({ color: 0xdbe6d6, flatShading: true, roughness: 1 }), M(0xc7bba4)])); m.userData.pick = 'tianwei'; m.position.y = -.01; world.add(m); pickMeshes.push(m);
+  const rnd = mulberry32(77), content = new THREE.Group(); world.add(content);
+  FILL.orchard(content, pts, rnd, [[STOPS['田尾國小'][0], STOPS['田尾國小'][1], .9]], 45);
+  return m;
+})();
+
+/* ================= 底座與雲 ================= */
+const ground = new THREE.Mesh(new THREE.CircleGeometry(46, 64), new THREE.MeshStandardMaterial({ color: DAY.ground, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.position.set(CX, -SKIRT - .02, CZ); ground.receiveShadow = true; scene.add(ground);
+const cloudMat = new THREE.MeshStandardMaterial({ color: 0xffffff, flatShading: true, transparent: true, opacity: .9, roughness: 1 });
+const clouds = [], crnd = mulberry32(99);
+for (let i = 0; i < 5; i++){ const c = new THREE.Group(); for (let k = 0; k < 4; k++){ const b = new THREE.Mesh(new THREE.IcosahedronGeometry(.9 + crnd() * .6, 1), cloudMat); b.position.set(k * 1.1 - 1.6, crnd() * .4, crnd() * .7); b.scale.y = .55; c.add(b); }
+  c.position.set(CX - 30 + i * 12, 24 + crnd() * 5, CZ - 22 + crnd() * 44); c.scale.setScalar(.5); c.userData.v = .3 + crnd() * .3; scene.add(c); clouds.push(c); }
+
+/* ================= 7 號公車路線 ================= */
+const curve = new THREE.CatmullRomCurve3(ROUTE.map(p => new THREE.Vector3(p[0], 0, p[1])), false, 'centripetal', .3);
+const RP = curve.getSpacedPoints(Math.ceil(curve.getLength() / .09));
+const SEG = [0]; for (let i = 1; i < RP.length; i++) SEG.push(SEG[i - 1] + RP[i].distanceTo(RP[i - 1]));
+const RLEN = SEG[SEG.length - 1];
+const RY = .13;
+function ribbon(w, y, mat){
+  const pos = [], idx = [];
+  for (let i = 0; i < RP.length; i++){
+    const a = RP[Math.max(0, i - 1)], b = RP[Math.min(RP.length - 1, i + 1)], tx = b.x - a.x, tz = b.z - a.z, l = Math.hypot(tx, tz) || 1, nx = -tz / l, nz = tx / l;
+    pos.push(RP[i].x + nx * w, y, RP[i].z + nz * w, RP[i].x - nx * w, y, RP[i].z - nz * w);
+    if (i < RP.length - 1){ const k = i * 2; idx.push(k, k + 2, k + 1, k + 1, k + 2, k + 3); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+  const m = new THREE.Mesh(g, mat); m.receiveShadow = true; return m;
+}
+const routeEdge = ribbon(.115, RY - .008, new THREE.MeshStandardMaterial({ color: 0x8c1f1f, roughness: .8, side: THREE.DoubleSide }));
+const routeLine = ribbon(.075, RY, new THREE.MeshStandardMaterial({ color: 0xe5484d, emissive: 0xff3b30, emissiveIntensity: .08, roughness: .6, side: THREE.DoubleSide }));
+routeLine.userData.pick = 'route'; scene.add(routeEdge, routeLine); pickMeshes.push(routeLine);
+const routeLineMat = routeLine.material;
+function at(d){   // 路線上距離 d 處的位置與方向
+  d = clamp(d, 0, RLEN); let i = 1; while (i < SEG.length - 1 && SEG[i] < d) i++;
+  const t = (d - SEG[i - 1]) / ((SEG[i] - SEG[i - 1]) || 1), p = RP[i - 1].clone().lerp(RP[i], t), dir = RP[i].clone().sub(RP[i - 1]).setY(0).normalize(); return { p, dir };
+}
+/* 前進方向的小箭頭 */
+const NCH = Math.round(RLEN / .7);
+const chev = new THREE.InstancedMesh(new THREE.ConeGeometry(.055, .16, 3), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xffffff, emissiveIntensity: .15, flatShading: true }), NCH);
+chev.frustumCulled = false; scene.add(chev);
+const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _up = new THREE.Vector3(0, 1, 0), _s = new THREE.Vector3(1, .4, 1);
+function updateChev(t){ for (let i = 0; i < NCH; i++){ const d = ((i / NCH) + t * .018) % 1 * RLEN, a = at(d); _q.setFromUnitVectors(_up, a.dir); _m.compose(new THREE.Vector3(a.p.x, RY + .02, a.p.z), _q, _s); chev.setMatrixAt(i, _m); } chev.instanceMatrix.needsUpdate = true; }
+/* 公車 */
+const bus = new THREE.Group();
+bus.add(box(.14, .13, .34, 0xf7f7f2, 0, .05, 0), box(.142, .035, .342, 0xe5484d, 0, .09, 0), box(.146, .045, .3, 0x4a6b8a, 0, .14, 0, { roughness: .3 }), box(.12, .02, .3, 0xf7f7f2, 0, .185, 0));
+for (const [x, z] of [[-.075, -.11], [.075, -.11], [-.075, .11], [.075, .11]]){ const w = cyl(.032, .032, .025, 0x2b2f36, x, 0, z, 8); w.position.y = .032; w.rotation.z = Math.PI / 2; bus.add(w); }
+const hl = new THREE.Mesh(new THREE.BoxGeometry(.03, .02, .01), lampMat); hl.position.set(-.04, .08, .172); const hr = hl.clone(); hr.position.x = .04; bus.add(hl, hr);
+bus.scale.setScalar(1.25); scene.add(bus);
+let busT = 0;
+anim.push((t, dt) => {
+  busT += dt; const run = 34, dwell = 2.2, cyc = run + dwell * 2, u = busT % cyc; let f = u < dwell ? 0 : u > dwell + run ? 1 : (u - dwell) / run; f = f * f * (3 - 2 * f) * .35 + f * .65;
+  const a = at(f * RLEN); bus.position.set(a.p.x, RY + .02, a.p.z); bus.rotation.y = Math.atan2(a.dir.x, a.dir.z);
+  updateChev(t);
+});
+
+/* ================= 地標：田中火車站、高鐵彰化站、田尾國小 ================= */
+function placeAt(key, sc, ry, fn){ const g = new THREE.Group(); const p = STOPS[key]; g.position.set(p[0], 0, p[1]); g.scale.setScalar(sc); g.rotation.y = ry; fn(g); scene.add(g); return g; }
+function windows(g, w, d, h, n = 2, y = .55){ for (let i = 0; i < n; i++){ const x = n === 1 ? 0 : (i - (n - 1) / 2) * w * .55; const win = new THREE.Mesh(new THREE.PlaneGeometry(.06, .07), winMat); win.position.set(x, h * y, d / 2 + .004); g.add(win); } }
+const stationG = placeAt('田中火車站', .72, .2, g => {
+  g.add(box(1.7, .04, .46, 0xb9bdc2, 0, 0, -.5), box(.9, .03, .5, 0xcfc9b8, 0, 0, .12));     // 月台、站前廣場
+  g.add(box(.9, .3, .34, 0xf3ecd8, 0, .03, .0), box(1.0, .05, .44, 0xc23b2a, 0, .33, 0));    // 站房、紅屋頂
+  const r = cone(.34, .16, 0xc23b2a, 0, .38, 0, 4); r.rotation.y = Math.PI / 4; r.scale.set(1.5, 1, .9); g.add(r); windows(g, .9, .34, .3, 3);
+  g.add(box(.08, .4, .08, 0xf3ecd8, .5, .03, .14), box(.14, .14, .02, 0xffffff, .5, .36, .14));  // 鐘塔
+  for (const z of [-.72, -.9]) g.add(box(2.2, .015, .03, 0x6b6f75, 0, .01, z), box(2.2, .01, .03, 0x6b6f75, 0, .01, z + .12));
+  for (const x of [-.6, -.2, .2, .6]) g.add(cyl(.02, .02, .22, 0x8a8f95, x, .03, -.4, 5));
+  g.add(box(1.7, .025, .24, 0x4a7fa8, 0, .25, -.42));                                          // 月台雨棚
+  const tr = new THREE.Group(); [0, 1, 2].forEach(i => tr.add(box(.4, .15, .17, i % 2 ? 0xe8edf2 : 0xdfe5ea, i * .43 - .43, .03, 0), box(.4, .035, .172, 0x2f6fb5, i * .43 - .43, .1, 0)));
+  tr.position.set(0, .02, -.81); g.add(tr);
+  anim.push((t) => { const c = (t % 22) / 22; tr.position.x = c < .3 ? lerp(-3.2, 0, c / .3) : c < .6 ? 0 : lerp(0, 3.2, (c - .6) / .4); });
+});
+const hsrG = placeAt('高鐵彰化站', .8, -.3, g => {
+  g.add(box(.2, .05, 3.4, 0xcfd3d8, 0, .44, 0));                                                // 高架橋面
+  for (let z = -1.5; z <= 1.5; z += .75) g.add(cyl(.05, .06, .44, 0xb7bcc2, 0, 0, z, 6), box(.3, .05, .1, 0xcfd3d8, 0, .42, z));
+  g.add(box(.9, .22, 1.1, 0xf6f6f6, .75, 0, 0));                                                // 站房
+  const roof = new THREE.Mesh(new THREE.CylinderGeometry(.5, .5, 1.25, 14, 1, false, 0, Math.PI), M(0xf0f4f8, { side: THREE.DoubleSide })); roof.rotation.set(Math.PI / 2, 0, Math.PI / 2); roof.position.set(.75, .22, 0); roof.scale.set(1, 1, .45); shade(roof); g.add(roof);
+  g.add(box(.92, .035, 1.12, 0xf08a24, .75, .2, 0));
+  for (let k = 0; k < 4; k++){ const win = new THREE.Mesh(new THREE.PlaneGeometry(.1, .09), winMat); win.position.set(.29, .12, -.4 + k * .27); win.rotation.y = -Math.PI / 2; g.add(win); }
+  const tr = new THREE.Group(); [0, 1, 2].forEach(i => tr.add(box(.17, .13, .68, 0xfafafa, 0, .495, i * .7 - .7), box(.172, .03, .68, 0xf08a24, 0, .54, i * .7 - .7), box(.174, .022, .68, 0x2b3f8a, 0, .5, i * .7 - .7)));
+  const nose = cone(.085, .26, 0xfafafa, 0, .495, 1.32, 6); nose.rotation.x = Math.PI / 2; nose.scale.set(1, 1, .75); tr.add(nose); g.add(tr);
+  anim.push((t) => { const c = (t % 14) / 14; tr.position.z = lerp(-4.5, 4.5, c); });
+});
+const schoolG = placeAt('田尾國小', .8, .15, g => {
+  g.add(box(1.2, .3, .42, 0xf3e3c0, 0, 0, 0), box(1.26, .05, .48, 0xd9683a, 0, .3, 0), box(.46, .4, .34, 0xf3e3c0, -.5, 0, -.2), box(.5, .05, .4, 0xd9683a, -.5, .4, -.2));
+  windows(g, 1.2, .42, .3, 4); g.add(cyl(.012, .012, .62, 0xcfd6dd, .7, 0, .35, 5), box(.16, .1, .01, 0xd9382a, .79, .52, .35));
+  g.add(box(.9, .01, .5, 0xd9d3c4, 0, 0, .55));
+});
+/* 站牌：大社、富農 */
+function stopSign(key, c = 0x2b6cb0){ const p = STOPS[key], g = new THREE.Group(); g.position.set(p[0] + .12, 0, p[1] - .12); g.add(cyl(.012, .012, .34, 0x9aa4ad, 0, 0, 0, 5), box(.14, .09, .012, c, 0, .3, 0)); scene.add(g); return g; }
+stopSign('大社'); stopSign('富農');
+/* 路線上的站點圓點 */
+for (const [k, p] of Object.entries(STOPS)){ const dot = new THREE.Mesh(new THREE.CylinderGeometry(.13, .13, .03, 18), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .6 })); dot.position.set(p[0], RY + .012, p[1]); dot.receiveShadow = true; const ring = new THREE.Mesh(new THREE.TorusGeometry(.13, .03, 6, 20), M(0xe5484d)); ring.rotation.x = Math.PI / 2; ring.position.set(p[0], RY + .03, p[1]); scene.add(dot, ring); }
+/* 「下車」大圖釘 */
+const pin = new THREE.Group(); pin.add(sph(.2, 0xe5484d, 0, .42, 0, { emissive: 0xff3b30, emissiveIntensity: .1 }, 2), cone(.14, .3, 0xe5484d, 0, 0, 0, 12)); pin.children[1].rotation.x = Math.PI; pin.children[1].position.y = .2; pin.add(sph(.075, 0xffffff, 0, .42, 0));
+pin.position.set(STOPS['田尾國小'][0], .75, STOPS['田尾國小'][1] + .0); scene.add(pin);
+anim.push(t => { pin.position.y = .75 + Math.sin(t * 2.4) * .07; pin.rotation.y = t * .8; });
+/* 點選用的隱形感應球 */
+const proxies = [];
+for (const [key, nm, r] of [['station', '田中火車站', .55], ['hsr', '高鐵彰化站', .7], ['school', '田尾國小', .6]]){ const p = STOPS[nm], m = new THREE.Mesh(new THREE.SphereGeometry(r, 8, 6), new THREE.MeshBasicMaterial({ visible: false })); m.position.set(p[0], .3, p[1]); m.userData.pick = key; scene.add(m); proxies.push(m); pickMeshes.push(m); }
+
+/* ================= 相機 ================= */
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .08; controls.enablePan = false;
+controls.minPolarAngle = .3; controls.maxPolarAngle = 1.3; controls.minDistance = 5; controls.maxDistance = 90;
+controls.autoRotate = !calm; controls.autoRotateSpeed = .3;
+const startDir = new THREE.Vector3(.1, .95, 1).normalize();
+const goalTarget = new THREE.Vector3(), tmp = new THREE.Vector3(), v3 = new THREE.Vector3();
+let goalDist = 30, tweening = true;
+const defaultDist = () => clamp(27 / (.63 * innerWidth / innerHeight), 20, 80);
+camera.position.set(CX, 0, CZ).add(startDir.clone().multiplyScalar(defaultDist() * 1.9));
+controls.target.set(CX, 0, CZ);
+controls.addEventListener('start', () => { tweening = false; controls.autoRotate = false; });
+let selected = null;
+function resetView(){ goalTarget.set(CX, 0, CZ); goalDist = defaultDist(); tweening = true; controls.autoRotate = !calm; select(null); }
+function resize(){ renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); if (tweening && !selected) goalDist = defaultDist(); }
+addEventListener('resize', resize);
+
+/* ================= 介面 ================= */
+const chipsEl = $('chips'), dockEl = $('dock'), panel = $('panel');
+const sn = k => UI[LANG].s[k];
+const liName = n => LANG === 'zh' || LANG === 'ja' ? n : UI[LANG].li.replace('{x}', NAMES[n]);
+const ANCH = { station: STOPS['田中火車站'], hsr: STOPS['高鐵彰化站'], school: STOPS['田尾國小'], dashe: STOPS['大社'], funong: STOPS['富農'] };
+const MAIN = [['station', '🚉', 'station'], ['hsr', '🚄', 'hsr'], ['school', '🏫', 'school']];
+const chipEls = {};
+function mkChip(key, cls, anchor, y){ const b = document.createElement('button'); b.className = 'chip ' + cls; b.onclick = () => select(key); chipsEl.appendChild(b); chipEls[key] = { b, anchor, y }; return b; }
+for (const [k] of MAIN) mkChip(k, 'main' + (k === 'school' ? ' end' : ''), ANCH[k], k === 'school' ? 1.25 : .75);
+mkChip('tianwei', 'tw', [DATA.tianwei.pts[0][0], DATA.tianwei.pts[0][1]], .4);
+chipEls['tianwei'].anchor = [CX - 9.5, CZ - 4.2];
+for (const v of villages){ const b = mkChip(v.name, 'li off', [v.pos.x, v.pos.z], .3); }
+const DOCK = [['station', '🚉', 'station'], ['longtan', '📍', '龍潭里'], ['hsr', '🚄', 'hsr'], ['dashe', '🚏', 'dashe'], ['funong', '🚏', 'funong'], ['school', '🏫', 'school']];
+const dockBtns = {};
+DOCK.forEach(([k, emo], i) => { if (i){ const a = document.createElement('span'); a.className = 'arr'; a.textContent = '›'; dockEl.appendChild(a); } const b = document.createElement('button'); b.className = 'btn card' + (k === 'school' ? ' end' : ''); b.onclick = () => select(k); dockEl.appendChild(b); dockBtns[k] = b; });
+let showNames = false;
+const hex6 = c => '#' + c.toString(16).padStart(6, '0');
+function dockLabel(k, emo){ const u = UI[LANG]; const nm = k === 'longtan' ? sn('longtan') : sn(k); return `${emo} ${nm}${k === 'station' ? ' · ' + u.board : k === 'school' ? ' · ' + u.alight : ''}`; }
+function renderNames(){
+  const u = UI[LANG];
+  for (const [k, emo] of MAIN) chipEls[k].b.textContent = `${emo} ${sn(k)}` + (k === 'school' ? ' · ' + u.alight : '');
+  chipEls['tianwei'].b.textContent = sn('tianwei') + ' →';
+  for (const v of villages){ const zs = v.name.replace('里', ''); chipEls[v.name].b.textContent = LANG === 'zh' || LANG === 'ja' ? zs : NAMES[v.name]; }
+  DOCK.forEach(([k, emo]) => { dockBtns[k].textContent = dockLabel(k, emo); });
+}
+function renderCard(){
+  const u = UI[LANG];
+  $('routeCard').innerHTML = `<b>${u.routeT}</b><p>${u.routeD}</p><p><span class="sw"></span>${u.area}：${sn('station')}（${liName('中路里')}）、${sn('hsr')}（${liName('龍潭里')}）</p><p class="rc">${u.kmTxt.replace('{n}', DATA.route_km)}</p>`;
+}
+const PANEL = {
+  station: { emoji: '🚉', zh: '田中火車站', tag: 'station', color: '#c0392b' },
+  hsr: { emoji: '🚄', zh: '高鐵彰化站', tag: 'hsr', color: '#d9792a' },
+  school: { emoji: '🏫', zh: '田尾國小', tag: 'school', color: '#c0392b' },
+  route: { emoji: '🚌', zh: '7', tag: 'route', color: '#c0392b' },
+  tianwei: { emoji: '🌼', zh: '田尾鄉', tag: 'tianwei', color: '#6a8f5a' },
+  dashe: { emoji: '🚏', zh: '大社', tag: 'stop', color: '#2b6cb0' },
+  funong: { emoji: '🚏', zh: '富農', tag: 'stop', color: '#2b6cb0' }
+};
+function fillPanel(key){
+  const u = UI[LANG], P = u.p, rd = $('pLinks');
+  let info = PANEL[key], pk = info ? info.tag : null, liKey = null;
+  if (!info && DATA.li[key]){ liKey = key; const h = HOT[key]; if (h){ info = PANEL[h]; pk = info.tag; } }
+  const links = [];
+  if (liKey){
+    $('pEmoji').textContent = HOT[liKey] ? PANEL[HOT[liKey]].emoji : '📍'; $('pZh').textContent = liKey; $('pEn').textContent = LANG === 'zh' || LANG === 'ja' ? NAMES[liKey] + ' Li' : liName(liKey);
+    const tag = $('pTag'); tag.textContent = u.liTag; tag.style.background = '#6a8f5a';
+    $('pText').textContent = HOT[liKey] ? P[HOT[liKey]].t : P.li.t; $('pMeta').textContent = HOT[liKey] ? P[HOT[liKey]].m : ''; $('pMeta').hidden = !HOT[liKey];
+    if (HOT[liKey]) links.push(['route', u.timetable]);
+  } else {
+    $('pEmoji').textContent = info.emoji;
+    $('pZh').textContent = key === 'route' ? (LANG === 'zh' ? '7 號公車' : u.routeT.replace('🚌 ', '')) : info.zh;
+    $('pEn').textContent = key === 'route' || LANG === 'zh' ? '' : sn(key);
+    const tag = $('pTag'); tag.textContent = P[pk].tag; tag.style.background = info.color;
+    $('pText').textContent = P[pk].t || ''; $('pMeta').textContent = P[pk].m || ''; $('pMeta').hidden = !P[pk].m;
+    if (key === 'dashe') { $('pText').textContent = ''; $('pMeta').textContent = '📍 ' + liName('大社里'); $('pMeta').hidden = false; }
+    if (key === 'funong') { $('pText').textContent = ''; $('pMeta').textContent = '📍 ' + sn('tianwei'); $('pMeta').hidden = false; }
+    if (key === 'station' || key === 'hsr') links.push(['route', u.timetable]);
+    if (key === 'school' || key === 'tianwei') links.push(['tw', u.tw]);
+    if (key === 'route') links.push(['route', u.timetable]);
+  }
+  $('pText').hidden = !$('pText').textContent;
+  rd.innerHTML = links.map(([t, label]) => t === 'route' ? `<a href="https://www.changhuabus.com.tw/service_info.asp?id=1158" target="_blank" rel="noopener">🚌 ${label} ↗</a>` : `<a href="township.html">🌼 ${label} →</a>`).join('');
+  $('pSrc').textContent = u.note;
+}
+function select(key){
+  if (key === 'longtan') key = '龍潭里';
+  selected = key;
+  for (const [k, c] of Object.entries(dockBtns)) c.classList.toggle('on', k === key || (k === 'longtan' && key === '龍潭里') || (k === 'station' && key === '中路里') || (k === 'hsr' && key === '龍潭里' && false));
+  for (const [k, c] of Object.entries(chipEls)) c.b.classList.toggle('on', k === key);
+  if (!key){ panel.classList.remove('open'); try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} return; }
+  fillPanel(key);
+  try { history.replaceState(null, '', '#' + (key.endsWith('里') ? encodeURIComponent(key) : key)); } catch (e) {}
+  panel.classList.add('open');
+  let tgt, dist;
+  if (key === 'route'){ const a = at(RLEN * .5); tgt = a.p; dist = 24; }
+  else if (key === 'tianwei'){ tgt = new THREE.Vector3(CX - 8, 0, CZ - 4); dist = 24; }
+  else if (ANCH[key]){ tgt = new THREE.Vector3(ANCH[key][0], 0, ANCH[key][1]); dist = key === 'dashe' || key === 'funong' ? 8 : 9; }
+  else if (byName[key]){ tgt = byName[key].pos; dist = clamp(byName[key].r * 7 + 9, 11, 18); }
+  if (tgt){ goalTarget.copy(tgt); goalDist = Math.min(dist, defaultDist() * .8); tweening = true; controls.autoRotate = false; }
+}
+$('closeBtn').onclick = () => select(null);
+$('resetBtn').onclick = resetView;
+addEventListener('keydown', e => { if (e.key === 'Escape') select(null); });
+const nightBtn = $('nightBtn');
+function setNightLabel(){ nightBtn.innerHTML = nightGoal ? `☀️ <span class="lbl">${tr('day')}</span>` : `🌙 <span class="lbl">${tr('night')}</span>`; }
+function setNight(on){ nightGoal = on ? 1 : 0; document.body.classList.toggle('night', on); nightBtn.setAttribute('aria-pressed', String(on)); setNightLabel(); }
+nightBtn.onclick = () => setNight(!nightGoal);
+function setNames(on){ showNames = on; $('namesBtn').setAttribute('aria-pressed', String(on)); for (const v of villages) chipEls[v.name].b.classList.toggle('off', !on); }
+$('namesBtn').onclick = () => setNames(!showNames);
+const zoomBy = f => { goalTarget.copy(controls.target); goalDist = clamp(camera.position.distanceTo(controls.target) * f, controls.minDistance, controls.maxDistance); tweening = true; controls.autoRotate = false; };
+$('bZin').onclick = () => zoomBy(.7); $('bZout').onclick = () => zoomBy(1.45);
+let azGoal = null, lastAz = 999; const tmpV = new THREE.Vector3(), tmpS = new THREE.Spherical(), compassEl = $('compass');
+$('bNorth').onclick = () => { azGoal = 0; tweening = false; controls.autoRotate = false; };
+function extraFrame(dt){
+  if (azGoal !== null){ const off = tmpV.copy(camera.position).sub(controls.target), sp = tmpS.setFromVector3(off); let d = azGoal - sp.theta; d = ((d + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI; sp.theta += d * Math.min(1, dt * 7); if (Math.abs(d) < .004){ sp.theta = azGoal; azGoal = null; } off.setFromSpherical(sp); camera.position.copy(controls.target).add(off); }
+  const az = controls.getAzimuthalAngle(); if (Math.abs(az - lastAz) > .004){ lastAz = az; compassEl.style.transform = `rotate(${az}rad)`; }
+}
+const hintEl = $('hint'); let hintShown = false;
+function hideHint(){ if (!hintShown) return; hintShown = false; hintEl.hidden = true; try { localStorage.setItem('tz-hint', '1'); } catch (e) {} }
+renderer.domElement.addEventListener('pointerdown', hideHint);
+setTimeout(() => { let seen = false; try { seen = localStorage.getItem('tz-hint') === '1'; } catch (e) {} if (seen || qs.has('shot') || selected) return; hintEl.textContent = tr('hint'); hintEl.hidden = false; hintShown = true; setTimeout(hideHint, 7000); }, 2500);
+function applyLang(){
+  const u = UI[LANG]; document.documentElement.lang = LANG === 'zh' ? 'zh-Hant' : LANG;
+  $('tTitle').textContent = u.title; $('tSub').textContent = u.sub; $('nLbl').textContent = u.names; $('rLbl').textContent = u.reset; $('twLbl').textContent = u.tw; $('hLbl').textContent = u.home;
+  $('namesBtn').title = u.tNames; nightBtn.title = u.tNight; $('resetBtn').title = u.tReset; $('twBtn').title = u.tTw; $('homeBtn').title = u.tHome;
+  document.title = LANG === 'zh' ? '田中鎮 3D 地圖與 7 號公車｜Tianzhong × Bus 7' : u.title + ' | Tianzhong 3D map';
+  setNightLabel(); renderNames(); renderCard(); if (selected) fillPanel(selected);
+}
+const langSel = $('langSel');
+langSel.innerHTML = Object.entries(LANGS).map(([k, n]) => `<option value="${k}">${n}</option>`).join(''); langSel.value = LANG;
+langSel.onchange = () => { LANG = langSel.value; try { localStorage.setItem('tw-lang', LANG); } catch (e) {} applyLang(); };
+applyLang();
+if (qs.has('night')) setNight(true);
+if (qs.has('names')) setNames(true);
+
+/* ================= 點選／懸停 ================= */
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2(); let downX = 0, downY = 0, hoverKey = null;
+function pick(e){ const r = renderer.domElement.getBoundingClientRect(); mouse.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(mouse, camera); const hit = ray.intersectObjects(pickMeshes, false)[0]; return hit ? hit.object.userData.pick : null; }
+renderer.domElement.addEventListener('pointermove', e => { if (e.pointerType === 'mouse'){ hoverKey = pick(e); stage.classList.toggle('hover', !!hoverKey); } });
+renderer.domElement.addEventListener('pointerdown', e => { downX = e.clientX; downY = e.clientY; });
+renderer.domElement.addEventListener('pointerup', e => { if (Math.hypot(e.clientX - downX, e.clientY - downY) > 6) return; const k = pick(e); if (k) select(k); });
+
+/* ================= 主迴圈 ================= */
+const tc = new THREE.Color();
+function applyNight(n){
+  scene.background.copy(DAY.bg).lerp(NIGHT.bg, n); scene.fog.color.copy(scene.background); ground.material.color.copy(DAY.ground).lerp(NIGHT.ground, n);
+  sun.color.copy(DAY.sun).lerp(NIGHT.sun, n); sun.intensity = lerp(2.2, .8, n);
+  hemi.color.copy(DAY.hemiSky).lerp(NIGHT.hemiSky, n); hemi.groundColor.copy(DAY.hemiGround).lerp(NIGHT.hemiGround, n); hemi.intensity = lerp(.95, 1.25, n);
+  winMat.emissiveIntensity = .05 + n * 1.6; lampMat.emissiveIntensity = .1 + n * 2.5; routeLineMat.emissiveIntensity = .08 + n * .6; cloudMat.opacity = lerp(.9, .12, n);
+  const ld = $('loading'); if (ld) ld.style.background = scene.background.getStyle();
+}
+const clock = new THREE.Clock(); let T = 0;
+applyNight(0); resize(); resetView();
+function frame(){
+  requestAnimationFrame(frame);
+  const dt = Math.min(clock.getDelta(), .05); T += dt; uTime.value = T;
+  if (Math.abs(nightV - nightGoal) > .001){ nightV += (nightGoal - nightV) * Math.min(1, dt * 3); applyNight(nightV); }
+  anim.forEach(f => f(T, dt));
+  clouds.forEach(c => { c.position.x += c.userData.v * dt; if (c.position.x > CX + 34) c.position.x = CX - 34; });
+  const sel = selected && (HOT[selected] ? selected : null), hovV = hoverKey && byName[hoverKey] ? hoverKey : null;
+  for (const v of villages){ const on = v.name === selected || v.name === hovV || (selected === 'station' && v.name === '中路里') || (selected === 'hsr' && v.name === '龍潭里'); tc.set(0x2a3a10); v.topMat.emissive.lerp(on ? tc : new THREE.Color(0), Math.min(1, dt * 10)); }
+  if (tweening){ const off = v3.copy(camera.position).sub(controls.target); controls.target.lerp(goalTarget, Math.min(1, dt * 3.2)); off.setLength(lerp(off.length(), goalDist, Math.min(1, dt * 3.2))); camera.position.copy(controls.target).add(off); }
+  const W_ = innerWidth, H_ = innerHeight, narrow = W_ <= 760, open = panel.classList.contains('open');
+  if (!narrow && open) camera.setViewOffset(W_, H_, W_ * .17, 0, W_, H_); else if (narrow && open) camera.setViewOffset(W_, H_, 0, H_ * .2, W_, H_); else if (camera.view) camera.clearViewOffset();
+  if (!isFinite(camera.position.x + camera.position.y + camera.position.z)){ camera.position.set(CX, 0, CZ).add(startDir.clone().multiplyScalar(defaultDist() * 1.2)); controls.target.set(CX, 0, CZ); }
+  extraFrame(dt); controls.update();
+  for (const [k, c] of Object.entries(chipEls)){ if (c.b.classList.contains('off')){ continue; } tmp.set(c.anchor[0], c.y, c.anchor[1]).project(camera); c.b.classList.toggle('hidden', tmp.z > 1); c.b.style.transform = `translate(${(tmp.x * .5 + .5) * W_}px,${(-tmp.y * .5 + .5) * H_}px) translate(-50%,-100%)`; }
+  renderer.render(scene, camera);
+  if (T > .3 && !frame.done){ frame.done = true; $('loading').classList.add('done'); setTimeout(() => $('loading') && $('loading').remove(), 800); }
+}
+if (START_HASH && (PANEL[START_HASH] || DATA.li[START_HASH])) select(START_HASH);
+frame();
+if (qs.has('shot')){ document.body.classList.add('shot'); controls.autoRotate = false; clouds.forEach(c => c.visible = false); }
+window.__tz = { select, setNight, setNames, scene, camera, controls, villages, bus, dbg: () => ({ goalDist, tweening, T, rlen: RLEN }) };
+</script>
+</body>
+</html>
