@@ -6,8 +6,14 @@
       "start": "2026-10-24",
       "end": "2026-11-09",
       "village": "打簾村",
-      "banner": { "l1": "花鄉田尾迎賓祭", "l2": "11/7 · 11/8" },
-      "source": { "name": "彰化新聞（2026-10-24）", "url": "https://www.changhuanews.com/2026/10/news-2407.html" },
+      "banner": {
+        "l1": "花鄉田尾迎賓祭",
+        "l2": "11/7 · 11/8"
+      },
+      "source": {
+        "name": "彰化新聞（2026-10-24）",
+        "url": "https://www.changhuanews.com/2026/10/news-2407.html"
+      },
       "title": {
         "zh": "2026 花鄉田尾迎賓祭「花田療癒探索」",
         "en": "2026 Tianwei Flower Town Welcome Festival — “Flower Field Healing Journey”",
@@ -27,6 +33,40 @@
         "vi": "Diễn ra ngày 7–8/11 với 22 hoạt động thư giãn, chủ đề “tuần hoàn bền vững”, kết nối hoa, làm vườn, nông nghiệp, ẩm thực và du lịch địa phương. Tối 7/11 còn có sự kiện bán vé “Huatian Xishi” (tiệc giữa cánh đồng hoa), kết hợp nguyên liệu địa phương, hoa và văn hóa tiệc bàn. Đơn vị tổ chức: Văn phòng hương Tianwei. Chi tiết theo thông báo của văn phòng hương.",
         "ko": "11월 7~8일 열리며, ‘순환과 지속가능성’을 주제로 22가지 힐링 체험이 있습니다. 꽃, 원예, 농업, 음식, 지역 관광을 잇습니다. 7일 저녁에는 유료 행사 ‘화톈시스’(꽃밭 잔치)도 있어 지역 식재료와 꽃, 잔치 문화를 즐길 수 있습니다. 주최: 톈웨이향공소. 자세한 내용은 향공소 공지를 확인하세요.",
         "de": "Am 7. und 8. November mit 22 entspannenden Erlebnissen zum Thema „nachhaltiger Kreislauf“, die Blumen, Gartenbau, Landwirtschaft, Gastronomie und lokalen Tourismus verbinden. Am Abend des 7. November gibt es zusätzlich die kostenpflichtige Veranstaltung „Huatian Xishi“ (Festmahl im Blumenfeld) mit lokalen Zutaten, Blumen und Banketttradition. Veranstalter: Gemeindeamt Tianwei. Details bitte den Ankündigungen des Gemeindeamts entnehmen."
+      }
+    },
+    {
+      "id": "2026-huaxian-meihao",
+      "start": "2026-10-28",
+      "end": "2026-11-09",
+      "village": "饒平村",
+      "banner": {
+        "l1": "花現美好",
+        "l2": "11/7 · 11/8"
+      },
+      "source": {
+        "name": "田尾鄉農會臉書貼文",
+        "url": "https://www.facebook.com/share/p/19ifqemvcr/"
+      },
+      "title": {
+        "zh": "花現美好田尾產業文化活動「植物們的產地市集 VII」",
+        "en": "“Huaxian Meihao” Tianwei Industry & Culture Event — “Plants’ Origin Market VII”",
+        "ja": "「花現美好」田尾 産業文化イベント「植物たちの産地マーケット VII」",
+        "th": "กิจกรรมอุตสาหกรรมและวัฒนธรรม “ฮวาเซี่ยนเหมยห่าว” เทียนเหว่ย — “ตลาดแหล่งผลิตของพืชพรรณ VII”",
+        "id": "Acara Industri & Budaya Tianwei “Huaxian Meihao” — “Pasar Asal Tanaman VII”",
+        "vi": "Sự kiện công nghiệp – văn hóa “Huaxian Meihao” Tianwei — “Chợ nơi sản xuất của cây cối VII”",
+        "ko": "‘화셴메이하오’ 톈웨이 산업문화 행사 ‘식물들의 산지 시장 VII’",
+        "de": "Industrie- und Kulturveranstaltung „Huaxian Meihao“ in Tianwei – „Herkunftsmarkt der Pflanzen VII“"
+      },
+      "text": {
+        "zh": "田尾鄉農會舉辦，11 月 7、8 日。農會貼文的標籤是「花現美好田尾產業文化活動」與「植物們的產地市集VII」。詳細時間、地點與內容請看農會的臉書貼文。",
+        "en": "Organized by the Tianwei Township Farmers’ Association on Nov 7–8. The association’s post is tagged “Huaxian Meihao Tianwei Industry & Culture Event” and “Plants’ Origin Market VII”. For exact times, place and details, see the association’s Facebook post.",
+        "ja": "田尾郷農会の主催で、11月7日・8日に開催。農会の投稿には「花現美好田尾産業文化活動」「植物たちの産地マーケットVII」のタグが付いています。詳しい時間・場所・内容は農会のFacebook投稿をご覧ください。",
+        "th": "จัดโดยสหกรณ์เกษตรกรอำเภอเทียนเหว่ย วันที่ 7–8 พฤศจิกายน โพสต์ของสหกรณ์ติดแท็ก “กิจกรรมอุตสาหกรรมและวัฒนธรรมเทียนเหว่ย ฮวาเซี่ยนเหมยห่าว” และ “ตลาดแหล่งผลิตของพืชพรรณ VII” เวลา สถานที่ และรายละเอียด โปรดดูโพสต์เฟซบุ๊กของสหกรณ์",
+        "id": "Diselenggarakan oleh Asosiasi Petani Kecamatan Tianwei pada 7–8 November. Unggahan asosiasi diberi tagar “Huaxian Meihao Tianwei Industry & Culture Event” dan “Plants’ Origin Market VII”. Waktu, tempat, dan rincian lengkap ada di unggahan Facebook asosiasi.",
+        "vi": "Do Hội Nông dân hương Tianwei tổ chức vào ngày 7–8/11. Bài đăng của hội gắn thẻ “Sự kiện công nghiệp – văn hóa Huaxian Meihao Tianwei” và “Chợ nơi sản xuất của cây cối VII”. Thời gian, địa điểm và chi tiết xin xem bài đăng Facebook của hội.",
+        "ko": "톈웨이향 농회 주최, 11월 7~8일. 농회 게시물에는 ‘화셴메이하오 톈웨이 산업문화 행사’와 ‘식물들의 산지 시장 VII’ 태그가 붙어 있습니다. 자세한 시간·장소·내용은 농회의 페이스북 게시물을 확인하세요.",
+        "de": "Veranstaltet von der Bauernvereinigung der Gemeinde Tianwei am 7. und 8. November. Der Beitrag der Vereinigung trägt die Tags „Huaxian Meihao Tianwei Industry & Culture Event“ und „Herkunftsmarkt der Pflanzen VII“. Genaue Zeiten, Ort und Details stehen im Facebook-Beitrag der Vereinigung."
       }
     }
   ]

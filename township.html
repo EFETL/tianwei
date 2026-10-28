@@ -1592,14 +1592,21 @@ let NEWS = [];   // 目前有效的消息（news.json；過了 end 日期自動�
 const ymd = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 let newsClosed = false; try { newsClosed = sessionStorage.getItem('tw-news-closed') === '1'; } catch (e) {}
 function renderNews(){
-  const box = $('news'), it = NEWS[0];
-  if (!it || newsClosed){ box.hidden = true; return; }
+  const box = $('news');
+  if (!NEWS.length || newsClosed){ box.hidden = true; return; }
   box.hidden = false; $('nTag').textContent = tr('news');
-  const pick = o => o[LANG] || o.en || o.zh;
-  $('nTitle').textContent = LANG === 'zh' ? it.title.zh : pick(it.title);
-  $('nText').innerHTML = ''; const p1 = document.createElement('span'); p1.textContent = it.text.zh; $('nText').appendChild(p1);
-  if (LANG !== 'zh'){ const br = document.createElement('div'); br.style.cssText = 'margin-top:8px;color:var(--muted)'; br.textContent = pick(it.text); $('nText').appendChild(br); }
-  $('nSrcLbl').textContent = tr('newsSrc'); $('nSrc').textContent = it.source.name; $('nSrc').href = it.source.url;
+  const pick = o => o[LANG] || o.en || o.zh, ttl = it => LANG === 'zh' ? it.title.zh : pick(it.title);
+  $('nTitle').textContent = ttl(NEWS[0]) + (NEWS.length > 1 ? ` ＋${NEWS.length - 1}` : '');
+  const body = $('newsBody'); body.innerHTML = '';
+  NEWS.forEach((it, i) => {
+    const d = document.createElement('div'); if (i) d.style.cssText = 'border-top:1px solid rgba(0,0,0,.12);padding-top:10px;margin-top:10px';
+    if (NEWS.length > 1){ const h = document.createElement('p'); h.style.cssText = 'font-weight:700;color:var(--green-dark)'; h.textContent = ttl(it); d.appendChild(h); }
+    const p = document.createElement('p'), s1 = document.createElement('span'); s1.textContent = it.text.zh; p.appendChild(s1);
+    if (LANG !== 'zh'){ const br = document.createElement('div'); br.style.cssText = 'margin-top:8px;color:var(--muted)'; br.textContent = pick(it.text); p.appendChild(br); }
+    d.appendChild(p);
+    const sp = document.createElement('p'); sp.className = 'nsrc'; sp.append(tr('newsSrc') + '：'); const a = document.createElement('a'); a.target = '_blank'; a.rel = 'noopener'; a.textContent = it.source.name; a.href = it.source.url; sp.appendChild(a); d.appendChild(sp);
+    body.appendChild(d);
+  });
 }
 $('newsHead').onclick = () => { const o = $('newsBody').hidden; $('newsBody').hidden = !o; $('newsHead').setAttribute('aria-expanded', String(o)); };
 $('newsClose').onclick = () => { newsClosed = true; try { sessionStorage.setItem('tw-news-closed', '1'); } catch (e) {} $('news').hidden = true; };
@@ -1616,7 +1623,7 @@ function addBanner(it){   // 在指定的村掛一面小旗幟（會隨風飄）
   const cloth = new THREE.Mesh(new THREE.PlaneGeometry(.4, .2), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })); cloth.position.set(0, .5, 0); cloth.castShadow = true; g.add(cloth);
   v.content.add(g); anim.push((t) => { cloth.rotation.y = Math.sin(t * 2.2) * .18; cloth.position.y = .5 + Math.sin(t * 3) * .006; });
 }
-fetch('news.json').then(r => r.ok ? r.json() : { items: [] }).then(j => {
+fetch('news.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : { items: [] }).then(j => {
   const today = ymd(new Date()), all = new URLSearchParams(location.search).has('news');
   NEWS = (j.items || []).filter(it => all || (it.start <= today && today <= it.end));
   renderNews(); NEWS.forEach(addBanner);
