@@ -100,8 +100,12 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
   #tools{gap:6px;right:10px}
   #tools .btn{padding:10px 11px}
   #title small{display:none}
-  .chip{display:none}
-  .chip.tzmain{display:inline-block}
+  .chip{font-size:11px;font-weight:600;padding:2px 6px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  .chip .e{display:none}
+  .chip.tzli{display:none}
+  .chip.tzmain{display:inline-block;font-size:12px;font-weight:700;padding:4px 10px}
+  .chip.tzmain:not(.on) .t{display:none}
+  .chip.tzmain:not(.on){padding:4px 7px}
   #dock{z-index:7}
   #legend{bottom:76px}
   #panel{right:0;left:0;top:auto;bottom:0;width:auto;max-height:52vh;border-radius:22px 22px 0 0;transform:translateY(110%);padding-bottom:84px}
@@ -1244,7 +1248,7 @@ const hex6 = c => '#' + c.toString(16).padStart(6, '0');
 function renderNames(){
   for (const v of order){
     const emo = v.info.emoji || '📍', zs = v.name.replace('村', ''), local = (LANG === 'ja' || LANG === 'zh') ? '' : shortName(v.name), c = chipMap.get(v.name);
-    c.chip.textContent = `${emo} ${zs}${local ? ' ' + local : ''}`; c.d.textContent = `${emo} ${v.name}${local ? ' · ' + local : ''}`;
+    const nm = zs + (local ? ' ' + local : ''); c.chip.textContent = ''; const se = document.createElement('span'); se.className = 'e'; se.textContent = emo + ' '; c.chip.append(se, nm); c.chip.dataset.t = nm; c.d.textContent = `${emo} ${v.name}${local ? ' · ' + local : ''}`;
   }
 }
 function fillPanel(name){
@@ -1318,7 +1322,7 @@ tzNamesBtn.onclick = () => tzSetNames(!tzShowNames);
 function tzClearOn(){ for (const c of Object.values(tzChips)) c.b.classList.remove('on'); for (const b of Object.values(tzDock)) b.classList.remove('on'); }
 function tzRenderNames(){
   const u = tzu();
-  for (const [k, emo, s] of TZ_MAIN){ tzChips[k].b.textContent = `${emo} ${tzSn(s)}` + (k === 'tz_school' ? ' · ' + u.alight : ''); tzDock[k].textContent = `${emo} ${tzSn(s)}` + (k === 'tz_station' ? ' · ' + u.board : k === 'tz_school' ? ' · ' + u.alight : ''); }
+  for (const [k, emo, s] of TZ_MAIN){ { const b = tzChips[k].b; b.textContent = ''; const se = document.createElement('span'); se.textContent = emo; const st = document.createElement('span'); st.className = 't'; st.textContent = ` ${tzSn(s)}` + (k === 'tz_school' ? ' · ' + u.alight : ''); b.append(se, st); } tzDock[k].textContent = `${emo} ${tzSn(s)}` + (k === 'tz_station' ? ' · ' + u.board : k === 'tz_school' ? ' · ' + u.alight : ''); }
   for (const n of Object.keys(tzVill)) tzChips[n].b.textContent = LANG === 'zh' || LANG === 'ja' ? n.replace('里', '') : TZ_NAMES[n];
   tzNamesBtn.title = u.tNames; tzNamesBtn.setAttribute('aria-label', u.tNames);
 }
@@ -1357,6 +1361,28 @@ function selectTz(key){
   else if (TZ_ANCH[key]){ tgt = new THREE.Vector3(TZ_ANCH[key][0], 0, TZ_ANCH[key][1]); dist = 12; }
   else if (tzVill[key]){ tgt = tzVill[key].pos; dist = clamp(tzVill[key].r * 7 + 9, 12, 22); }
   if (tgt){ goalTarget.copy(tgt); goalDist = Math.min(dist, defaultDist() * .8); tweening = true; controls.autoRotate = false; }
+}
+/* 村名標籤：電腦版全部顯示；手機版只顯示名字（不放小圖示），依人口多寡排優先順序，互相重疊的先藏起來，放大後會出現更多 */
+const popN = n => { const m = (INFO[n].meta || '').match(/([\d,]+)/); return m ? +m[1].replace(/,/g, '') : 0; };
+const VPRI = villages.map(v => v.name).sort((a, b) => popN(b) - popN(a));
+const chipW = el => { let w = 12; for (const ch of el.dataset.t || '') w += ch.charCodeAt(0) > 255 ? 11.5 : 6.2; return w; };
+function villageLabels(W_, H_, narrow){
+  const put = (el, x, y) => { el.style.transform = `translate(${x}px,${y}px) translate(-50%,-100%)`; };
+  if (!narrow){
+    for (const v of villages){ tmp.copy(v.pos).add(v3.set(0, .55, 0)).project(camera); const el = chipMap.get(v.name).chip; el.classList.toggle('hidden', tmp.z > 1); put(el, (tmp.x * .5 + .5) * W_, (-tmp.y * .5 + .5) * H_); }
+    return;
+  }
+  const boxes = [], hit = b => boxes.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]);
+  for (const c of Object.values(tzChips)) if (c.b.classList.contains('tzmain') && !c.b.classList.contains('hidden')){ const r = c.b.getBoundingClientRect(); boxes.push([r.left - 2, r.top - 2, r.right + 2, r.bottom + 2]); }
+  const names = selected && chipMap.has(selected) ? [selected, ...VPRI.filter(n => n !== selected)] : VPRI;
+  for (const n of names){
+    const v = byName[n], el = chipMap.get(n).chip;
+    tmp.copy(v.pos).add(v3.set(0, .55, 0)).project(camera);
+    const x = (tmp.x * .5 + .5) * W_, y = (-tmp.y * .5 + .5) * H_, w = chipW(el), b = [x - w / 2 - 1, y - 19, x + w / 2 + 1, y + 1];
+    const ok = tmp.z <= 1 && b[0] > -4 && b[2] < W_ + 4 && b[1] > 52 && b[3] < H_ - 70 && (n === selected || !hit(b));
+    el.classList.toggle('hidden', !ok);
+    if (ok){ put(el, x, y); boxes.push(b); }
+  }
 }
 function tzApplyLang(){ tzRenderNames(); if (tzKey(selected)) fillTzPanel(selected); }
 const tzCol = new THREE.Color(), tzZero = new THREE.Color(0), tzOn = new THREE.Color(0x2a3a10);
@@ -1612,7 +1638,7 @@ function frame(){
   tzFrame(dt, innerWidth, innerHeight, innerWidth <= 760);
   extraFrame(dt);
   controls.update();
-  if (!narrow) for (const v of villages){ tmp.copy(v.pos).add(v3.set(0, .55, 0)).project(camera); const el = chipMap.get(v.name).chip; el.classList.toggle('hidden', tmp.z > 1); el.style.transform = `translate(${(tmp.x * .5 + .5) * W_}px,${(-tmp.y * .5 + .5) * H_}px) translate(-50%,-100%)`; }
+  villageLabels(W_, H_, narrow);
   renderer.render(scene, camera);
   if (T > .3 && !frame.done){ frame.done = true; $('loading').classList.add('done'); setTimeout(() => $('loading') && $('loading').remove(), 800); }
 }
