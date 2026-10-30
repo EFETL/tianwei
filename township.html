@@ -121,6 +121,7 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
 .sbtn:focus-visible{outline:3px solid var(--pink)}
 .sbtn[aria-pressed="true"]{background:var(--gold);color:#2b2208}
 .sbtn.t{font-size:15px;font-weight:700}
+@media (max-height:700px){.stack{gap:6px}.sbtn{height:40px}}
 #compass{display:block;width:26px;height:26px}
 #searchBox{position:fixed;top:50%;left:72px;transform:translateY(-50%);width:min(360px,calc(100vw - 100px));z-index:6;padding:10px}
 #sInput{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text)}
@@ -182,6 +183,7 @@ body.shot #stack,body.shot #tags,body.shot #hint,body.shot #toast,body.shot #sea
   <button class="sbtn card" id="bZout" aria-label="zoom out">－</button>
   <button class="sbtn card" id="bNorth" aria-label="north"><svg id="compass" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" stroke-opacity=".3"/><path d="M13 3 L17.5 13 L13 11 L8.5 13 Z" fill="#d9382a"/><path d="M13 23 L8.5 13 L13 15 L17.5 13 Z" fill="currentColor" opacity=".45"/></svg></button>
   <button class="sbtn card" id="bMove" aria-pressed="false" aria-label="move">✥</button>
+  <button class="sbtn card" id="bMusic" aria-pressed="false" aria-label="music">🎵</button>
   <button class="sbtn card" id="bTzNames" aria-pressed="false" aria-label="names">🏷️</button>
   <a class="sbtn t card" id="b2d" href="villages.html">2D</a>
   <button class="sbtn card" id="bLite" aria-pressed="false" aria-label="lite">⚡</button>
@@ -1709,5 +1711,6 @@ if (qs.get('shot')){ const sn = qs.get('shot'); const go = () => { if (byName[sn
 { let lite = false; try { lite = localStorage.getItem('tw-lite') === '1'; } catch (e) {} if (lite || qs.has('lite')) setLite(true); }
 window.__tw = { tzVill, tzMeshes, FR, selectTz, birds, quizState: () => Q, quizAnswer, startQuiz, setLite, select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
 </script>
+<script src="music.js" data-src="music/chorus-loop.mp3" data-mode="loop" defer></script>
 </body>
 </html>
