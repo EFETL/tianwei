@@ -2,11 +2,12 @@
    <script src="music.js" data-src="music/xxx.mp3" data-mode="song|loop" defer></script>
    - song：整首歌，用 <audio>，播完再從頭播
    - loop：副歌，用 Web Audio 無縫循環（失敗時退回 <audio loop>）
-   - 瀏覽器不允許自動播放：預設關閉，訪客按 🎵 才開始；開關狀態記在 localStorage（tw-music），
-     下一頁若是開著，會在訪客第一次點擊／按鍵時接著播
+   - 瀏覽器不允許「完全沒互動」就自動播放：data-default="on" 的頁面會先嘗試自動播，被擋就等訪客第一次點擊／按鍵／手指放開時開始；
+     訪客按 🎵 關掉後記在 localStorage（tw-music=0），之後各頁都不再自動播。data-volume 是音量（0～1）
    - 頁面有 #bMusic 就用它（3D 地圖的按鈕列），沒有就在右下角放一顆浮動按鈕 */
 (function () {
   var sc = document.currentScript, SRC = sc.getAttribute('data-src'), MODE = sc.getAttribute('data-mode') || 'song', KEY = 'tw-music';
+  var DEFAULT_ON = sc.getAttribute('data-default') === 'on', VOL = parseFloat(sc.getAttribute('data-volume')) || .6;
   var LABEL = {
     zh: ['播放音樂', '暫停音樂', '點一下開始播放音樂'], en: ['Play music', 'Pause music', 'Tap to start the music'],
     ja: ['音楽を再生', '音楽を一時停止', 'タップして音楽を再生'], th: ['เล่นเพลง', 'หยุดเพลง', 'แตะเพื่อเริ่มเล่นเพลง'],
@@ -30,13 +31,13 @@
 
   /* ---- 播放引擎 ---- */
   var audio = null, ctx = null, buf = null, srcNode = null, gain = null;
-  function audioEl() { if (!audio) { audio = new Audio(SRC); audio.loop = true; audio.preload = 'auto'; audio.volume = .8; } return audio; }
+  function audioEl() { if (!audio) { audio = new Audio(SRC); audio.loop = true; audio.preload = 'auto'; audio.volume = VOL; } return audio; }
   var useWA = MODE === 'loop' && (window.AudioContext || window.webkitAudioContext);
   var engine = {
     play: function () {
       if (!useWA) return audioEl().play();
       var AC = window.AudioContext || window.webkitAudioContext;
-      if (!ctx) { ctx = new AC(); gain = ctx.createGain(); gain.gain.value = .8; gain.connect(ctx.destination); }
+      if (!ctx) { ctx = new AC(); gain = ctx.createGain(); gain.gain.value = VOL; gain.connect(ctx.destination); }
       var ready = ctx.state === 'running' ? Promise.resolve() : Promise.race([ctx.resume(), new Promise(function (r) { setTimeout(r, 500); })]);
       return ready.then(function () {
         if (ctx.state !== 'running') throw new Error('blocked');
@@ -57,7 +58,7 @@
     }
   };
 
-  var want = get() === '1', playing = false, pending = false, starting = false;
+  var g0 = get(), want = g0 === '1' || (g0 === null && DEFAULT_ON), playing = false, pending = false, starting = false;
   function ui() {
     var L = LABEL[lang()], on = playing || pending;
     btn.setAttribute('aria-pressed', String(on));
@@ -71,15 +72,15 @@
       .then(function () { starting = false; ui(); });
   }
   function stop() { engine.pause(); playing = false; pending = false; ui(); }
-  var armed = false;
+  var armed = false, EVS = ['pointerup', 'touchend', 'click', 'keydown'];   // iPhone 只承認「點擊／放開」這類手勢，按下去不算
   function armGesture() {
     if (armed) return; armed = true;
     var go = function (e) {
       if (e.target && btn.contains(e.target)) return;   // 按的是音樂鈕本身：交給它的 click 處理
-      document.removeEventListener('pointerdown', go, true); document.removeEventListener('keydown', go, true); armed = false;
+      EVS.forEach(function (n) { document.removeEventListener(n, go, true); }); armed = false;
       if (want) start();
     };
-    document.addEventListener('pointerdown', go, true); document.addEventListener('keydown', go, true);
+    EVS.forEach(function (n) { document.addEventListener(n, go, true); });
   }
   btn.addEventListener('click', function () {
     if (playing) { want = false; put('0'); stop(); } else { want = true; put('1'); start(); }

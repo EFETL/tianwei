@@ -1711,6 +1711,6 @@ if (qs.get('shot')){ const sn = qs.get('shot'); const go = () => { if (byName[sn
 { let lite = false; try { lite = localStorage.getItem('tw-lite') === '1'; } catch (e) {} if (lite || qs.has('lite')) setLite(true); }
 window.__tw = { tzVill, tzMeshes, FR, selectTz, birds, quizState: () => Q, quizAnswer, startQuiz, setLite, select, setNight, setDist, scene, camera, controls, villages, dbg: () => ({ goalDist, tweening, T }) };
 </script>
-<script src="music.js" data-src="music/chorus-loop.mp3" data-mode="loop" defer></script>
+<script src="music.js" data-src="music/chorus-loop.mp3" data-mode="loop" data-default="on" data-volume=".3" defer></script>
 </body>
 </html>
