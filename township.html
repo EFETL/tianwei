@@ -74,7 +74,7 @@ canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
 #panel .emoji{font-size:40px;line-height:1}
 #panel .photo{margin:14px 0 4px}
 #panel .photo img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:12px;background:var(--soft)}
-#panel .photo figcaption{font-size:14px;color:var(--muted);margin-top:4px}
+#panel .photo figcaption{white-space:pre-line;font-size:14px;color:var(--muted);margin-top:4px}
 body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #dock,body.shot #legend,body.shot #panel,body.shot #loading{display:none!important}
 #panel h2{margin:6px 0 0;font-size:26px;color:var(--green-dark);line-height:1.3;padding-right:40px}
 #panel .en{color:var(--muted);margin:2px 0 8px}
@@ -672,6 +672,9 @@ const FR = (() => { const a = [(POLY._bbox[0] - CX) * S, (POLY._bbox[1] - CY) * 
   return { x0, z0, x1, z1, cx: (x0 + x1) / 2, cz: (z0 + z1) / 2, k: Math.max(w / 26.73, h / 16.87 * .96) }; })();
 const SLUG = { '田尾村':'tianwei','打簾村':'dalian','溪畔村':'xipan','北曾村':'beizeng','南曾村':'nanzeng','饒平村':'raoping','正義村':'zhengyi','豐田村':'fengtian','溪頂村':'xiding','新厝村':'xincuo','仁里村':'renli','柳鳳村':'liufeng','陸豐村':'lufeng','海豐村':'haifeng','北鎮村':'beizhen','新興村':'xinxing','福田村':'futian','新生村':'xinsheng','南鎮村':'nanzhen','睦宜村':'muyi' };
 const START_HASH = decodeURIComponent(location.hash.slice(1));
+let TW_I18N = null;   // 照片說明的翻譯（tw-i18n.json，中文原文 → 各語言）；選中文時不載入
+function capTxt(zh){ const t = zh && LANG !== 'zh' && TW_I18N && TW_I18N[zh] && TW_I18N[zh][LANG]; return t ? zh + '\n' + t : (zh || ''); }
+function loadTwI18n(){ if (TW_I18N || LANG === 'zh') return; fetch('tw-i18n.json').then(r => r.ok ? r.json() : {}).then(j => { TW_I18N = j || {}; if (selected) fillPanel(selected); }).catch(() => { TW_I18N = {}; }); }
 let PHOTO_CREDITS = {}; fetch('photos/credits.json').then(r => r.ok ? r.json() : {}).then(j => { PHOTO_CREDITS = j || {}; if (selected) fillPanel(selected); }).catch(() => {});
 const SLUG_REV = Object.fromEntries(Object.entries(SLUG).map(([k, v]) => [v, k]));
 const DIST = { 1: { name: '第一選區', c: 0x3fa58a }, 2: { name: '第二選區', c: 0xe3b53a }, 3: { name: '第三選區', c: 0x4a9bd6 }, 4: { name: '第四選區', c: 0xe0742f } };
@@ -1278,6 +1281,7 @@ function renderNames(){
   }
 }
 function fillPanel(name){
+  loadTwI18n();
   { const pg = $('pPage'); pg.hidden = false; pg.removeAttribute('target'); $('pTag').hidden = false; }
   const v = byName[name], i = v.info, dd = DIST[i.dist], u = UI[LANG];
   $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = (LANG === 'ja' || LANG === 'zh') ? i.en : fullName(name);
@@ -1287,17 +1291,17 @@ function fillPanel(name){
   const ph = $('pPhoto'), slug = SLUG[name], real = `photos/${slug}.jpg`, fake = `photos/3d/${slug}.jpg`, hasReal = Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, slug);
   ph.alt = `${name} · ${i.en}`; $('pPhotoBox').hidden = false; ph.dataset.fb = '';
   ph.onerror = () => { if (hasReal && !ph.dataset.fb){ ph.dataset.fb = '1'; $('pCap').textContent = u.shotCap; ph.src = fake; } else $('pPhotoBox').hidden = true; };
-  $('pCap').textContent = hasReal ? (PHOTO_CREDITS[slug] || '') : u.shotCap; ph.src = hasReal ? real : fake;
+  $('pCap').textContent = hasReal ? capTxt(PHOTO_CREDITS[slug]) : u.shotCap; ph.src = hasReal ? real : fake;
   const tk = slug + '-temple', tbox = $('pTempleBox'), timg = $('pTemple');   // 廟宇照片（你自己拍的）：photos/<slug>-temple.jpg，並在 credits.json 登記
   if (Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, tk)){
     timg.onerror = () => { tbox.hidden = true; }; timg.onload = () => { tbox.hidden = false; };
-    timg.alt = PHOTO_CREDITS[tk]; $('pTempleCap').textContent = PHOTO_CREDITS[tk]; timg.src = `photos/${slug}-temple.jpg`;
+    timg.alt = PHOTO_CREDITS[tk]; $('pTempleCap').textContent = capTxt(PHOTO_CREDITS[tk]); timg.src = `photos/${slug}-temple.jpg`;
   } else { tbox.hidden = true; timg.removeAttribute('src'); }
   const ex = $('pExtras'); ex.innerHTML = '';   // 額外照片：photos/<slug>-x1.jpg、-x2.jpg…，在 credits.json 登記才顯示
   for (let k = 1; k <= 6; k++){
     const key = `${slug}-x${k}`; if (!Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, key)) break;
     const f = document.createElement('figure'); f.className = 'photo'; f.style.margin = '0 0 4px'; const im = document.createElement('img'), cp = document.createElement('figcaption');
-    im.alt = PHOTO_CREDITS[key]; im.loading = 'lazy'; im.src = `photos/${key}.jpg`; im.onerror = () => f.remove(); cp.textContent = PHOTO_CREDITS[key]; f.append(im, cp); ex.appendChild(f);
+    im.alt = PHOTO_CREDITS[key]; im.loading = 'lazy'; im.src = `photos/${key}.jpg`; im.onerror = () => f.remove(); cp.textContent = capTxt(PHOTO_CREDITS[key]); f.append(im, cp); ex.appendChild(f);
   }
   $('pPage').textContent = u.page; $('pPage').href = `village/${SLUG[name]}.html`;
 }
