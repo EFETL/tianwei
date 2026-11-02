@@ -72,7 +72,7 @@
       .then(function () { starting = false; ui(); });
   }
   function stop() { engine.pause(); playing = false; pending = false; ui(); }
-  var armed = false, EVS = ['pointerup', 'touchend', 'click', 'keydown'];   // iPhone 只承認「點擊／放開」這類手勢，按下去不算
+  var armed = false, EVS = ['pointerdown', 'mousedown', 'pointerup', 'touchend', 'click', 'keydown'];   // 電腦「按下去」就算互動、越早越好；iPhone 只承認「點擊／放開」，按下去失敗會自動再等下一次
   function armGesture() {
     if (armed) return; armed = true;
     var go = function (e) {
