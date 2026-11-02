@@ -1298,7 +1298,7 @@ function fillPanel(name){
     timg.alt = PHOTO_CREDITS[tk]; $('pTempleCap').textContent = capTxt(PHOTO_CREDITS[tk]); timg.src = `photos/${slug}-temple.jpg`;
   } else { tbox.hidden = true; timg.removeAttribute('src'); }
   const ex = $('pExtras'); ex.innerHTML = '';   // 額外照片：photos/<slug>-x1.jpg、-x2.jpg…，在 credits.json 登記才顯示
-  for (let k = 1; k <= 12; k++){
+  for (let k = 1; k <= 24; k++){
     const key = `${slug}-x${k}`; if (!Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, key)) break;
     const f = document.createElement('figure'); f.className = 'photo'; f.style.margin = '0 0 4px'; const im = document.createElement('img'), cp = document.createElement('figcaption');
     im.alt = PHOTO_CREDITS[key]; im.loading = 'lazy'; im.src = `photos/${key}.jpg`; im.onerror = () => f.remove(); cp.textContent = capTxt(PHOTO_CREDITS[key]); f.append(im, cp); ex.appendChild(f);
