@@ -32,6 +32,7 @@
   /* ---- 播放引擎 ---- */
   var audio = null, ctx = null, buf = null, srcNode = null, gain = null;
   function audioEl() { if (!audio) { audio = new Audio(SRC); audio.loop = true; audio.preload = 'auto'; audio.volume = VOL; } return audio; }
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}   // iPhone：Web Audio 預設會被「靜音鍵」靜音，改成像音樂播放器一樣照常出聲
   var useWA = MODE === 'loop' && (window.AudioContext || window.webkitAudioContext);
   var engine = {
     play: function () {
@@ -59,8 +60,10 @@
   };
 
   var g0 = get(), want = g0 === '1' || (g0 === null && DEFAULT_ON), playing = false, pending = false, starting = false;
+  var ps = document.createElement('style'); ps.textContent = '@keyframes twpulse{0%,100%{box-shadow:0 0 0 0 rgba(227,163,58,.75)}60%{box-shadow:0 0 0 12px rgba(227,163,58,0)}}#bMusic.musicwait{animation:twpulse 1.6s infinite}'; document.head.appendChild(ps);
   function ui() {
     var L = LABEL[lang()], on = playing || pending;
+    btn.classList.toggle('musicwait', pending && !playing);   // 瀏覽器擋住自動播放時，讓 🎵 鈕閃動，提示「點一下畫面就開始」
     btn.setAttribute('aria-pressed', String(on));
     btn.textContent = playing ? '🔊' : '🎵';
     var t = pending ? L[2] : (playing ? L[1] : L[0]); btn.title = t; btn.setAttribute('aria-label', t);
@@ -72,10 +75,11 @@
       .then(function () { starting = false; ui(); });
   }
   function stop() { engine.pause(); playing = false; pending = false; ui(); }
-  var armed = false, EVS = ['pointerdown', 'mousedown', 'pointerup', 'touchend', 'click', 'keydown'];   // 電腦「按下去」就算互動、越早越好；iPhone 只承認「點擊／放開」，按下去失敗會自動再等下一次
+  var armed = false, EVS = ['pointerdown', 'pointerup', 'touchend', 'click', 'keydown'];   // 電腦滑鼠「按下去」就算互動、越早越好；觸控（iPhone）只承認「點擊／放開」，所以觸控的 pointerdown 要略過，否則第一下點擊會被浪費
   function armGesture() {
     if (armed) return; armed = true;
     var go = function (e) {
+      if (e.type === 'pointerdown' && e.pointerType !== 'mouse') return;
       if (e.target && btn.contains(e.target)) return;   // 按的是音樂鈕本身：交給它的 click 處理
       EVS.forEach(function (n) { document.removeEventListener(n, go, true); }); armed = false;
       if (want) start();
