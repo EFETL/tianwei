@@ -135,6 +135,13 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
 #tags .tg{flex:0 0 auto;font:inherit;font-size:15px;border:0;border-radius:999px;padding:6px 14px;background:var(--card);color:var(--text);box-shadow:0 3px 10px rgba(0,0,0,.14);cursor:pointer;white-space:nowrap;min-height:36px}
 #tags .tg[aria-pressed="true"]{background:var(--green);color:#fff}
 #tags .tg.quizbtn{background:var(--pink);color:#fff}
+#tags .tg.routebtn{background:#fff3e6;color:#9a4a12}#tags .tg.routebtn[aria-pressed="true"]{background:#e3763a;color:#fff}
+.poi{position:absolute;left:0;top:0;z-index:4;pointer-events:auto;width:36px;height:36px;border-radius:50%;border:3px solid #fff;background:var(--card);box-shadow:0 3px 10px rgba(0,0,0,.3);font:inherit;font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0}
+.poi.cat-spot{background:#fde4ec}.poi.cat-food{background:#fdf0cf}.poi.cat-serv{background:#dcecf8}
+.poi.num{background:#e3763a;color:#fff;font-weight:700;font-size:17px}.poi.on{outline:3px solid var(--gold);outline-offset:2px}.poi.far{width:16px;height:16px;border-width:2px;font-size:0}.poi.far.on{width:26px;height:26px}
+.poi.hidden{display:none}
+body.quiz .poi{display:none}
+#panel .rsteps{margin:10px 0;padding-left:0;list-style:none}#panel .rsteps button{font:inherit;font-size:16px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:10px 12px;margin:6px 0;cursor:pointer;min-height:44px}#panel .rsteps button:hover{background:var(--soft)}
 .tgcount{flex:0 0 auto;font-size:14px;color:var(--text);background:var(--card);border-radius:999px;padding:4px 10px}
 .chip.dimmed,#dock .btn.dimmed{opacity:.35}
 #legend{bottom:116px}
@@ -1509,6 +1516,8 @@ function renderNames(){
 }
 function fillPanel(name){
   loadTwI18n();
+  if (isPoiKey(name)) return fillPoiPanel(name.slice(4));
+  if (!byName[name]) return;
   { const pg = $('pPage'); pg.hidden = false; pg.removeAttribute('target'); $('pTag').hidden = false; }
   const v = byName[name], i = v.info, dd = DIST[i.dist], u = UI[LANG];
   $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = (LANG === 'ja' || LANG === 'zh') ? i.en : fullName(name);
@@ -1755,6 +1764,8 @@ function renderTags(){
   const mk = (label, on, fn, cls = '') => { const b = document.createElement('button'); b.className = 'tg ' + cls; b.textContent = label; b.setAttribute('aria-pressed', String(on)); b.onclick = fn; tagsEl.appendChild(b); };
   mk(tr('tagAll'), tagSel === null, () => setTag(null));
   for (const k in TAGDEF) mk(`${TAGDEF[k].emoji} ${tr(TAGDEF[k].key)}`, tagSel === k, () => setTag(tagSel === k ? null : k));
+  mk('🧭 ' + pui('route'), routeOn, () => setRoute(!routeOn), 'routebtn');
+  for (const c of ['spot', 'food', 'serv']) mk(`${POI.cats[c].emoji} ${pui('cat_' + c)}`, poiCatOn[c], () => { poiCatOn[c] = !poiCatOn[c]; refreshPoi(); renderTags(); });
   mk('🎯 ' + tr('quiz'), false, () => startQuiz(), 'quizbtn');
   const sh = document.createElement('a'); sh.className = 'tg'; sh.href = 'worksheet.html'; sh.target = '_blank'; sh.rel = 'noopener'; sh.textContent = '🖨️ ' + tr('sheet'); sh.style.textDecoration = 'none'; tagsEl.appendChild(sh);
   const sp = document.createElement('span'); sp.className = 'tgcount'; sp.id = 'tgCount'; sp.hidden = !tagSel; sp.textContent = tagSel ? tr('tagCount').replace('{n}', TAGSET[tagSel].size) : ''; tagsEl.appendChild(sp);
@@ -1856,9 +1867,457 @@ function addBanner(it){   // 在指定的村掛一面小旗幟（會隨風飄）
   const cloth = new THREE.Mesh(new THREE.PlaneGeometry(.4, .2), new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })); cloth.position.set(0, .5, 0); cloth.castShadow = true; g.add(cloth);
   v.content.add(g); anim.push((t) => { cloth.rotation.y = Math.sin(t * 2.2) * .18; cloth.position.y = .5 + Math.sin(t * 3) * .006; });
 }
+/* ================= 景點標記層與一日遊路線（資料與翻譯：poi.json） ================= */
+const POI = {
+ "ui": {
+  "zh": {
+   "route": "一日遊",
+   "cat_spot": "景點",
+   "cat_food": "吃喝購物",
+   "cat_serv": "公共服務",
+   "open_map": "在 Google 地圖查看",
+   "note": "地圖上的標記只表示它在哪個村，位置為示意；實際位置請看 Google 地圖。"
+  },
+  "en": {
+   "route": "One-day trip",
+   "cat_spot": "Sights",
+   "cat_food": "Food & shopping",
+   "cat_serv": "Public services",
+   "open_map": "Open in Google Maps",
+   "note": "Markers only show which village a place is in; positions are approximate. Use Google Maps for the exact location."
+  },
+  "ja": {
+   "route": "1日コース",
+   "cat_spot": "見どころ",
+   "cat_food": "グルメ・買い物",
+   "cat_serv": "公共サービス",
+   "open_map": "Googleマップで開く",
+   "note": "地図上のマークはその場所がどの村にあるかを示すもので、位置は目安です。正確な場所はGoogleマップでご確認ください。"
+  },
+  "th": {
+   "route": "ทริปหนึ่งวัน",
+   "cat_spot": "สถานที่น่าเที่ยว",
+   "cat_food": "อาหารและช้อปปิ้ง",
+   "cat_serv": "บริการสาธารณะ",
+   "open_map": "เปิดใน Google Maps",
+   "note": "เครื่องหมายบนแผนที่แสดงเพียงว่าสถานที่อยู่ในหมู่บ้านใด ตำแหน่งเป็นเพียงโดยประมาณ โปรดดูตำแหน่งที่แน่นอนจาก Google Maps"
+  },
+  "id": {
+   "route": "Wisata sehari",
+   "cat_spot": "Tempat wisata",
+   "cat_food": "Kuliner & belanja",
+   "cat_serv": "Layanan publik",
+   "open_map": "Buka di Google Maps",
+   "note": "Penanda di peta hanya menunjukkan desa tempat lokasi itu berada; posisinya perkiraan. Lihat Google Maps untuk lokasi yang tepat."
+  },
+  "vi": {
+   "route": "Chuyến đi một ngày",
+   "cat_spot": "Điểm tham quan",
+   "cat_food": "Ăn uống & mua sắm",
+   "cat_serv": "Dịch vụ công",
+   "open_map": "Mở trong Google Maps",
+   "note": "Dấu trên bản đồ chỉ cho biết địa điểm thuộc làng nào, vị trí chỉ mang tính tương đối. Hãy xem Google Maps để biết vị trí chính xác."
+  },
+  "ko": {
+   "route": "하루 코스",
+   "cat_spot": "명소",
+   "cat_food": "먹거리·쇼핑",
+   "cat_serv": "공공 서비스",
+   "open_map": "Google 지도에서 열기",
+   "note": "지도의 표시는 해당 장소가 어느 마을에 있는지만 보여 주며 위치는 대략적입니다. 정확한 위치는 Google 지도를 확인하세요."
+  },
+  "de": {
+   "route": "Tagestour",
+   "cat_spot": "Sehenswertes",
+   "cat_food": "Essen & Einkaufen",
+   "cat_serv": "Öffentliche Dienste",
+   "open_map": "In Google Maps öffnen",
+   "note": "Die Markierungen zeigen nur, in welchem Dorf ein Ort liegt; die Position ist ungefähr. Den genauen Ort finden Sie in Google Maps."
+  }
+ },
+ "cats": {
+  "spot": {
+   "emoji": "🌷",
+   "color": "#d9668a"
+  },
+  "food": {
+   "emoji": "🛍️",
+   "color": "#e3a33a"
+  },
+  "serv": {
+   "emoji": "🏛️",
+   "color": "#4a7fa8"
+  }
+ },
+ "pois": [
+  {
+   "id": "visitor",
+   "village": "打簾村",
+   "cat": "serv",
+   "emoji": "ℹ️",
+   "name": {
+    "zh": "田尾鄉遊客服務中心",
+    "en": "Tianwei Visitor Service Center",
+    "ja": "田尾郷観光サービスセンター",
+    "th": "ศูนย์บริการนักท่องเที่ยวเทียนเหว่ย",
+    "id": "Pusat Layanan Wisatawan Tianwei",
+    "vi": "Trung tâm Dịch vụ Du khách Tianwei",
+    "ko": "톈웨이향 관광안내센터",
+    "de": "Besucherzentrum Tianwei"
+   },
+   "text": {
+    "zh": "位在打簾村，在公路花園一帶。來田尾玩，可以從這裡開始。",
+    "en": "In Dalian Village, in the Highway Garden area. A good place to start your visit to Tianwei.",
+    "ja": "打簾村の公路花園の一角にあります。田尾観光はここから始めましょう。",
+    "th": "ตั้งอยู่ในหมู่บ้านต่าเหลียน บริเวณสวนริมทางหลวง เป็นจุดเริ่มต้นที่ดีสำหรับการเที่ยวเทียนเหว่ย",
+    "id": "Berada di Desa Dalian, di kawasan Taman Jalan Raya. Tempat yang tepat untuk memulai kunjungan ke Tianwei.",
+    "vi": "Nằm ở làng Dalian, trong khu Vườn hoa Công lộ. Đây là nơi tốt để bắt đầu chuyến tham quan Tianwei.",
+    "ko": "다롄촌의 공로화원 일대에 있습니다. 톈웨이 여행을 여기서 시작해 보세요.",
+    "de": "Im Dorf Dalian, im Bereich des Highway Garden. Ein guter Ausgangspunkt für den Besuch in Tianwei."
+   },
+   "photo": "dalian",
+   "q": "田尾鄉遊客服務中心"
+  },
+  {
+   "id": "garden",
+   "village": "打簾村",
+   "cat": "spot",
+   "emoji": "🌷",
+   "name": {
+    "zh": "公路花園",
+    "en": "Highway Garden",
+    "ja": "ハイウェイ・ガーデン（公路花園）",
+    "th": "สวนริมทางหลวง",
+    "id": "Taman Jalan Raya",
+    "vi": "Vườn hoa Công lộ",
+    "ko": "공로화원(公路花園)",
+    "de": "Highway Garden"
+   },
+   "text": {
+    "zh": "田尾是有名的花卉之鄉，公路花園是賞花、散步的好地方。",
+    "en": "Tianwei is a famous flower town, and Highway Garden is a lovely place to see flowers and take a walk.",
+    "ja": "田尾は花の郷として知られ、公路花園は花を見ながら散歩するのにぴったりの場所です。",
+    "th": "เทียนเหว่ยเป็นเมืองดอกไม้ที่มีชื่อเสียง สวนริมทางหลวงเป็นที่เหมาะสำหรับชมดอกไม้และเดินเล่น",
+    "id": "Tianwei terkenal sebagai kota bunga, dan Taman Jalan Raya adalah tempat yang menyenangkan untuk melihat bunga dan berjalan-jalan.",
+    "vi": "Tianwei nổi tiếng là xứ hoa, và Vườn hoa Công lộ là nơi tuyệt vời để ngắm hoa và đi dạo.",
+    "ko": "톈웨이는 꽃의 고장으로 유명하며, 공로화원은 꽃구경과 산책을 하기 좋은 곳입니다.",
+    "de": "Tianwei ist als Blumenstadt bekannt; der Highway Garden eignet sich gut zum Blumenschauen und Spazierengehen."
+   },
+   "photo": null,
+   "q": "田尾公路花園"
+  },
+  {
+   "id": "nightmarket",
+   "village": "打簾村",
+   "cat": "food",
+   "emoji": "🌙",
+   "name": {
+    "zh": "週六夜市",
+    "en": "Saturday Night Market",
+    "ja": "土曜夜市",
+    "th": "ตลาดกลางคืนวันเสาร์",
+    "id": "Pasar Malam Sabtu",
+    "vi": "Chợ đêm thứ Bảy",
+    "ko": "토요 야시장",
+    "de": "Samstags-Nachtmarkt"
+   },
+   "text": {
+    "zh": "每週六晚上，公路花園旁會有夜市。賞花之餘，歡迎留下來逛逛。",
+    "en": "On Saturday evenings a night market opens next to Highway Garden. Stay after the flowers and take a stroll.",
+    "ja": "土曜の夜は公路花園のそばで夜市が開かれます。花見のあとはぜひ散策を。",
+    "th": "เย็นวันเสาร์มีตลาดกลางคืนข้างสวนริมทางหลวง ชมดอกไม้แล้วอยู่เดินเล่นต่อได้",
+    "id": "Pada Sabtu malam ada pasar malam di samping Taman Jalan Raya. Setelah melihat bunga, silakan mampir berjalan-jalan.",
+    "vi": "Tối thứ Bảy có chợ đêm ngay cạnh Vườn hoa Công lộ. Ngắm hoa xong mời ở lại dạo chơi.",
+    "ko": "토요일 저녁이면 공로화원 옆에 야시장이 열립니다. 꽃구경 후 들러 보세요.",
+    "de": "Samstagabends findet neben dem Highway Garden ein Nachtmarkt statt. Nach den Blumen laden wir Sie zu einem Bummel ein."
+   },
+   "photo": "dalian-x1",
+   "q": null
+  },
+  {
+   "id": "tianyi",
+   "village": "饒平村",
+   "cat": "spot",
+   "emoji": "⛩️",
+   "name": {
+    "zh": "天乙宮",
+    "en": "Tianyi Temple",
+    "ja": "天乙宮",
+    "th": "ศาลเจ้าเทียนอี่ (天乙宮)",
+    "id": "Kuil Tianyi",
+    "vi": "Đền Tianyi",
+    "ko": "톈이궁(天乙宮)",
+    "de": "Tianyi-Tempel"
+   },
+   "text": {
+    "zh": "饒平村的廟，主祀蘇府王爺。廟埕有兩棵修剪成傘形的大樹。",
+    "en": "A temple in Raoping Village honoring Lord Su. Two large trees pruned into umbrella shapes stand in the temple courtyard.",
+    "ja": "饒平村の廟で、蘇府王爺をまつっています。廟の前庭には傘の形に刈り込まれた大きな木が2本あります。",
+    "th": "ศาลเจ้าในหมู่บ้านเหราผิง บูชาซูฝู่หวาง (蘇府王爺) ลานหน้าศาลมีต้นไม้ใหญ่ 2 ต้นที่ตัดแต่งเป็นทรงร่ม",
+    "id": "Kuil di Desa Raoping yang memuliakan Su Fu Wangye (Pangeran Su). Di halaman kuil ada dua pohon besar yang dipangkas berbentuk payung.",
+    "vi": "Ngôi đền ở làng Raoping thờ Tô Phủ Vương Gia (Su Fu Wangye). Sân đền có hai cây lớn được tỉa thành hình chiếc ô.",
+    "ko": "라오핑촌의 사당으로 쑤푸왕예(蘇府王爺)를 모십니다. 사당 마당에는 우산 모양으로 다듬은 큰 나무 두 그루가 있습니다.",
+    "de": "Ein Tempel im Dorf Raoping, Fürst Su (Su Fu Wangye) geweiht. Im Tempelhof stehen zwei große, schirmförmig geschnittene Bäume."
+   },
+   "photo": "raoping-x3",
+   "q": "田尾天乙宮"
+  },
+  {
+   "id": "huajian",
+   "village": "饒平村",
+   "cat": "food",
+   "emoji": "🛍️",
+   "name": {
+    "zh": "花間小舖",
+    "en": "Huajian Xiaopu (Flower Corner Shop)",
+    "ja": "花間小舗",
+    "th": "หัวเจียนเสี่ยวผู่ (花間小舖)",
+    "id": "Huajian Xiaopu (Toko Kecil di Antara Bunga)",
+    "vi": "Hoa Gian Tiểu Phố (花間小舖)",
+    "ko": "화간소포(花間小舖)",
+    "de": "Huajian Xiaopu (Kleiner Laden zwischen den Blumen)"
+   },
+   "text": {
+    "zh": "田尾鄉農會的超市，在饒平村。",
+    "en": "The supermarket of the Tianwei Township Farmers’ Association, in Raoping Village.",
+    "ja": "饒平村にある田尾郷農会のスーパーです。",
+    "th": "ซูเปอร์มาร์เก็ตของสหกรณ์เกษตรกรอำเภอเทียนเหว่ย ในหมู่บ้านเหราผิง",
+    "id": "Supermarket milik Asosiasi Petani Kecamatan Tianwei, di Desa Raoping.",
+    "vi": "Siêu thị của Hội Nông dân hương Tianwei, ở làng Raoping.",
+    "ko": "라오핑촌에 있는 톈웨이향 농회의 슈퍼마켓입니다.",
+    "de": "Der Supermarkt der Bauernvereinigung von Tianwei im Dorf Raoping."
+   },
+   "photo": "raoping-x5",
+   "q": "田尾鄉農會 花間小舖"
+  },
+  {
+   "id": "township",
+   "village": "饒平村",
+   "cat": "serv",
+   "emoji": "🏛️",
+   "name": {
+    "zh": "田尾鄉公所",
+    "en": "Tianwei Township Office",
+    "ja": "田尾郷公所（役場）",
+    "th": "ที่ว่าการอำเภอเทียนเหว่ย",
+    "id": "Kantor Kecamatan Tianwei",
+    "vi": "Trụ sở Ủy ban hương Tianwei",
+    "ko": "톈웨이향 향공소",
+    "de": "Gemeindeamt Tianwei"
+   },
+   "text": {
+    "zh": "田尾鄉公所，在饒平村。",
+    "en": "The Tianwei Township Office, in Raoping Village.",
+    "ja": "饒平村にある田尾郷公所（役場）です。",
+    "th": "ที่ว่าการอำเภอเทียนเหว่ย ตั้งอยู่ในหมู่บ้านเหราผิง",
+    "id": "Kantor Kecamatan Tianwei, di Desa Raoping.",
+    "vi": "Trụ sở Ủy ban hương Tianwei, ở làng Raoping.",
+    "ko": "라오핑촌에 있는 톈웨이향 향공소입니다.",
+    "de": "Das Gemeindeamt von Tianwei im Dorf Raoping."
+   },
+   "photo": "raoping-x8",
+   "q": "田尾鄉公所"
+  },
+  {
+   "id": "health",
+   "village": "饒平村",
+   "cat": "serv",
+   "emoji": "➕",
+   "name": {
+    "zh": "田尾鄉衛生所（臨時辦公處）",
+    "en": "Tianwei Public Health Center (temporary office)",
+    "ja": "田尾郷衛生所（仮事務所）",
+    "th": "ศูนย์สาธารณสุขอำเภอเทียนเหว่ย (สำนักงานชั่วคราว)",
+    "id": "Puskesmas Tianwei (kantor sementara)",
+    "vi": "Trạm y tế Tianwei (văn phòng tạm thời)",
+    "ko": "톈웨이향 보건소(임시 사무소)",
+    "de": "Gesundheitsamt Tianwei (vorübergehendes Büro)"
+   },
+   "text": {
+    "zh": "田尾鄉衛生所目前暫時設在這裡，在饒平村。",
+    "en": "The Tianwei Township Public Health Center is temporarily located here, in Raoping Village.",
+    "ja": "田尾郷衛生所は現在ここに仮事務所を置いています（饒平村）。",
+    "th": "ศูนย์สาธารณสุขอำเภอเทียนเหว่ยตั้งสำนักงานชั่วคราวอยู่ที่นี่ ในหมู่บ้านเหราผิง",
+    "id": "Puskesmas Kecamatan Tianwei untuk sementara berkantor di sini, di Desa Raoping.",
+    "vi": "Trạm y tế hương Tianwei hiện tạm đặt văn phòng ở đây, tại làng Raoping.",
+    "ko": "톈웨이향 보건소가 현재 라오핑촌의 이곳에 임시 사무소를 두고 있습니다.",
+    "de": "Das Gesundheitsamt von Tianwei hat hier derzeit sein vorübergehendes Büro, im Dorf Raoping."
+   },
+   "photo": "raoping-x10",
+   "q": null
+  },
+  {
+   "id": "yixin",
+   "village": "田尾村",
+   "cat": "spot",
+   "emoji": "🎠",
+   "name": {
+    "zh": "田尾怡心園",
+    "en": "Yixin Park (inclusive playground)",
+    "ja": "田尾怡心園（インクルーシブ遊び場）",
+    "th": "สวนอี๋ซิน (สนามเด็กเล่นสำหรับทุกคน)",
+    "id": "Taman Yixin (taman bermain inklusif)",
+    "vi": "Công viên Di Tâm (sân chơi hòa nhập)",
+    "ko": "톈웨이 이신위안(통합 놀이터)",
+    "de": "Yixin-Park (inklusiver Spielplatz)"
+   },
+   "text": {
+    "zh": "田尾村的共融遊戲場，有兔子雕像和攀爬網遊具，適合帶小朋友來玩。",
+    "en": "An inclusive playground in Tianwei Village with a rabbit sculpture and climbing nets — a fun stop for children.",
+    "ja": "田尾村にあるインクルーシブな遊び場で、ウサギの像とクライミングネットがあります。お子さま連れにおすすめです。",
+    "th": "สนามเด็กเล่นสำหรับทุกคนในหมู่บ้านเทียนเหว่ย มีรูปปั้นกระต่ายและเน็ตปีนป่าย เหมาะกับการพาเด็กมาเล่น",
+    "id": "Taman bermain inklusif di Desa Tianwei dengan patung kelinci dan jaring panjat — cocok untuk membawa anak-anak.",
+    "vi": "Sân chơi hòa nhập ở làng Tianwei, có tượng thỏ và lưới leo trèo — rất thích hợp cho trẻ nhỏ.",
+    "ko": "톈웨이촌의 통합 놀이터로 토끼 조각상과 클라이밍 네트가 있어 아이들과 함께 오기 좋습니다.",
+    "de": "Ein inklusiver Spielplatz im Dorf Tianwei mit Hasenskulptur und Kletternetzen – ein schöner Halt für Kinder."
+   },
+   "photo": "tianwei-x1",
+   "q": "田尾怡心園"
+  },
+  {
+   "id": "postoffice",
+   "village": "田尾村",
+   "cat": "serv",
+   "emoji": "✉️",
+   "name": {
+    "zh": "田尾郵局",
+    "en": "Tianwei Post Office",
+    "ja": "田尾郵便局",
+    "th": "ที่ทำการไปรษณีย์เทียนเหว่ย",
+    "id": "Kantor Pos Tianwei",
+    "vi": "Bưu điện Tianwei",
+    "ko": "톈웨이 우체국",
+    "de": "Postamt Tianwei"
+   },
+   "text": {
+    "zh": "田尾郵局，在田尾村。",
+    "en": "The Tianwei Post Office, in Tianwei Village.",
+    "ja": "田尾村にある田尾郵便局です。",
+    "th": "ที่ทำการไปรษณีย์เทียนเหว่ย ตั้งอยู่ในหมู่บ้านเทียนเหว่ย",
+    "id": "Kantor Pos Tianwei, di Desa Tianwei.",
+    "vi": "Bưu điện Tianwei, ở làng Tianwei.",
+    "ko": "톈웨이촌에 있는 톈웨이 우체국입니다.",
+    "de": "Das Postamt Tianwei im Dorf Tianwei."
+   },
+   "photo": "tianwei-x3",
+   "q": "田尾郵局"
+  }
+ ],
+ "route": {
+  "id": "day1",
+  "title": {
+   "zh": "田尾一日遊（建議路線）",
+   "en": "A one-day trip in Tianwei (suggested route)",
+   "ja": "田尾の1日さんぽ（おすすめルート）",
+   "th": "เที่ยวเทียนเหว่ยหนึ่งวัน (เส้นทางแนะนำ)",
+   "id": "Wisata sehari di Tianwei (rute yang disarankan)",
+   "vi": "Một ngày ở Tianwei (lộ trình gợi ý)",
+   "ko": "톈웨이 하루 여행(추천 코스)",
+   "de": "Ein Tag in Tianwei (Routenvorschlag)"
+  },
+  "intro": {
+   "zh": "從遊客服務中心出發，逛公路花園、天乙宮、花間小舖和怡心園；如果剛好是週六，傍晚再回到公路花園旁逛夜市。順序只是建議，可以依自己的時間調整。",
+   "en": "Start at the Visitor Service Center, then visit Highway Garden, Tianyi Temple, Huajian Xiaopu and Yixin Park. If it happens to be Saturday, come back to the night market beside Highway Garden in the evening. The order is only a suggestion — adjust it to your own time.",
+   "ja": "まず観光サービスセンターから出発し、公路花園、天乙宮、花間小舗、怡心園をめぐります。土曜日なら、夕方に公路花園のそばの夜市へ戻りましょう。順番はあくまで目安です。ご自分の時間に合わせてください。",
+   "th": "เริ่มจากศูนย์บริการนักท่องเที่ยว แล้วเที่ยวสวนริมทางหลวง ศาลเจ้าเทียนอี่ ร้านหัวเจียนเสี่ยวผู่ และสวนอี๋ซิน หากตรงกับวันเสาร์ ตอนเย็นกลับมาเดินตลาดกลางคืนข้างสวนริมทางหลวง ลำดับเป็นเพียงข้อเสนอแนะ ปรับได้ตามเวลาของคุณ",
+   "id": "Mulailah dari Pusat Layanan Wisatawan, lalu kunjungi Taman Jalan Raya, Kuil Tianyi, Huajian Xiaopu, dan Taman Yixin. Jika kebetulan hari Sabtu, kembali ke pasar malam di samping Taman Jalan Raya pada sore hari. Urutan ini hanya saran; sesuaikan dengan waktu Anda.",
+   "vi": "Xuất phát từ Trung tâm Dịch vụ Du khách, rồi ghé Vườn hoa Công lộ, đền Tianyi, Hoa Gian Tiểu Phố và Công viên Di Tâm. Nếu đúng thứ Bảy, buổi tối quay lại chợ đêm cạnh Vườn hoa Công lộ. Thứ tự chỉ là gợi ý, bạn có thể điều chỉnh theo thời gian của mình.",
+   "ko": "관광안내센터에서 출발해 공로화원, 톈이궁, 화간소포, 이신위안을 둘러보세요. 마침 토요일이라면 저녁에 공로화원 옆 야시장으로 돌아오세요. 순서는 추천일 뿐이니 시간에 맞게 조정하세요.",
+   "de": "Starten Sie am Besucherzentrum und besuchen Sie dann Highway Garden, Tianyi-Tempel, Huajian Xiaopu und Yixin-Park. Wenn es gerade Samstag ist, kehren Sie abends zum Nachtmarkt neben dem Highway Garden zurück. Die Reihenfolge ist nur ein Vorschlag – passen Sie sie Ihrer Zeit an."
+  },
+  "steps": [
+   "visitor",
+   "garden",
+   "tianyi",
+   "huajian",
+   "yixin",
+   "nightmarket"
+  ]
+ }
+}, POI_BY = Object.fromEntries(POI.pois.map(p => [p.id, p]));
+const pui = k => (POI.ui[LANG] || POI.ui.en)[k], ptx = o => LANG === 'zh' ? o.zh : (o[LANG] || o.en);
+const poiCatOn = { spot: true, food: true, serv: true }; let routeOn = false;
+const isPoiKey = s => typeof s === 'string' && s.startsWith('poi:');
+const POI_LOCAL = {}, POI_POS = {};
+(function placePoi(){   // 位置為示意：標在所屬的村裡，彼此與村中心、旗幟錯開
+  const taken = {};
+  for (const p of POI.pois){
+    const v = byName[p.village]; if (!v) continue;
+    const sc = clamp(v.r * .95 / .9, .5, 1.45), list = taken[p.village] = taken[p.village] || [[.85 * sc, 0, .5 * sc], [0, 0, .5 * sc]];
+    let h = 0; for (const ch of p.id) h = (h * 31 + ch.charCodeAt(0)) % 997;
+    let pos = null;
+    for (const rr of [.7, .95, .5, 1.15, .3]){ for (let k = 0; k < 18 && !pos; k++){ const a = h * .01 + k * Math.PI / 9, x = Math.cos(a) * rr * sc, z = Math.sin(a) * rr * sc; if (pip(v.poly, x, z) && edgeDist(v.poly, x, z) > .25 && list.every(o => Math.hypot(o[0] - x, o[1] - z) > Math.max(o[2], .45 * sc))) pos = [x, z]; } if (pos) break; }
+    if (!pos) pos = [0, 0];
+    list.push([pos[0], pos[1], .45 * sc]); POI_LOCAL[p.id] = pos;
+    v.content.updateWorldMatrix(true, false); POI_POS[p.id] = v.content.localToWorld(new THREE.Vector3(pos[0], 0, pos[1]));
+  }
+})();
+const routeCurve = new THREE.CatmullRomCurve3(POI.route.steps.map(id => POI_POS[id].clone().setY(.16)), false, 'catmullrom', .35);
+const routeTube = new THREE.Mesh(new THREE.TubeGeometry(routeCurve, 220, .035, 8, false), new THREE.MeshBasicMaterial({ color: 0xe3763a, depthTest: false, transparent: true, opacity: .92 }));
+const routeDot = new THREE.Mesh(new THREE.SphereGeometry(.1, 16, 12), new THREE.MeshBasicMaterial({ color: 0xffffff, depthTest: false }));
+routeTube.renderOrder = 9; routeDot.renderOrder = 10; routeTube.visible = routeDot.visible = false; scene.add(routeTube, routeDot);
+anim.push((t) => { if (routeOn) routeDot.position.copy(routeCurve.getPointAt((t * .06) % 1)); });
+const poiEls = {};
+for (const p of POI.pois){ const b = document.createElement('button'); b.type = 'button'; b.className = 'poi cat-' + p.cat; b.onclick = e => { e.stopPropagation(); selectPoi(p.id); }; chipsEl.appendChild(b); poiEls[p.id] = b; }
+function refreshPoi(){
+  for (const p of POI.pois){
+    const b = poiEls[p.id], idx = POI.route.steps.indexOf(p.id), num = routeOn && idx >= 0, nm = p.name.zh + (LANG === 'zh' ? '' : ' · ' + ptx(p.name));
+    b.dataset.show = (routeOn ? idx >= 0 : poiCatOn[p.cat]) ? '1' : ''; b.classList.toggle('num', num); b.textContent = num ? String(idx + 1) : p.emoji; b.title = nm; b.setAttribute('aria-label', nm);
+  }
+}
+const poiTmp = new THREE.Vector3();
+function poiFrame(W_, H_){
+  const quiz = document.body.classList.contains('quiz'), far = !routeOn && camera.position.distanceTo(controls.target) > defaultDist() * .8;   // 拉遠時縮成小圓點，放大才顯示圖示
+  for (const p of POI.pois){
+    const b = poiEls[p.id]; b.classList.toggle('far', far); if (!b.dataset.show || quiz){ b.classList.add('hidden'); continue; }
+    poiTmp.copy(POI_POS[p.id]).setY(.75).project(camera); b.classList.toggle('hidden', poiTmp.z > 1); b.classList.toggle('on', selected === 'poi:' + p.id);
+    b.style.transform = `translate(${(poiTmp.x * .5 + .5) * W_}px,${(-poiTmp.y * .5 + .5) * H_}px) translate(-50%,-100%)`;
+  }
+}
+function fillPoiPanel(id){
+  loadTwI18n();
+  const L = LANG !== 'zh', pg = $('pPage'), tag = $('pTag'), ph = $('pPhoto');
+  $('pHist').hidden = true; $('pTempleBox').hidden = true; $('pExtras').innerHTML = ''; $('pMeta').hidden = true; tag.hidden = false;
+  const photo = key => { if (!key){ $('pPhotoBox').hidden = true; return; } ph.onerror = () => { $('pPhotoBox').hidden = true; }; ph.alt = ''; $('pPhotoBox').hidden = false; ph.dataset.fb = '1'; ph.src = `photos/${key}.jpg`; $('pCap').textContent = capTxt(PHOTO_CREDITS[key]); };
+  if (id === 'route'){
+    const r = POI.route; $('pEmoji').textContent = '🧭'; $('pZh').textContent = r.title.zh; $('pEn').textContent = L ? ptx(r.title) : '';
+    tag.textContent = pui('route'); tag.style.background = '#e3763a';
+    $('pText').textContent = r.intro.zh; $('pEnText').textContent = L ? ptx(r.intro) : ''; $('pEnText').hidden = !L; $('pText').hidden = false;
+    photo(null); pg.hidden = true;
+    const ol = document.createElement('ol'); ol.className = 'rsteps';
+    r.steps.forEach(sid => { const p = POI_BY[sid], li = document.createElement('li'), b = document.createElement('button'); b.type = 'button'; b.textContent = p.emoji + ' ' + p.name.zh + (L ? ' · ' + ptx(p.name) : ''); b.onclick = () => selectPoi(sid); li.appendChild(b); ol.appendChild(li); });
+    $('pHist').innerHTML = ''; $('pHist').appendChild(ol); $('pHist').hidden = false;   // 步驟清單放在簡介文字下面
+  } else {
+    const p = POI_BY[id], idx = POI.route.steps.indexOf(id);
+    $('pEmoji').textContent = p.emoji; $('pZh').textContent = p.name.zh; $('pEn').textContent = L ? ptx(p.name) : '';
+    tag.textContent = pui('cat_' + p.cat); tag.style.background = POI.cats[p.cat].color;
+    $('pText').textContent = p.text.zh; $('pText').hidden = false; $('pEnText').textContent = L ? ptx(p.text) : ''; $('pEnText').hidden = !L;
+    if (routeOn && idx >= 0){ $('pMeta').textContent = '🧭 ' + pui('route') + ' · ' + (idx + 1) + ' / ' + POI.route.steps.length; $('pMeta').hidden = false; }
+    photo(p.photo);
+    if (p.q){ pg.hidden = false; pg.target = '_blank'; pg.rel = 'noopener'; pg.textContent = '📍 ' + pui('open_map') + ' ↗'; pg.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('彰化縣田尾鄉 ' + p.q); } else pg.hidden = true;
+  }
+  $('pSrc').textContent = pui('note');
+}
+function selectPoi(id){
+  tzClearOn(); for (const [k, c] of chipMap){ c.chip.classList.remove('on'); c.d.classList.remove('on'); }
+  selected = 'poi:' + id; fillPoiPanel(id);
+  try { history.replaceState(null, '', '#' + (id === 'route' ? 'route' : 'poi-' + id)); } catch (e) {}
+  panel.classList.toggle('peek', innerWidth <= 760); panel.classList.add('open');
+  if (id === 'route'){
+    const pts = POI.route.steps.map(s => POI_POS[s]), cx = pts.reduce((a, q) => a + q.x, 0) / pts.length, cz = pts.reduce((a, q) => a + q.z, 0) / pts.length;
+    const span = Math.max(Math.max(...pts.map(q => q.x)) - Math.min(...pts.map(q => q.x)), Math.max(...pts.map(q => q.z)) - Math.min(...pts.map(q => q.z)));
+    const nar = innerWidth <= 760; goalTarget.set(cx, 0, cz); goalDist = clamp(span * (nar ? 3.4 : 1.5) + 8, 14, defaultDist() * (nar ? 1 : .8));
+  } else { goalTarget.copy(POI_POS[id]); goalDist = Math.min(13, defaultDist() * .6); }
+  tweening = true; controls.autoRotate = false;
+}
+function setRoute(on){
+  routeOn = on; routeTube.visible = routeDot.visible = on; refreshPoi(); renderTags();
+  if (on) selectPoi('route'); else if (selected === 'poi:route') select(null);
+}
+refreshPoi();
 function addHealthCross(){   // 田尾鄉衛生所（臨時辦公處）在饒平村：立一面白色牌子、上面紅十字。衛生所搬回原址後，刪掉下面這一行呼叫即可
   const v = byName['饒平村']; if (!v) return;
-  const sc = clamp(v.r * .95 / .9, .5, 1.45); let pos = null;
+  const sc = clamp(v.r * .95 / .9, .5, 1.45); let pos = POI_LOCAL.health ? POI_LOCAL.health.slice() : null;   // 位置和景點標記「衛生所」一致
   for (let k = 0; k < 24 && !pos; k++){ const a = Math.PI + k * .55, rr = .6 * sc, px = Math.cos(a) * rr, pz = Math.sin(a) * rr; if (pip(v.poly, px, pz) && edgeDist(v.poly, px, pz) > .35) pos = [px, pz]; }
   if (!pos) pos = [0, 0];
   const g = new THREE.Group(); g.position.set(pos[0], 0, pos[1]); g.scale.setScalar(sc * 1.7);
@@ -1878,7 +2337,7 @@ function applyLang(){
   $('tSub').textContent = u.sub; $('dLbl').textContent = u.dist; $('rLbl').textContent = u.reset; $('hLbl').textContent = u.home;
   distBtn.title = u.tDist; nightBtn.title = u.tNight; $('resetBtn').title = u.tReset; $('homeBtn').title = u.tHome; dockEl.setAttribute('aria-label', u.list);
   $('noglBox').innerHTML = `<h2>${u.glH}</h2><p>${u.glP}</p>`;
-  setNightLabel(); renderLegend(); renderNames(); tzApplyLang(); renderNews(); renderExtra(); if (selected) fillPanel(selected);
+  setNightLabel(); renderLegend(); renderNames(); tzApplyLang(); renderNews(); renderExtra(); refreshPoi(); renderTags(); if (selected) fillPanel(selected);
 }
 const langSel = $('langSel');
 langSel.innerHTML = Object.entries(LANGS).map(([k, n]) => `<option value="${k}">${n}</option>`).join(''); langSel.value = LANG;
@@ -1931,6 +2390,7 @@ function frame(){
   shiftX += (wantX - shiftX) * Math.min(1, dt * 6); shiftY += (wantY - shiftY) * Math.min(1, dt * 6);
   if (Math.abs(shiftX) + Math.abs(shiftY) > .5) camera.setViewOffset(W_, H_, shiftX, shiftY, W_, H_); else if (camera.view) camera.clearViewOffset();
   tzFrame(dt, innerWidth, innerHeight, innerWidth <= 760);
+  poiFrame(innerWidth, innerHeight);
   extraFrame(dt);
   controls.update();
   { const t = controls.target, nx = clamp(t.x, FR.x0 - 4, FR.x1 + 4), nz = clamp(t.z, FR.z0 - 4, FR.z1 + 4);   // 平移不要把島推出畫面太遠
@@ -1939,7 +2399,7 @@ function frame(){
   renderer.render(scene, camera);
   if (T > .3 && !frame.done){ frame.done = true; $('loading').classList.add('done'); setTimeout(() => $('loading') && $('loading').remove(), 800); }
 }
-if (SLUG_REV[START_HASH]) select(SLUG_REV[START_HASH]); else if (TZ_HASH[START_HASH]) select(TZ_HASH[START_HASH]); else if (tzVill[START_HASH]) select(START_HASH);
+if (START_HASH === 'route') setRoute(true); else if (POI_BY[START_HASH.replace(/^poi-/, '')] && START_HASH.startsWith('poi-')) selectPoi(START_HASH.slice(4)); else if (SLUG_REV[START_HASH]) select(SLUG_REV[START_HASH]); else if (TZ_HASH[START_HASH]) select(TZ_HASH[START_HASH]); else if (tzVill[START_HASH]) select(START_HASH);
 frame();
 if (qs.has('shot')){ document.body.classList.add('shot'); controls.autoRotate = false; clouds.forEach(c => c.visible = false); birds.forEach(o => o.b.visible = false); }
 window.__shot = (name) => {   // 產生「3D 示意圖」用：把鏡頭擺到某個村，其餘村先隱藏
