@@ -22,6 +22,7 @@ dl.facts{margin:0}dl.facts div{display:flex;gap:12px;padding:8px 0;border-bottom
 .cta.alt{background:transparent;color:var(--green);border:2px solid var(--green)}
 .nb{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:8px 0;list-style:none}.nb a{display:inline-block;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 16px;text-decoration:none}
 .photo{margin:0 0 14px}.photo img{width:100%;height:auto;display:block;border-radius:12px;background:var(--soft)}.photo figcaption{font-size:18px;color:var(--muted);margin-top:6px}
+.hist{margin:18px 0}.hist h2{margin-top:0}.hist h3{font-size:22px;margin:18px 0 6px;color:var(--green-dark)}.hist .srcl{font-size:17px;color:var(--muted)}.hist .srcl a{color:var(--green)}
 .note{font-size:18px;color:var(--muted);border-top:1px solid var(--line);margin-top:28px;padding:14px 0 40px}
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;list-style:none;padding:0;margin:12px 0}
 .vgrid li{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}

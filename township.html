@@ -83,6 +83,7 @@ body.shot #news,body.shot #chips,body.shot #tools,body.shot #title,body.shot #do
 #panel .enp{color:var(--muted)}
 #panel .meta{font-size:16px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 #panel .src{font-size:14px;color:var(--muted)}
+#panel #pHist{margin:14px 0;padding:12px 14px;background:var(--soft);border-radius:12px}#pHist h3{margin:0 0 4px;font-size:18px;color:var(--green-dark)}#pHist h4{margin:12px 0 4px;font-size:16px}#pHist p{font-size:15px;line-height:1.6;margin:4px 0}#pHist .src{font-size:13px}
 #panel .src a{color:var(--green)}
 #loading{position:fixed;inset:0;display:grid;place-items:center;background:#dfeee9;z-index:20;transition:opacity .6s;color:#1f4a36;text-align:center}
 #loading.done{opacity:0;pointer-events:none}
@@ -216,6 +217,7 @@ body.shot #stack,body.shot #tags,body.shot #hint,body.shot #toast,body.shot #sea
   <p id="pText"></p>
   <p class="enp" id="pEnText"></p>
   <p class="meta" id="pMeta"></p>
+  <div id="pHist" hidden></div>
   <p class="src" id="pSrc"></p>
   <p><a id="pPage" href="villages.html" style="font-weight:700;color:var(--green);text-decoration:none">📄 看這個村的文字介紹頁 →</a></p>
 </aside>
@@ -714,6 +716,231 @@ const tr = k => UI[LANG][k];
 const shortName = n => (LANG === 'ja' || LANG === 'zh') ? n.replace('村', '') : LANG === 'ko' ? NAME_KO[n] : LANG === 'th' ? NAME_TH[n] : INFO[n].en.replace(' Village', '');
 const fullName = n => (LANG === 'ja' || LANG === 'zh') ? n : tr('vil').replace('{x}', shortName(n));
 const popLine = n => { const m = (INFO[n].meta || '').match(/([\d,]+)/); return m ? tr('pop').replace('{n}', m[1]) : ''; };
+const SCHOOL_HIST = {
+ "ui": {
+  "zh": {
+   "title": "學校簡史",
+   "src": "資料來源"
+  },
+  "en": {
+   "title": "School history",
+   "src": "Sources"
+  },
+  "ja": {
+   "title": "学校の沿革",
+   "src": "出典"
+  },
+  "th": {
+   "title": "ประวัติโรงเรียน",
+   "src": "แหล่งที่มา"
+  },
+  "id": {
+   "title": "Sejarah sekolah",
+   "src": "Sumber"
+  },
+  "vi": {
+   "title": "Lịch sử trường",
+   "src": "Nguồn"
+  },
+  "ko": {
+   "title": "학교 연혁",
+   "src": "출처"
+  },
+  "de": {
+   "title": "Schulgeschichte",
+   "src": "Quellen"
+  }
+ },
+ "schools": [
+  {
+   "village": "饒平村",
+   "id": "twps",
+   "url": "https://twps.chc.edu.tw/departments/3/show",
+   "name": {
+    "zh": "田尾國民小學",
+    "en": "Tianwei Elementary School",
+    "ja": "田尾国民小学校",
+    "th": "โรงเรียนประถมเทียนเหว่ย",
+    "id": "SD Tianwei",
+    "vi": "Trường Tiểu học Tianwei",
+    "ko": "톈웨이 초등학교",
+    "de": "Grundschule Tianwei"
+   },
+   "src": {
+    "zh": "田尾國小官方網站〈校史〉",
+    "en": "Tianwei Elementary School website, “School history”",
+    "ja": "田尾国民小学校公式サイト「校史」",
+    "th": "เว็บไซต์โรงเรียนประถมเทียนเหว่ย “ประวัติโรงเรียน”",
+    "id": "Situs resmi SD Tianwei, “Sejarah sekolah”",
+    "vi": "Trang web Trường Tiểu học Tianwei, mục “Lịch sử trường”",
+    "ko": "톈웨이 초등학교 공식 웹사이트 「교사(校史)」",
+    "de": "Website der Grundschule Tianwei, „Schulgeschichte“"
+   },
+   "zh": "田尾國小創立於 1922 年 4 月 1 日，當時是隸屬陸豐公學校的「田尾分教場」，借用打簾的國語研究會場當教室，共有兩個年級、兩個班。1926 年 4 月 1 日獨立為「田尾公學校」，首任校長是日籍的馬場久雄。戰後校名陸續改為「台中縣立田尾國民學校」（1945 年）、「彰化縣田尾鄉田尾國民學校」（1950 年），1968 年配合九年國民教育改稱「田尾國民小學」。學校在 2021 年舉辦創校百週年慶祝活動。",
+   "tr": {
+    "en": "Tianwei Elementary School began on April 1, 1922 as the “Tianwei Branch Classroom” of Lufeng Public School, borrowing the Dalian Mandarin study hall as its classroom, with two grades and two classes. On April 1, 1926 it became independent as “Tianwei Public School”, with the Japanese educator Baba Hisao as its first principal. After the war its name changed to Taichung County Tianwei National School (1945) and Changhua County Tianwei Township Tianwei National School (1950); in 1968, with the start of nine-year compulsory education, it became Tianwei National Elementary School. The school held its 100th-anniversary celebration in 2021.",
+    "ja": "田尾国民小学校は、1922年4月1日に陸豊公学校の「田尾分教場」として始まりました。打簾の国語研究会場を教室に借り、2学年・2学級でスタートしました。1926年4月1日に「田尾公学校」として独立し、初代校長は日本人の馬場久雄です。戦後は「台中県立田尾国民学校」（1945年）、「彰化県田尾郷田尾国民学校」（1950年）と改称され、1968年に九年制国民教育の開始に合わせて「田尾国民小学校」となりました。2021年には創立100周年を祝う行事が行われました。",
+    "th": "โรงเรียนประถมเทียนเหว่ยเริ่มต้นเมื่อวันที่ 1 เมษายน 1922 ในฐานะ “ห้องเรียนสาขาเทียนเหว่ย” ของโรงเรียนสามัญลู่เฟิง (陸豐公學校) โดยยืมห้องประชุมศึกษาภาษาประจำชาติของต่าเหลียนเป็นห้องเรียน มี 2 ชั้นปี 2 ห้องเรียน วันที่ 1 เมษายน 1926 แยกเป็นอิสระเป็น “โรงเรียนสามัญเทียนเหว่ย” โดยมีนายบาบะ ฮิซาโอะ ชาวญี่ปุ่น เป็นครูใหญ่คนแรก หลังสงครามเปลี่ยนชื่อเป็นโรงเรียนแห่งชาติเทียนเหว่ย เทศมณฑลไถจง (1945) และโรงเรียนแห่งชาติเทียนเหว่ย อำเภอเทียนเหว่ย เทศมณฑลจางฮั่ว (1950) ในปี 1968 พร้อมกับการเริ่มการศึกษาภาคบังคับ 9 ปี เปลี่ยนเป็นโรงเรียนประถมศึกษาแห่งชาติเทียนเหว่ย และในปี 2021 โรงเรียนจัดงานฉลองครบรอบ 100 ปี",
+    "id": "SD Tianwei berawal pada 1 April 1922 sebagai “Kelas Cabang Tianwei” dari Sekolah Umum Lufeng, dengan meminjam balai belajar bahasa nasional di Dalian sebagai ruang kelas; saat itu ada dua tingkat dan dua kelas. Pada 1 April 1926 sekolah ini berdiri sendiri sebagai “Sekolah Umum Tianwei” dengan kepala sekolah pertama orang Jepang, Baba Hisao. Setelah perang, namanya berganti menjadi Sekolah Nasional Tianwei Kabupaten Taichung (1945) dan Sekolah Nasional Tianwei Kecamatan Tianwei, Kabupaten Changhua (1950); pada 1968, bersamaan dengan wajib belajar sembilan tahun, namanya menjadi SD Nasional Tianwei. Pada 2021 sekolah merayakan ulang tahun ke-100.",
+    "vi": "Trường Tiểu học Tianwei bắt đầu từ ngày 1/4/1922 với tên “Phân hiệu Tianwei” của trường công Lufeng (陸豐公學校), mượn hội trường nghiên cứu quốc ngữ ở Dalian làm lớp học, gồm 2 khối lớp, 2 lớp. Ngày 1/4/1926, trường tách ra thành “Trường công Tianwei”, hiệu trưởng đầu tiên là người Nhật Baba Hisao. Sau chiến tranh, trường lần lượt đổi tên thành Trường quốc dân Tianwei huyện Đài Trung (1945) và Trường quốc dân Tianwei hương Tianwei huyện Chương Hóa (1950); năm 1968, khi bắt đầu giáo dục bắt buộc chín năm, trường đổi thành Trường Tiểu học quốc dân Tianwei. Năm 2021 trường tổ chức lễ kỷ niệm 100 năm thành lập.",
+    "ko": "톈웨이 초등학교는 1922년 4월 1일 루펑 공학교(陸豐公學校)의 ‘톈웨이 분교장’으로 시작했습니다. 다롄의 국어연구회장을 교실로 빌려 2개 학년, 2개 학급으로 문을 열었습니다. 1926년 4월 1일 ‘톈웨이 공학교’로 독립했고, 초대 교장은 일본인 바바 히사오였습니다. 전후 ‘타이중현립 톈웨이 국민학교’(1945), ‘장화현 톈웨이향 톈웨이 국민학교’(1950)로 이름이 바뀌었고, 1968년 9년 의무교육 시행에 맞춰 ‘톈웨이 국민초등학교’가 되었습니다. 2021년에는 창립 100주년 기념 행사를 열었습니다.",
+    "de": "Die Grundschule Tianwei begann am 1. April 1922 als „Zweigstelle Tianwei“ der öffentlichen Schule Lufeng; als Klassenraum diente der geliehene Sprachstudien-Saal in Dalian, mit zwei Jahrgängen und zwei Klassen. Am 1. April 1926 wurde sie als „Öffentliche Schule Tianwei“ selbstständig; erster Schulleiter war der Japaner Baba Hisao. Nach dem Krieg wurde sie umbenannt in Nationalschule Tianwei des Landkreises Taichung (1945) und Nationalschule Tianwei der Gemeinde Tianwei, Landkreis Changhua (1950); 1968, mit Einführung der neunjährigen Schulpflicht, hieß sie Nationale Grundschule Tianwei. 2021 feierte die Schule ihr 100-jähriges Bestehen."
+   }
+  },
+  {
+   "village": "饒平村",
+   "id": "twjh",
+   "url": "https://twjh.chc.edu.tw/departments/3/show",
+   "name": {
+    "zh": "田尾國民中學",
+    "en": "Tianwei Junior High School",
+    "ja": "田尾国民中学校",
+    "th": "โรงเรียนมัธยมต้นเทียนเหว่ย",
+    "id": "SMP Tianwei",
+    "vi": "Trường Trung học cơ sở Tianwei",
+    "ko": "톈웨이 중학교",
+    "de": "Mittelschule Tianwei"
+   },
+   "src": {
+    "zh": "田尾國中官方網站〈尾中大事紀〉",
+    "en": "Tianwei Junior High School website, “Milestones”",
+    "ja": "田尾国民中学校公式サイト「尾中大事紀」",
+    "th": "เว็บไซต์โรงเรียนมัธยมต้นเทียนเหว่ย “เหตุการณ์สำคัญ”",
+    "id": "Situs resmi SMP Tianwei, “Peristiwa penting”",
+    "vi": "Trang web Trường THCS Tianwei, mục “Sự kiện lớn”",
+    "ko": "톈웨이 중학교 공식 웹사이트 「주요 연혁」",
+    "de": "Website der Mittelschule Tianwei, „Meilensteine“"
+   },
+   "zh": "田尾國中的起點，是 1961 年 6 月成立的「北斗中學田尾分部籌建委員會」。委員會積極籌募建校基金、爭取設校，縣政府派趙錦水擔任分部主任。1964 年獨立設校，改稱「彰化縣田尾初級中學」，趙錦水成為首任校長。1968 年秋改制為「彰化縣立田尾國民中學」。",
+   "tr": {
+    "en": "Tianwei Junior High School began with the “Beidou Junior High Tianwei Branch Preparatory Committee”, set up in June 1961. The committee raised funds and campaigned for a school in Tianwei, and the county government sent Zhao Jinshui to head the branch. In 1964 it became independent as “Changhua County Tianwei Junior Middle School”, with Zhao Jinshui as its first principal. In autumn 1968 it was reorganized as “Changhua County Tianwei National Junior High School”.",
+    "ja": "田尾国民中学校は、1961年6月に設立された「北斗中学田尾分部設立準備委員会」から始まりました。委員会は建設資金を集め、設校を働きかけ、県政府は趙錦水氏を分部主任として派遣しました。1964年に独立して「彰化県田尾初級中学」となり、趙錦水氏が初代校長に就任しました。1968年秋に「彰化県立田尾国民中学」へ改制されました。",
+    "th": "โรงเรียนมัธยมต้นเทียนเหว่ยเริ่มจาก “คณะกรรมการเตรียมการสาขาเทียนเหว่ยของโรงเรียนมัธยมเป่ยโตว” ที่ตั้งขึ้นในเดือนมิถุนายน 1961 คณะกรรมการระดมทุนและผลักดันให้จัดตั้งโรงเรียน โดยรัฐบาลเทศมณฑลส่งนายเจ้า จิ่นสุ่ย (趙錦水) มาเป็นหัวหน้าสาขา ในปี 1964 แยกเป็นอิสระเป็น “โรงเรียนมัธยมต้นเทียนเหว่ย เทศมณฑลจางฮั่ว” โดยนายเจ้าเป็นครูใหญ่คนแรก และในฤดูใบไม้ร่วงปี 1968 ปรับเป็น “โรงเรียนมัธยมต้นแห่งชาติเทียนเหว่ย เทศมณฑลจางฮั่ว”",
+    "id": "SMP Tianwei bermula dari “Panitia Persiapan Cabang Tianwei SMP Beidou” yang dibentuk pada Juni 1961. Panitia menggalang dana dan memperjuangkan berdirinya sekolah, dan pemerintah kabupaten menugaskan Zhao Jinshui memimpin cabang tersebut. Pada 1964 sekolah berdiri sendiri sebagai “SMP Tianwei Kabupaten Changhua”, dengan Zhao Jinshui sebagai kepala sekolah pertama. Pada musim gugur 1968 sekolah diubah menjadi “SMP Nasional Tianwei Kabupaten Changhua”.",
+    "vi": "Trường Trung học cơ sở Tianwei bắt nguồn từ “Ủy ban chuẩn bị thành lập phân hiệu Tianwei của Trường Trung học Beidou”, được lập vào tháng 6/1961. Ủy ban tích cực quyên góp quỹ xây trường và vận động mở trường; chính quyền huyện cử ông Zhao Jinshui (趙錦水) làm chủ nhiệm phân hiệu. Năm 1964, trường tách ra thành “Trường Trung học cơ sở Tianwei huyện Chương Hóa”, ông Zhao Jinshui là hiệu trưởng đầu tiên. Mùa thu năm 1968, trường được cải tổ thành “Trường Trung học cơ sở quốc dân Tianwei huyện Chương Hóa”.",
+    "ko": "톈웨이 중학교는 1961년 6월 설립된 ‘베이더우 중학 톈웨이 분부 건립 준비위원회’에서 시작했습니다. 위원회는 건립 기금을 모으고 학교 설립을 추진했으며, 현 정부는 자오진수이(趙錦水)를 분부 주임으로 보냈습니다. 1964년 독립해 ‘장화현 톈웨이 초급중학’이 되었고, 자오진수이가 초대 교장을 맡았습니다. 1968년 가을 ‘장화현립 톈웨이 국민중학’으로 개편되었습니다.",
+    "de": "Die Mittelschule Tianwei ging aus dem im Juni 1961 gegründeten „Vorbereitungskomitee der Zweigstelle Tianwei der Mittelschule Beidou“ hervor. Das Komitee sammelte Geld für den Bau und warb für eine Schule vor Ort; die Kreisregierung entsandte Zhao Jinshui als Leiter der Zweigstelle. 1964 wurde sie als „Juniormittelschule Tianwei des Landkreises Changhua“ selbstständig, mit Zhao Jinshui als erstem Schulleiter. Im Herbst 1968 wurde sie zur „Nationalen Mittelschule Tianwei des Landkreises Changhua“ umgestaltet."
+   }
+  },
+  {
+   "village": "南鎮村",
+   "id": "njes",
+   "url": "https://njes.chc.edu.tw/departments/2/show",
+   "name": {
+    "zh": "南鎮國民小學",
+    "en": "Nanzhen Elementary School",
+    "ja": "南鎮国民小学校",
+    "th": "โรงเรียนประถมหนานเจิ้น",
+    "id": "SD Nanzhen",
+    "vi": "Trường Tiểu học Nanzhen",
+    "ko": "난전 초등학교",
+    "de": "Grundschule Nanzhen"
+   },
+   "src": {
+    "zh": "南鎮國小官方網站〈歷史資料〉",
+    "en": "Nanzhen Elementary School website, “Historical records”",
+    "ja": "南鎮国民小学校公式サイト「歴史資料」",
+    "th": "เว็บไซต์โรงเรียนประถมหนานเจิ้น “ข้อมูลทางประวัติศาสตร์”",
+    "id": "Situs resmi SD Nanzhen, “Data sejarah”",
+    "vi": "Trang web Trường Tiểu học Nanzhen, mục “Tư liệu lịch sử”",
+    "ko": "난전 초등학교 공식 웹사이트 「역사 자료」",
+    "de": "Website der Grundschule Nanzhen, „Historische Unterlagen“"
+   },
+   "zh": "南鎮國小的前身，是 1948 年設立的「田尾國民學校分離教室」（分校）。它收容福田、新興、北鎮、南鎮、新生、睦宜六個村四年級以下的學童，共七班。1949 年奉准獨立為「南鎮國民學校」，校址在南鎮村光復路南側。",
+   "tr": {
+    "en": "Nanzhen Elementary School grew out of a “separate classroom” (branch) of Tianwei National School, set up in 1948. It took in children up to fourth grade from six villages — Futian, Xinxing, Beizhen, Nanzhen, Xinsheng and Muyi — in seven classes. In 1949 it was approved to become independent as “Nanzhen National School”, on the south side of Guangfu Road in Nanzhen Village.",
+    "ja": "南鎮国民小学校の前身は、1948年に設けられた「田尾国民学校の分離教室」（分校）です。福田・新興・北鎮・南鎮・新生・睦宜の6つの村の4年生以下の児童を受け入れ、7学級で授業を始めました。1949年に独立が認められて「南鎮国民学校」となり、校地は南鎮村の光復路の南側にあります。",
+    "th": "โรงเรียนประถมหนานเจิ้นมีต้นกำเนิดจาก “ห้องเรียนแยก” (สาขา) ของโรงเรียนแห่งชาติเทียนเหว่ยที่ตั้งขึ้นในปี 1948 รับเด็กชั้นไม่เกินประถม 4 จาก 6 หมู่บ้าน ได้แก่ ฝูเถียน ซินซิง เป่ยเจิ้น หนานเจิ้น ซินเซิง และมู่อี๋ รวม 7 ห้องเรียน ในปี 1949 ได้รับอนุมัติให้แยกเป็นอิสระเป็น “โรงเรียนแห่งชาติหนานเจิ้น” ตั้งอยู่ด้านใต้ของถนนกวงฟู่ในหมู่บ้านหนานเจิ้น",
+    "id": "SD Nanzhen berawal dari “ruang kelas terpisah” (cabang) Sekolah Nasional Tianwei yang dibuka pada 1948. Sekolah ini menampung anak-anak sampai kelas empat dari enam desa — Futian, Xinxing, Beizhen, Nanzhen, Xinsheng, dan Muyi — dalam tujuh kelas. Pada 1949 sekolah disetujui berdiri sendiri sebagai “Sekolah Nasional Nanzhen”, di sisi selatan Jalan Guangfu, Desa Nanzhen.",
+    "vi": "Trường Tiểu học Nanzhen có tiền thân là “phòng học tách riêng” (phân hiệu) của Trường quốc dân Tianwei, lập năm 1948. Trường nhận học sinh từ lớp 4 trở xuống của sáu làng — Futian, Xinxing, Beizhen, Nanzhen, Xinsheng và Muyi — với bảy lớp. Năm 1949, trường được phê chuẩn tách ra thành “Trường quốc dân Nanzhen”, nằm ở phía nam đường Guangfu, làng Nanzhen.",
+    "ko": "난전 초등학교는 1948년에 세운 톈웨이 국민학교의 ‘분리 교실’(분교)에서 시작했습니다. 푸톈·신싱·베이전·난전·신성·무이 6개 마을의 4학년 이하 어린이를 받아 7개 학급으로 수업했습니다. 1949년 독립이 승인되어 ‘난전 국민학교’가 되었고, 교지는 난전촌 광푸로 남쪽에 있습니다.",
+    "de": "Die Grundschule Nanzhen ging aus einem „abgetrennten Klassenraum“ (Zweigstelle) der Nationalschule Tianwei hervor, der 1948 eingerichtet wurde. Er nahm Kinder bis zur vierten Klasse aus sechs Dörfern auf – Futian, Xinxing, Beizhen, Nanzhen, Xinsheng und Muyi – in sieben Klassen. 1949 wurde die Selbstständigkeit genehmigt: die „Nationalschule Nanzhen“ an der Südseite der Guangfu-Straße im Dorf Nanzhen."
+   }
+  },
+  {
+   "village": "新厝村",
+   "id": "rfes",
+   "url": "https://rfes.chc.edu.tw/departments/1/show",
+   "name": {
+    "zh": "仁豐國民小學",
+    "en": "Renfeng Elementary School",
+    "ja": "仁豐国民小学校",
+    "th": "โรงเรียนประถมเหรินเฟิง",
+    "id": "SD Renfeng",
+    "vi": "Trường Tiểu học Renfeng",
+    "ko": "런펑 초등학교",
+    "de": "Grundschule Renfeng"
+   },
+   "src": {
+    "zh": "仁豐國小官方網站〈仁豐國小簡介〉",
+    "en": "Renfeng Elementary School website, “About the school”",
+    "ja": "仁豐国民小学校公式サイト「仁豐国小の紹介」",
+    "th": "เว็บไซต์โรงเรียนประถมเหรินเฟิง “แนะนำโรงเรียน”",
+    "id": "Situs resmi SD Renfeng, “Profil sekolah”",
+    "vi": "Trang web Trường Tiểu học Renfeng, mục “Giới thiệu trường”",
+    "ko": "런펑 초등학교 공식 웹사이트 「학교 소개」",
+    "de": "Website der Grundschule Renfeng, „Über die Schule“"
+   },
+   "zh": "仁豐國小的故事從 1957 年 6 月成立建校籌備委員會開始。1958 年 10 月 24 日，先成立「陸豐國小仁豐分校」，當時只有三間教室；1961 年 8 月 1 日奉准獨立設校，成為「仁豐國民學校」，首任校長是黃輝培。1968 年 8 月配合國民教育改制，改稱「仁豐國民小學」。學校在 2021 年舉辦創校六十週年校慶。",
+   "tr": {
+    "en": "Renfeng Elementary School’s story began in June 1957, when a preparatory committee for the school was formed. On October 24, 1958 the “Renfeng Branch of Lufeng Elementary School” opened with just three classrooms; on August 1, 1961 it was approved as an independent school, “Renfeng National School”, with Huang Huipei as its first principal. In August 1968, with the reform of national education, it was renamed “Renfeng National Elementary School”. In 2021 the school celebrated its 60th anniversary.",
+    "ja": "仁豐国民小学校の歩みは、1957年6月に設立準備委員会ができたことに始まります。1958年10月24日に「陸豐国小仁豐分校」が教室3つで開校し、1961年8月1日に独立が認められて「仁豐国民学校」となり、初代校長は黄輝培氏でした。1968年8月、国民教育の制度改正に合わせて「仁豐国民小学校」と改称しました。2021年には創立60周年を祝いました。",
+    "th": "เรื่องราวของโรงเรียนประถมเหรินเฟิงเริ่มในเดือนมิถุนายน 1957 เมื่อมีการตั้งคณะกรรมการเตรียมการสร้างโรงเรียน วันที่ 24 ตุลาคม 1958 เปิด “สาขาเหรินเฟิงของโรงเรียนประถมลู่เฟิง” ด้วยห้องเรียนเพียง 3 ห้อง วันที่ 1 สิงหาคม 1961 ได้รับอนุมัติให้แยกเป็นโรงเรียนอิสระ ชื่อ “โรงเรียนแห่งชาติเหรินเฟิง” โดยมีนายหวง ฮุยเผย (黃輝培) เป็นครูใหญ่คนแรก เดือนสิงหาคม 1968 เมื่อมีการปฏิรูประบบการศึกษาแห่งชาติ เปลี่ยนชื่อเป็น “โรงเรียนประถมศึกษาแห่งชาติเหรินเฟิง” และในปี 2021 จัดงานฉลองครบรอบ 60 ปี",
+    "id": "Kisah SD Renfeng dimulai pada Juni 1957, ketika panitia persiapan pendirian sekolah dibentuk. Pada 24 Oktober 1958 dibuka “Cabang Renfeng dari SD Lufeng” dengan hanya tiga ruang kelas; pada 1 Agustus 1961 sekolah disetujui berdiri sendiri sebagai “Sekolah Nasional Renfeng”, dengan Huang Huipei sebagai kepala sekolah pertama. Pada Agustus 1968, seiring reformasi pendidikan nasional, namanya berubah menjadi “SD Nasional Renfeng”. Pada 2021 sekolah merayakan ulang tahun ke-60.",
+    "vi": "Câu chuyện của Trường Tiểu học Renfeng bắt đầu từ tháng 6/1957, khi ban chuẩn bị xây trường được thành lập. Ngày 24/10/1958, “Phân hiệu Renfeng của Trường Tiểu học Lufeng” khai giảng chỉ với ba phòng học; ngày 1/8/1961 được phê chuẩn tách riêng thành “Trường quốc dân Renfeng”, hiệu trưởng đầu tiên là ông Huang Huipei (黃輝培). Tháng 8/1968, theo cải cách giáo dục quốc dân, trường đổi tên thành “Trường Tiểu học quốc dân Renfeng”. Năm 2021 trường kỷ niệm 60 năm thành lập.",
+    "ko": "런펑 초등학교의 이야기는 1957년 6월 건립 준비위원회가 만들어지면서 시작되었습니다. 1958년 10월 24일 ‘루펑 초등학교 런펑 분교’가 교실 세 칸으로 문을 열었고, 1961년 8월 1일 독립이 승인되어 ‘런펑 국민학교’가 되었으며 초대 교장은 황후이페이(黃輝培)였습니다. 1968년 8월 국민교육 개편에 맞춰 ‘런펑 국민초등학교’로 이름을 바꿨습니다. 2021년에는 창립 60주년을 기념했습니다.",
+    "de": "Die Geschichte der Grundschule Renfeng begann im Juni 1957 mit der Gründung eines Vorbereitungskomitees. Am 24. Oktober 1958 öffnete die „Zweigstelle Renfeng der Grundschule Lufeng“ mit nur drei Klassenräumen; am 1. August 1961 wurde sie als eigenständige „Nationalschule Renfeng“ genehmigt, erster Schulleiter war Huang Huipei. Im August 1968 wurde sie im Zuge der Reform des nationalen Bildungswesens in „Nationale Grundschule Renfeng“ umbenannt. 2021 feierte die Schule ihr 60-jähriges Bestehen."
+   }
+  },
+  {
+   "village": "陸豐村",
+   "id": "lfes",
+   "url": "https://tcmb.culture.tw/zh-tw/detail?indexCode=Culture_Place&id=667124",
+   "name": {
+    "zh": "陸豐國民小學",
+    "en": "Lufeng Elementary School",
+    "ja": "陸豐国民小学校",
+    "th": "โรงเรียนประถมลู่เฟิง",
+    "id": "SD Lufeng",
+    "vi": "Trường Tiểu học Lufeng",
+    "ko": "루펑 초등학교",
+    "de": "Grundschule Lufeng"
+   },
+   "src": {
+    "zh": "國家文化記憶庫〈彰化陸豐國小創校沿革史〉",
+    "en": "National Cultural Memory Bank, “History of Changhua Lufeng Elementary School”",
+    "ja": "国家文化記憶庫「彰化陸豐国小創校沿革史」",
+    "th": "คลังความทรงจำทางวัฒนธรรมแห่งชาติ “ประวัติการก่อตั้งโรงเรียนประถมลู่เฟิง จางฮั่ว”",
+    "id": "Bank Memori Budaya Nasional, “Sejarah berdirinya SD Lufeng Changhua”",
+    "vi": "Kho ký ức văn hóa quốc gia, “Lịch sử thành lập Trường Tiểu học Lufeng, Chương Hóa”",
+    "ko": "국가문화기억고 「장화 루펑 초등학교 창교 연혁사」",
+    "de": "Nationale Kulturgedächtnis-Datenbank, „Gründungsgeschichte der Grundschule Lufeng, Changhua“"
+   },
+   "zh": "陸豐國小的前身，是 1918 年 4 月 1 日設立的「海豐崙分校」，日治時期隸屬永靖公學校；1919 年 3 月 31 日獨立為「海豐崙公學校」。戰後 1945 年改稱「縣立海豐崙國民學校」，1947 年 1 月 1 日改名「陸豐國民學校」。1958 年另設「仁豐分校」並重劃學區，後來成為獨立的仁豐國小；1968 年 8 月改稱「彰化縣立陸豐國民小學」。",
+   "tr": {
+    "en": "Lufeng Elementary School began as the “Haifenglun Branch”, founded on April 1, 1918 and attached to Yongjing Public School under Japanese rule; on March 31, 1919 it became independent as “Haifenglun Public School”. After the war it became the county-run Haifenglun National School (1945) and, on January 1, 1947, Lufeng National School. In 1958 a “Renfeng Branch” was set up and school districts were redrawn; it later became the separate Renfeng Elementary School. In August 1968 the school was renamed “Changhua County Lufeng National Elementary School”.",
+    "ja": "陸豐国民小学校の前身は、1918年4月1日に設けられた「海豐崙分校」で、日本統治時代は永靖公学校に属していました。1919年3月31日に独立して「海豐崙公学校」となりました。戦後の1945年に「県立海豐崙国民学校」と改称し、1947年1月1日に「陸豐国民学校」となりました。1958年に「仁豐分校」が設けられ学区が引き直され、のちに独立して仁豐国民小学校になりました。1968年8月に「彰化県立陸豐国民小学校」と改称しました。",
+    "th": "โรงเรียนประถมลู่เฟิงมีต้นกำเนิดจาก “สาขาไห่เฟิงหลุน” ที่ก่อตั้งเมื่อวันที่ 1 เมษายน 1918 สังกัดโรงเรียนสามัญหย่งจิ้งในสมัยญี่ปุ่นปกครอง วันที่ 31 มีนาคม 1919 แยกเป็นอิสระเป็น “โรงเรียนสามัญไห่เฟิงหลุน” หลังสงครามในปี 1945 เป็นโรงเรียนแห่งชาติไห่เฟิงหลุนของเทศมณฑล และวันที่ 1 มกราคม 1947 เปลี่ยนชื่อเป็น “โรงเรียนแห่งชาติลู่เฟิง” ในปี 1958 ตั้ง “สาขาเหรินเฟิง” และแบ่งเขตการศึกษาใหม่ ต่อมาแยกเป็นโรงเรียนประถมเหรินเฟิง และเดือนสิงหาคม 1968 เปลี่ยนชื่อเป็น “โรงเรียนประถมศึกษาแห่งชาติลู่เฟิง เทศมณฑลจางฮั่ว”",
+    "id": "SD Lufeng bermula dari “Cabang Haifenglun” yang didirikan pada 1 April 1918 dan berada di bawah Sekolah Umum Yongjing pada masa pendudukan Jepang; pada 31 Maret 1919 sekolah ini berdiri sendiri sebagai “Sekolah Umum Haifenglun”. Setelah perang, namanya menjadi Sekolah Nasional Haifenglun milik kabupaten (1945) dan pada 1 Januari 1947 menjadi “Sekolah Nasional Lufeng”. Pada 1958 dibuka “Cabang Renfeng” dan wilayah sekolah ditata ulang; kelak cabang itu menjadi SD Renfeng yang mandiri. Pada Agustus 1968 sekolah berganti nama menjadi “SD Nasional Lufeng Kabupaten Changhua”.",
+    "vi": "Trường Tiểu học Lufeng có tiền thân là “Phân hiệu Haifenglun”, thành lập ngày 1/4/1918 và trực thuộc trường công Yongjing thời Nhật thuộc; ngày 31/3/1919 tách ra thành “Trường công Haifenglun”. Sau chiến tranh, trường thành Trường quốc dân Haifenglun của huyện (1945) và ngày 1/1/1947 đổi tên thành “Trường quốc dân Lufeng”. Năm 1958, “Phân hiệu Renfeng” được lập và khu vực tuyển sinh được vạch lại; về sau phân hiệu này trở thành Trường Tiểu học Renfeng độc lập. Tháng 8/1968, trường đổi tên thành “Trường Tiểu học quốc dân Lufeng huyện Chương Hóa”.",
+    "ko": "루펑 초등학교의 전신은 1918년 4월 1일 세워진 ‘하이펑룬 분교’로, 일제강점기에는 융징 공학교에 속해 있었습니다. 1919년 3월 31일 ‘하이펑룬 공학교’로 독립했습니다. 전후 1945년 ‘현립 하이펑룬 국민학교’로 바뀌었고, 1947년 1월 1일 ‘루펑 국민학교’로 이름을 바꿨습니다. 1958년 ‘런펑 분교’가 세워지고 학구가 다시 나뉘었으며, 이 분교는 나중에 독립한 런펑 초등학교가 되었습니다. 1968년 8월 ‘장화현립 루펑 국민초등학교’로 개칭되었습니다.",
+    "de": "Die Grundschule Lufeng ging aus der am 1. April 1918 gegründeten „Zweigstelle Haifenglun“ hervor, die unter japanischer Herrschaft zur öffentlichen Schule Yongjing gehörte; am 31. März 1919 wurde sie als „Öffentliche Schule Haifenglun“ selbstständig. Nach dem Krieg hieß sie Kreis-Nationalschule Haifenglun (1945) und ab dem 1. Januar 1947 „Nationalschule Lufeng“. 1958 wurde die „Zweigstelle Renfeng“ eingerichtet und die Schulbezirke neu gezogen; sie wurde später die eigenständige Grundschule Renfeng. Im August 1968 erhielt die Schule den Namen „Nationale Grundschule Lufeng des Landkreises Changhua“."
+   }
+  }
+ ]
+};   // 各校簡史（田尾國小／國中、南鎮、仁豐、陸豐）：資料與翻譯在 school_hist.json，村頁也用同一份
+function fillHist(name){
+  const box = $('pHist'), list = SCHOOL_HIST.schools.filter(s => s.village === name), ui = SCHOOL_HIST.ui, L = LANG !== 'zh', tx = o => o[LANG] || o.en;
+  box.innerHTML = ''; box.hidden = !list.length; if (!list.length) return;
+  const h = document.createElement('h3'); h.textContent = '🏫 ' + ui.zh.title + (L ? ' · ' + tx(ui).title : ''); box.appendChild(h);
+  for (const s of list){
+    const d = document.createElement('div'), n = document.createElement('h4'), p = document.createElement('p');
+    n.textContent = s.name.zh + (L ? ' · ' + tx(s.name) : ''); p.textContent = s.zh; d.append(n, p);
+    if (L){ const q = document.createElement('p'); q.className = 'enp'; q.textContent = tx(s.tr); d.appendChild(q); }
+    const a = document.createElement('a'), sp = document.createElement('p'); a.href = s.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = s.src.zh + (L ? ' · ' + tx(s.src) : '');
+    sp.className = 'src'; sp.append(ui.zh.src + (L ? ' · ' + tx(ui).src : '') + '：', a); d.appendChild(sp); box.appendChild(d);
+  }
+}
 const vtext = n => LANG === 'zh' ? '' : LANG === 'en' ? INFO[n].enText : ((VT[n] && VT[n][LANG]) || INFO[n].enText);
 { const ld = document.getElementById('ldMsg'); if (ld) ld.innerHTML = UI[LANG].load + '<small>' + UI[LANG].loadSub + '</small>'; }
 function shade(m){ m.castShadow = true; m.receiveShadow = true; return m; }
@@ -1286,7 +1513,7 @@ function fillPanel(name){
   const v = byName[name], i = v.info, dd = DIST[i.dist], u = UI[LANG];
   $('pEmoji').textContent = i.emoji || '📍'; $('pZh').textContent = name; $('pEn').textContent = (LANG === 'ja' || LANG === 'zh') ? i.en : fullName(name);
   const tag = $('pTag'); tag.textContent = dd ? (LANG === 'zh' ? dd.name : `${dd.name} · ${u.dnames[i.dist - 1]}`) : ''; tag.style.background = dd ? hex6(dd.c) : '#888'; tag.hidden = !dd;
-  $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pEnText').hidden = !vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta;
+  $('pText').textContent = i.text || ''; $('pEnText').textContent = vtext(name); $('pEnText').hidden = !vtext(name); $('pMeta').textContent = popLine(name); $('pMeta').hidden = !i.meta; fillHist(name);
   $('pSrc').innerHTML = '3D 場景為示意。人口：內政部戶政司 115 年 9 月；文字已逐句核對公開資料（鄉公所官網的村頁目前無法開啟）。' + (u.note ? '<br>' + u.note : '');
   const ph = $('pPhoto'), slug = SLUG[name], real = `photos/${slug}.jpg`, fake = `photos/3d/${slug}.jpg`, hasReal = Object.prototype.hasOwnProperty.call(PHOTO_CREDITS, slug);
   ph.alt = `${name} · ${i.en}`; $('pPhotoBox').hidden = false; ph.dataset.fb = '';
@@ -1372,7 +1599,7 @@ function tzRenderNames(){
 }
 function fillTzPanel(key){
   const u = tzu(), P = u.p, info = TZ_PANEL[key], links = [];
-  $('pPhotoBox').hidden = true; $('pTempleBox').hidden = true; $('pExtras').innerHTML = ''; $('pEnText').hidden = true; $('pEnText').textContent = '';
+  $('pHist').hidden = true; $('pPhotoBox').hidden = true; $('pTempleBox').hidden = true; $('pExtras').innerHTML = ''; $('pEnText').hidden = true; $('pEnText').textContent = '';
   const pg = $('pPage');
   if (info){
     const pk = info.tag; $('pEmoji').textContent = info.emoji;
